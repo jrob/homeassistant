@@ -1,0 +1,62 @@
+homeassistant:
+  packages: !include_dir_named packages
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+http:
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+
+notify:
+  - name: primary
+    platform: pushover
+    api_key: !secret pushover_api_key
+    user_key: !secret pushover_user_key
+
+influxdb:
+  host: !secret influxdb_host
+  port: !secret influxdb_port
+  database: home_assistant
+  username: !secret influxdb_username
+  password: !secret influxdb_password
+  ssl: true
+  verify_ssl: true
+  tags_attributes:
+    - friendly_name
+  component_config_glob:
+    sensor.*humidity:
+      override_measurement: humidity
+    sensor.*temperature:
+      override_measurement: temperature
+
+sensor:
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /
+      - type: disk_use
+        arg: /
+      - type: processor_use
+      - type: last_boot
+      - type: memory_use_percent
+  - platform: command_line
+    name: CPU Temperature
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: '{{ (value | multiply(0.001)) | round(1) }}'
+  - platform: template
+    sensors:
+      water_sensor_2_temperature:
+        value_template: "{{ state_attr('binary_sensor.water_sensor_2', 'temperature') }}"
+        unit_of_measurement: '°C'
+

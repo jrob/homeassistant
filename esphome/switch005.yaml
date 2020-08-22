@@ -1,0 +1,74 @@
+substitutions:
+  name: switch005
+  description: Garage Overhead Light
+
+esphome:
+  name: $name
+  platform: ESP8266
+  board: esp01_1m
+
+# sonoff mini
+
+wifi:
+  ssid: !secret iot_wifi
+  password: !secret iot_wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Switch005 Fallback Hotspot"
+    password: "W3jOhSCNQSSU"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+# https://esphome-configs.io/devices/sonoff-mini-relay/
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO00
+    id: reset
+    internal: true
+    filters:
+      - invert:
+      - delayed_off: 10ms
+    on_press:
+      - light.toggle:
+          id: light_1
+
+  - platform: gpio
+    name: $description Switch
+    pin: GPIO04
+    filters:
+      - invert:
+    id: switch_1
+    on_press:
+      then:
+        - light.toggle:
+            id: light_1
+    on_release:
+      then:
+        - light.toggle:
+            id: light_1
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
+
+light:
+  - platform: binary
+    id: light_1
+    name: $description
+    output: relay_1
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: true

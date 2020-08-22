@@ -1,0 +1,32 @@
+binary_sensor:
+  - platform: mqtt
+    name: "Fermcon Heater"
+    state_topic: "ri/fermcon/state/heater"
+    payload_on: 1
+    payload_off: 0
+
+sensor:
+  - platform: mqtt
+    name: "Fermcon Internal Temperature"
+    unique_id: fermcon_internal_temperature
+    state_topic: "ri/fermcon/temperature/internal"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+  - platform: mqtt
+    name: "Fermcon Secondary Temperature"
+    unique_id: fermcon_secondary_temperature
+    state_topic: "ri/fermcon/temperature/secondary"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+  - platform: mqtt
+    name: "Fermcon Primary Temperature"
+    unique_id: fermcon_primary_temperature
+    state_topic: "ri/fermcon/temperature/primary"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+  - platform: mqtt
+    name: "Fermcon Primary Humidity"
+    unique_id: fermcon_primary_humidity
+    state_topic: "ri/fermcon/humidity/primary"
+    unit_of_measurement: "%"
+    device_class: "humidity"

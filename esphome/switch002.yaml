@@ -1,0 +1,30 @@
+esphome:
+  name: switch002
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret iot_wifi
+  password: !secret iot_wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Switch002 Fallback Hotspot"
+    password: "BGQbSegkiQri"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+switch:
+  - platform: gpio
+    name: "Lamp"
+    pin: GPIO14
+    id: relay
+

@@ -1,0 +1,25 @@
+esphome:
+  name: switch007
+  platform: ESP8266
+  board: esp01_1m
+  
+# sonoff mini
+
+wifi:
+  ssid: !secret iot_wifi
+  password: !secret iot_wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Switch005 Fallback Hotspot"
+    password: "W3jOhSCNQSSU"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:

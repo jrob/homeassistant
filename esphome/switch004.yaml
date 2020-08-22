@@ -1,0 +1,24 @@
+substitutions:
+  name: switch004
+  description: Desk Lamp
+
+wifi:
+  ssid: !secret iot_wifi
+  password: !secret iot_wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Switch004 Fallback Hotspot"
+    password: "3K69H20Ua5B4"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+<<: !include include/gosund_wp5.yaml

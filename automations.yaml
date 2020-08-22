@@ -1,0 +1,33 @@
+- id: '1590521213994'
+  alias: Washing machine water sensor
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.water_sensor_1
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      message: Washing machine water sensor triggered!
+    service: notify.primary
+- id: '1597951896909'
+  alias: Turn off after time demo
+  description: ''
+  trigger:
+  - device_id: abd6032571a042d8b16ef846417a176c
+    domain: switch
+    entity_id: switch.desk_lamp_relay
+    for:
+      hours: 2
+      minutes: 0
+      seconds: 0
+    platform: device
+    type: turned_on
+  condition: []
+  action:
+  - device_id: abd6032571a042d8b16ef846417a176c
+    domain: switch
+    entity_id: switch.desk_lamp_relay
+    type: turn_off
+  mode: single

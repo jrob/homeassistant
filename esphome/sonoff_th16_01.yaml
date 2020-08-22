@@ -1,0 +1,37 @@
+esphome:
+  name: sonoff_th16_01
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret iot_wifi
+  password: !secret iot_wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sonoff Th16 01 Fallback Hotspot"
+    password: "B9s5iiz7xS2X"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+mqtt:
+  broker: !secret mqtt_host
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  discovery: false
+
+dallas:
+  - pin: GPIO14
+  
+sensor:
+  - platform: dallas
+    address: 0xBB3C01B5565A6A28
+    name: "Aquarium Temperature"
