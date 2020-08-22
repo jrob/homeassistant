@@ -2,13 +2,6 @@ substitutions:
   name: switch005
   description: Garage Overhead Light
 
-esphome:
-  name: $name
-  platform: ESP8266
-  board: esp01_1m
-
-# sonoff mini
-
 wifi:
   ssid: !secret iot_wifi
   password: !secret iot_wifi_password
