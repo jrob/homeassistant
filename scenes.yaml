@@ -1,0 +1,30 @@
+- id: '1598072698705'
+  name: Workout
+  entities:
+    light.garage_fluorescent_light:
+      friendly_name: Garage Fluorescent Light
+      state: 'on'
+      supported_features: 8
+    light.garage_overhead_light:
+      friendly_name: Garage Overhead Light
+      state: 'on'
+      supported_features: 8
+    switch.switch003:
+      friendly_name: Floor Fan
+      icon: ''
+      state: 'on'
+- id: '1598073575704'
+  name: Nighttime
+  entities:
+    light.garage_fluorescent_light:
+      friendly_name: Garage Fluorescent Light
+      state: 'off'
+      supported_features: 8
+    light.garage_overhead_light:
+      friendly_name: Garage Overhead Light
+      state: 'off'
+      supported_features: 8
+    switch.switch003:
+      friendly_name: Floor Fan
+      icon: ''
+      state: 'off'
