@@ -1,0 +1,42 @@
+binary_sensor:
+  - platform: gpio
+    pin: GPIO00
+    id: reset
+    internal: true
+    filters:
+      - invert:
+      - delayed_off: 10ms
+    on_press:
+      - light.toggle:
+          id: light_1
+
+  - platform: gpio
+    name: $description Switch
+    pin: GPIO04
+    filters:
+      - invert:
+    id: switch_1
+    on_press:
+      then:
+        - light.toggle:
+            id: light_1
+    on_release:
+      then:
+        - light.toggle:
+            id: light_1
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
+
+light:
+  - platform: binary
+    id: light_1
+    name: $description
+    output: relay_1
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: true
