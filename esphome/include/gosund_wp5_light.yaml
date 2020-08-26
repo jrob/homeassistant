@@ -1,0 +1,48 @@
+esphome:
+  name: $name
+  platform: ESP8266
+  board: esp01_1m
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO14
+
+binary_sensor:
+  - platform: gpio
+    id: button_1
+    pin: GPIO4
+    filters:
+      - invert:
+      - delayed_off: 10ms
+    name: $description Power Button
+    on_press:
+      then:
+        - light.toggle: light_1
+        - switch.toggle: blue_led
+        - switch.toggle: red_led
+
+switch:
+  - platform: gpio
+    id: red_led
+    pin: GPIO12
+    inverted: true
+    name: $description Red LED
+    restore_mode: RESTORE_DEFAULT_ON
+  - platform: gpio
+    id: blue_led
+    pin: GPIO13
+    inverted: true
+    name: $description Blue LED
+
+light:
+  - platform: binary
+    id: light_1
+    name: $description
+    output: relay_1
+    #on_turn_on:
+    #  - switch.turn_on: blue_led
+    #  - switch.turn_off: red_led
+    #on_turn_off:
+    #  - switch.turn_on: red_led
+    #  - switch.turn_off: blue_led

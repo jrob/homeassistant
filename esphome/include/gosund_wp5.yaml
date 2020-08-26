@@ -25,7 +25,7 @@ switch:
     inverted: true
     name: $description Blue LED
   - platform: gpio
-    name: $description Relay
+    name: $description
     pin: GPIO14
     id: relay
     on_turn_on:
