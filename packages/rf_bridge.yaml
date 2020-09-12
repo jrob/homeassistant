@@ -1,0 +1,35 @@
+automation:
+  - alias: 'rfbridge_demultiplexer'
+    trigger:
+    - platform: mqtt
+      topic: tele/sonoff-rf-bridge-01/RESULT
+    action:
+    - service: python_script.rfbridge_demux
+      data_template:
+        payload: '{{trigger.payload_json.RfReceived.Data}}'
+        
+binary_sensor:
+  - platform: mqtt
+    name: 'Doorbell'
+    state_topic: 'home/doorbell'
+    off_delay: 1
+  - platform: mqtt
+    name: 'Front Door'
+    device_class: 'door'
+    state_topic: 'home/sensor017'
+    payload_off: 'ON'
+    payload_on: 'OFF'
+  - platform: mqtt
+    name: 'Front Door Battery'
+    device_class: 'battery'
+    state_topic: 'home/sensor017_battery'
+    off_delay: 120
+  - platform: mqtt
+    name: 'Aquarium Water Sensor'
+    device_class: 'moisture'
+    state_topic: 'home/sensor020'
+  - platform: mqtt
+    name: 'Aquarium Water Sensor Battery'
+    device_class: 'battery'
+    state_topic: 'home/sensor020_battery'
+    off_delay: 120
