@@ -29,6 +29,13 @@ notify:
     api_key: !secret pushover_api_key
     user_key: !secret pushover_user_key
 
+cloudflare:
+  email: !secret cloudflare_email
+  api_key: !secret cloudflare_api_key
+  zone: !secret cloudflare_zone
+  records:
+    - !secret cloudflare_record1
+
 influxdb:
   host: !secret influxdb_host
   port: !secret influxdb_port
@@ -65,4 +72,3 @@ sensor:
       water_sensor_2_temperature:
         value_template: "{{ state_attr('binary_sensor.water_sensor_2', 'temperature') }}"
         unit_of_measurement: '°C'
-
