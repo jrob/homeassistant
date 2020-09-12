@@ -92,11 +92,11 @@ automation:
         - condition: template
           value_template: "{{ ((as_timestamp(now()) - as_timestamp(states.sensor.mail_packages_in_transit.last_changed)) < 15 and sensor.mail_packages_in_transit > 0) }}"
   action:
-    - service: notify.YOUR_NOTIFY_METHOD
+    - service: notify.mobile_app_jeremy_phone
       data_template:
         title: "*Today's Mail and Packages*"
         message: "{{ states('sensor.mail_deliveries_message')}}"
-    - service: notify.YOUR_NOTIFY_METHOD
+    - service: notify.mobile_app_jeremy_phone
       data:
         message: "Here is the mail"
         data:
