@@ -18,7 +18,7 @@ binary_sensor:
     name: $description Power Button
     on_press:
       then:
-        - light.toggle: light_1
+        - fan.toggle: fan_1
         - switch.toggle: blue_led
         - switch.toggle: red_led
 
@@ -35,9 +35,9 @@ switch:
     inverted: true
     name: $description Blue LED
 
-light:
+fan:
   - platform: binary
-    id: light_1
+    id: fan_1
     name: $description
     output: relay_1
     #on_turn_on:

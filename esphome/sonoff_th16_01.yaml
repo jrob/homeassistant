@@ -30,7 +30,7 @@ mqtt:
 
 dallas:
   - pin: GPIO14
-  
+
 sensor:
   - platform: dallas
     address: 0xBB3C01B5565A6A28

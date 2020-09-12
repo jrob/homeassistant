@@ -1,0 +1,47 @@
+esphome:
+  name: $name
+  platform: ESP8266
+  board: esp01_1m
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO00
+    id: reset
+    internal: true
+    filters:
+      - invert:
+      - delayed_off: 10ms
+    on_press:
+      - fan.toggle:
+          id: fan_1
+
+  - platform: gpio
+    name: $description Switch
+    pin: GPIO04
+    filters:
+      - invert:
+    id: switch_1
+    on_press:
+      then:
+        - fan.toggle:
+            id: fan_1
+    on_release:
+      then:
+        - fan.toggle:
+            id: fan_1
+
+output:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
+
+fan:
+  - platform: binary
+    id: fan_1
+    name: $description
+    output: relay_1
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: true
