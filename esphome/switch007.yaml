@@ -1,9 +1,6 @@
-esphome:
+substitutions:
   name: switch007
-  platform: ESP8266
-  board: esp01_1m
-  
-# sonoff mini
+  description: Basement Table Fan
 
 wifi:
   ssid: !secret iot_wifi
@@ -11,7 +8,7 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Switch005 Fallback Hotspot"
+    ssid: "Switch007 Fallback Hotspot"
     password: "W3jOhSCNQSSU"
 
 captive_portal:
@@ -23,3 +20,5 @@ logger:
 api:
 
 ota:
+
+<<: !include include/sonoff_mini_fan.yaml

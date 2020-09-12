@@ -27,4 +27,4 @@ api:
 
 ota:
 
-<<: !include include/gosund_wp5.yaml
+<<: !include include/gosund_wp5_fan.yaml

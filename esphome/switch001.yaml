@@ -1,7 +1,6 @@
-esphome:
+substitutions:
   name: switch001
-  platform: ESP8266
-  board: esp01_1m
+  description: Living Room Lamp
 
 wifi:
   ssid: !secret iot_wifi
@@ -22,8 +21,4 @@ api:
 
 ota:
 
-switch:
-  - platform: gpio
-    name: "Living Room Lamp"
-    pin: GPIO14
-    id: relay
+<<: !include include/gosund_wp5_light.yaml
