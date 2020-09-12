@@ -17,6 +17,12 @@ http:
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
 
+lutron_caseta:
+  host: !secret caseta_host
+  keyfile: caseta.key
+  certfile: caseta.crt
+  ca_certs: caseta-bridge.crt
+
 notify:
   - name: primary
     platform: pushover
