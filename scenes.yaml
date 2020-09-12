@@ -1,6 +1,10 @@
 - id: '1598072698705'
   name: Workout
   entities:
+    fan.garage_floor_fan:
+      friendly_name: Garage Floor Fan
+      state: 'on'
+      supported_features: 0
     light.garage_fluorescent_light:
       friendly_name: Garage Fluorescent Light
       state: 'on'
@@ -9,13 +13,31 @@
       friendly_name: Garage Overhead Light
       state: 'on'
       supported_features: 8
-    switch.switch003:
-      friendly_name: Floor Fan
-      icon: ''
-      state: 'on'
 - id: '1598073575704'
   name: Nighttime
   entities:
+    fan.garage_floor_fan:
+      friendly_name: Garage Floor Fan
+      state: 'off'
+      supported_features: 0
+    light.basement_table_ceiling_fan_lights:
+      brightness: 2
+      device_id: '2'
+      friendly_name: Basement Table Ceiling Fan Lights
+      state: 'on'
+      supported_features: 1
+      zone_id: '1'
+    light.basement_tv_ceiling_fan_lights:
+      brightness: 2
+      device_id: '4'
+      friendly_name: Basement TV Ceiling Fan Lights
+      state: 'on'
+      supported_features: 1
+      zone_id: '2'
+    light.desk_lamp:
+      friendly_name: Desk Lamp
+      state: 'off'
+      supported_features: 8
     light.garage_fluorescent_light:
       friendly_name: Garage Fluorescent Light
       state: 'off'
@@ -24,7 +46,100 @@
       friendly_name: Garage Overhead Light
       state: 'off'
       supported_features: 8
-    switch.switch003:
-      friendly_name: Floor Fan
+    switch.desk_lamp_blue_led:
+      friendly_name: Desk Lamp Blue LED
+      icon: ''
+      state: 'off'
+    switch.desk_lamp_red_led:
+      friendly_name: Desk Lamp Red LED
+      icon: ''
+      state: 'on'
+    switch.living_room_lamp:
+      friendly_name: Living Room Lamp
+      icon: ''
+      state: 'off'
+- id: '1598827751183'
+  name: TV and Dinner
+  entities:
+    fan.basement_table_fan:
+      state: 'on'
+      supported_features: 0
+    fan.basement_tv_fan:
+      state: 'on'
+      supported_features: 0
+    light.basement_table_ceiling_fan_lights:
+      brightness: 66
+      device_id: '2'
+      friendly_name: Basement Table Ceiling Fan Lights
+      state: 'on'
+      supported_features: 1
+      zone_id: '1'
+    light.basement_tv_ceiling_fan_lights:
+      brightness: 45
+      device_id: '4'
+      friendly_name: Basement TV Ceiling Fan Lights
+      state: 'on'
+      supported_features: 1
+      zone_id: '2'
+    light.desk_lamp:
+      friendly_name: Desk Lamp
+      state: 'off'
+      supported_features: 8
+    switch.desk_lamp_blue_led:
+      friendly_name: Desk Lamp Blue LED
+      icon: ''
+      state: 'on'
+    switch.desk_lamp_red_led:
+      friendly_name: Desk Lamp Red LED
+      icon: ''
+      state: 'off'
+    switch.desk_lamp_relay:
+      friendly_name: Desk Lamp Relay
+      icon: ''
+      restored: true
+      state: unavailable
+      supported_features: 0
+- id: '1598827872399'
+  name: Theater Mode
+  entities:
+    fan.basement_fan_one:
+      friendly_name: Basement Fan One
+      state: 'on'
+      supported_features: 0
+    fan.basement_fan_two:
+      friendly_name: Basement Fan Two
+      state: 'on'
+      supported_features: 0
+    light.basement_table_ceiling_fan_lights:
+      brightness: 15
+      device_id: '2'
+      friendly_name: Basement Table Ceiling Fan Lights
+      state: 'on'
+      supported_features: 1
+      zone_id: '1'
+    light.basement_tv_ceiling_fan_lights:
+      brightness: 2
+      device_id: '4'
+      friendly_name: Basement TV Ceiling Fan Lights
+      state: 'on'
+      supported_features: 1
+      zone_id: '2'
+    light.desk_lamp:
+      friendly_name: Desk Lamp
+      state: 'off'
+      supported_features: 8
+- id: '1599596759605'
+  name: Work
+  entities:
+    light.desk_lamp:
+      friendly_name: Desk Lamp
+      state: 'on'
+      supported_features: 8
+    switch.desk_lamp_blue_led:
+      friendly_name: Desk Lamp Blue LED
+      icon: ''
+      state: 'on'
+    switch.desk_lamp_red_led:
+      friendly_name: Desk Lamp Red LED
       icon: ''
       state: 'off'
