@@ -1,15 +1,6 @@
 substitutions:
   name: switch003
   description: Garage Floor Fan
-  
-wifi:
-  ssid: !secret iot_wifi
-  password: !secret iot_wifi_password
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Switch003 Fallback Hotspot"
-    password: "N8P53r4rd8Cx"
 
 mqtt:
   broker: !secret mqtt_host
@@ -17,14 +8,8 @@ mqtt:
   password: !secret mqtt_password
   discovery: false
 
-captive_portal:
-
 # Enable logging
 logger:
 
-# Enable Home Assistant API
-api:
-
-ota:
-
+<<: !include include/common.yaml
 <<: !include include/gosund_wp5_fan.yaml

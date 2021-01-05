@@ -2,23 +2,8 @@ substitutions:
   name: switch008
   description: Basement TV Fan
 
-wifi:
-  ssid: !secret iot_wifi
-  password: !secret iot_wifi_password
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Switch008 Fallback Hotspot"
-    password: "W3jOhSCNQSSU"
-
-captive_portal:
-
 # Enable logging
 logger:
 
-# Enable Home Assistant API
-api:
-
-ota:
-
+<<: !include include/common.yaml
 <<: !include include/sonoff_mini_fan.yaml
