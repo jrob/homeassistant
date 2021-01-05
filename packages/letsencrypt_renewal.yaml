@@ -1,0 +1,18 @@
+# https://github.com/home-assistant/hassio-addons/issues/1445#issuecomment-668547727
+
+automation:
+  # Renew certificates and restart homeassistant when cert expires in less than 30 days
+  - alias: system_letsencrypt_renewal
+    trigger:
+      - platform: time
+        at: 03:00:00
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.cert_expiry_ha
+        below: 30
+    action:
+      - service: hassio.addon_restart
+        data:
+          addon: core_letsencrypt
+      - delay: 00:05:00
+      - service: homeassistant.restart
