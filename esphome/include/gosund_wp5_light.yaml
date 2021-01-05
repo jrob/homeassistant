@@ -27,13 +27,11 @@ switch:
     id: red_led
     pin: GPIO12
     inverted: true
-    name: $description Red LED
     restore_mode: RESTORE_DEFAULT_ON
   - platform: gpio
     id: blue_led
     pin: GPIO13
     inverted: true
-    name: $description Blue LED
 
 light:
   - platform: binary
