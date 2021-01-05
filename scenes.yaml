@@ -62,20 +62,22 @@
   name: TV and Dinner
   entities:
     fan.basement_table_fan:
+      friendly_name: Basement Table Fan
       state: 'on'
       supported_features: 0
     fan.basement_tv_fan:
+      friendly_name: Basement TV Fan
       state: 'on'
       supported_features: 0
     light.basement_table_ceiling_fan_lights:
-      brightness: 66
+      brightness: 38
       device_id: '2'
       friendly_name: Basement Table Ceiling Fan Lights
       state: 'on'
       supported_features: 1
       zone_id: '1'
     light.basement_tv_ceiling_fan_lights:
-      brightness: 45
+      brightness: 22
       device_id: '4'
       friendly_name: Basement TV Ceiling Fan Lights
       state: 'on'
@@ -93,12 +95,6 @@
       friendly_name: Desk Lamp Red LED
       icon: ''
       state: 'off'
-    switch.desk_lamp_relay:
-      friendly_name: Desk Lamp Relay
-      icon: ''
-      restored: true
-      state: unavailable
-      supported_features: 0
 - id: '1598827872399'
   name: Theater Mode
   entities:
