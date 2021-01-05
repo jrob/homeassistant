@@ -9,7 +9,7 @@ automation:
     - service: python_script.rfbridge_demux
       data_template:
         payload: '{{trigger.payload_json.RfReceived.Data}}'
-        
+
 binary_sensor:
   - platform: mqtt
     name: 'Doorbell'
@@ -27,6 +27,28 @@ binary_sensor:
     state_topic: 'home/sensor017_battery'
     off_delay: 120
   - platform: mqtt
+    name: 'Interior Garage Door'
+    device_class: 'door'
+    state_topic: 'home/sensor018'
+    payload_off: 'ON'
+    payload_on: 'OFF'
+  - platform: mqtt
+    name: 'Interior Garage Door Battery'
+    device_class: 'battery'
+    state_topic: 'home/sensor018_battery'
+    off_delay: 120
+  - platform: mqtt
+    name: 'Back Door'
+    device_class: 'door'
+    state_topic: 'home/sensor019'
+    payload_off: 'ON'
+    payload_on: 'OFF'
+  - platform: mqtt
+    name: 'Back Door Battery'
+    device_class: 'battery'
+    state_topic: 'home/sensor019_battery'
+    off_delay: 120
+  - platform: mqtt
     name: 'Aquarium Water Sensor'
     device_class: 'moisture'
     state_topic: 'home/sensor020'
@@ -34,4 +56,15 @@ binary_sensor:
     name: 'Aquarium Water Sensor Battery'
     device_class: 'battery'
     state_topic: 'home/sensor020_battery'
+    off_delay: 120
+  - platform: mqtt
+    name: 'Basement Door'
+    device_class: 'door'
+    state_topic: 'home/sensor021'
+    payload_off: 'ON'
+    payload_on: 'OFF'
+  - platform: mqtt
+    name: 'Basement Door Battery'
+    device_class: 'battery'
+    state_topic: 'home/sensor021_battery'
     off_delay: 120
