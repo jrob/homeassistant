@@ -1,0 +1,9 @@
+substitutions:
+  name: switch032
+  description: switch032
+
+# Enable logging
+logger:
+
+<<: !include include/common.yaml
+<<: !include include/gosund_wp5_light.yaml

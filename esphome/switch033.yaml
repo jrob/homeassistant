@@ -1,0 +1,9 @@
+substitutions:
+  name: switch033
+  description: Basement Desk Lamp
+
+# Enable logging
+logger:
+
+<<: !include include/common.yaml
+<<: !include include/gosund_wp5_light.yaml
