@@ -1,0 +1,52 @@
+substitutions:
+  name: switch028
+  description: Aquarium Pump
+
+# Enable logging
+logger:
+
+<<: !include include/common.yaml
+
+esphome:
+  name: $name
+  platform: ESP8266
+  board: esp01_1m
+
+binary_sensor:
+  - platform: gpio
+    id: button_1
+    pin: GPIO4
+    filters:
+      - invert:
+      - delayed_off: 10ms
+    name: $description Power Button
+    on_press:
+      then:
+        - script.stop: reset_timer
+        - switch.toggle: relay_1
+        - switch.toggle: blue_led
+        - switch.toggle: red_led
+        - script.execute: reset_timer
+
+switch:
+  - platform: gpio
+    id: red_led
+    pin: GPIO12
+    inverted: true
+  - platform: gpio
+    id: blue_led
+    pin: GPIO13
+    inverted: true
+    restore_mode: RESTORE_DEFAULT_ON
+  - platform: gpio
+    id: relay_1
+    pin: GPIO14
+    restore_mode: RESTORE_DEFAULT_ON
+
+script:
+  id: reset_timer
+  then:
+    - delay: 10min
+    - switch.turn_on: relay_1
+    - switch.turn_on: blue_led
+    - switch.turn_off: red_led
