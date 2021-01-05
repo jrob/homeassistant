@@ -31,6 +31,13 @@ notify:
     api_key: !secret pushover_api_key
     user_key: !secret pushover_user_key
 
+logbook:
+  exclude:
+    domains:
+      - media_player
+    entity_globs:
+      - automation.keepalive_*_speaker
+
 influxdb:
   host: !secret influxdb_host
   port: !secret influxdb_port
