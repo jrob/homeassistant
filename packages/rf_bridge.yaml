@@ -3,6 +3,8 @@ automation:
     trigger:
     - platform: mqtt
       topic: tele/sonoff-rf-bridge-01/RESULT
+    - platform: mqtt
+      topic: tele/sonoff-rf-bridge-02/RESULT
     action:
     - service: python_script.rfbridge_demux
       data_template:
