@@ -1,0 +1,18 @@
+wifi:
+  ssid: !secret iot_wifi
+  password: !secret iot_wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: $name Fallback Hotspot
+    password: !secret fallback_wifi_password
+
+captive_portal:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+web_server:
+  port: 80
