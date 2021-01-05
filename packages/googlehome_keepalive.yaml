@@ -6,6 +6,7 @@ automation:
     trigger:
       platform: time_pattern
       minutes: "/2"
+      seconds: "30"
     condition:
       condition: or
       conditions:
@@ -22,11 +23,11 @@ automation:
           media_content_id: !secret url_silent_mp3
           media_content_type: music
 
-
   - alias: keepalive_dining_room_speaker
     trigger:
       platform: time_pattern
       minutes: "/2"
+      seconds: "30"
     condition:
       condition: or
       conditions:
@@ -47,6 +48,7 @@ automation:
     trigger:
       platform: time_pattern
       minutes: "/2"
+      seconds: "30"
     condition:
       condition: or
       conditions:
