@@ -41,7 +41,7 @@ logbook:
 influxdb:
   host: !secret influxdb_host
   port: !secret influxdb_port
-  database: home_assistant
+  database: homeassistant
   username: !secret influxdb_username
   password: !secret influxdb_password
   ssl: true
