@@ -22,11 +22,7 @@ binary_sensor:
     name: $description Power Button
     on_press:
       then:
-        - script.stop: reset_timer
         - switch.toggle: relay_1
-        - switch.toggle: blue_led
-        - switch.toggle: red_led
-        - script.execute: reset_timer
 
 switch:
   - platform: gpio
@@ -39,14 +35,23 @@ switch:
     inverted: true
     restore_mode: RESTORE_DEFAULT_ON
   - platform: gpio
+    name: $description
     id: relay_1
     pin: GPIO14
     restore_mode: RESTORE_DEFAULT_ON
+    on_turn_on:
+      then:
+        - script.stop: turn_on_timer
+        - switch.turn_on: blue_led
+        - switch.turn_off: red_led
+    on_turn_off:
+      then:
+        - script.execute: turn_on_timer
+        - switch.turn_off: blue_led
+        - switch.turn_on: red_led
 
 script:
-  id: reset_timer
+  id: turn_on_timer
   then:
     - delay: 10min
     - switch.turn_on: relay_1
-    - switch.turn_on: blue_led
-    - switch.turn_off: red_led
