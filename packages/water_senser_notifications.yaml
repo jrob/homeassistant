@@ -1,0 +1,33 @@
+notify:
+  - name: water_sensor_group_emergency
+    platform: group
+    services:
+      - service: pushover_jeremy
+      - service: mobile_app_adults
+  - name: water_sensor_group
+    platform: group
+    services:
+      - service: mobile_group_adults
+
+automation:
+
+- alias: Washing Machine Water Sensor Alarm
+  trigger:
+  - entity_id: binary_sensor.water_sensor_0035
+    platform: state
+    from: 'off'
+    to: 'on'
+  action:
+    - service: notify.water_sensor_group_emergency
+      data:
+        message: Washing Machine water sensor alarm sensor triggered!
+
+- alias: Washing Machine Battery Sensor Alarm
+  trigger:
+  - entity_id: sensor.water_sensor_0035_battery_level
+    platform: numeric_state
+    below: 25
+  action:
+    - service: notify.water_sensor_group
+      data:
+        message: Washing Machine battery sensor alarm sensor triggered.
