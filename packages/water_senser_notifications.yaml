@@ -11,6 +11,17 @@ notify:
 
 automation:
 
+- alias: Aquarium Water Sensor Alarm
+  trigger:
+  - entity_id: binary_sensor.aquarium_water_sensor
+    platform: state
+    from: 'off'
+    to: 'on'
+  action:
+    - service: notify.water_sensor_group_emergency
+      data:
+        message: Aquarium water sensor alarm sensor triggered!
+
 - alias: Washing Machine Water Sensor Alarm
   trigger:
   - entity_id: binary_sensor.water_sensor_0035

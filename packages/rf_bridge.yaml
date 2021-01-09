@@ -49,15 +49,6 @@ binary_sensor:
     state_topic: 'home/sensor019_battery'
     off_delay: 120
   - platform: mqtt
-    name: 'Aquarium Water Sensor'
-    device_class: 'moisture'
-    state_topic: 'home/sensor020'
-  - platform: mqtt
-    name: 'Aquarium Water Sensor Battery'
-    device_class: 'battery'
-    state_topic: 'home/sensor020_battery'
-    off_delay: 120
-  - platform: mqtt
     name: 'Basement Door'
     device_class: 'door'
     state_topic: 'home/sensor021'
@@ -68,3 +59,10 @@ binary_sensor:
     device_class: 'battery'
     state_topic: 'home/sensor021_battery'
     off_delay: 120
+  - platform: mqtt
+    name: 'Aquarium Water Sensor'
+    device_class: 'moisture'
+    state_topic: 'home/sensor037'
+    off_delay: 5
+    #payload_off: 'ON'
+    #payload_on: 'OFF'
