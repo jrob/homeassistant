@@ -1,0 +1,41 @@
+substitutions:
+  name: controller038
+  description: Aquarium Auto Top Off
+
+# Enable logging
+logger:
+
+<<: !include include/common.yaml
+
+esphome:
+  name: $name
+  platform: ESP8266
+  board: d1_mini
+
+servo:
+  - id: my_servo
+    output: pwm_output
+    min_level: 0
+    idle_level: 0
+    max_level: 1
+
+# Example output platform
+# On ESP32, use ledc output
+output:
+  - platform: esp8266_pwm
+    id: pwm_output
+    pin: D1
+    frequency: 20000 Hz
+    
+api:
+  services:
+    - service: control_servo
+      variables:
+        level: float
+      then:
+        - logger.log:
+            format: "API called with value %.1f"
+            args: [ 'level' ]
+        - servo.write:
+            id: my_servo
+            level: !lambda 'return level / 100.0;'
