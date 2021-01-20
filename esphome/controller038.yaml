@@ -13,8 +13,13 @@ esphome:
   board: d1_mini
 
 servo:
-  - id: my_servo
-    output: pwm_output
+  - id: pump_1
+    output: pwm_d0
+    min_level: 0
+    idle_level: 0
+    max_level: 1
+  - id: pump_2
+    output: pwm_d1
     min_level: 0
     idle_level: 0
     max_level: 1
@@ -23,19 +28,33 @@ servo:
 # On ESP32, use ledc output
 output:
   - platform: esp8266_pwm
-    id: pwm_output
+    id: pwm_d0
+    pin: D0
+    frequency: 20000 Hz
+  - platform: esp8266_pwm
+    id: pwm_d1
     pin: D1
     frequency: 20000 Hz
-    
+
 api:
   services:
-    - service: control_servo
+    - service: control_pump_1
       variables:
         level: float
       then:
         - logger.log:
-            format: "API called with value %.1f"
+            format: "Pump 1 called with value %.1f"
             args: [ 'level' ]
         - servo.write:
-            id: my_servo
+            id: pump_1
+            level: !lambda 'return level / 100.0;'
+    - service: control_pump_2
+      variables:
+        level: float
+      then:
+        - logger.log:
+            format: "Pump 2 called with value %.1f"
+            args: [ 'level' ]
+        - servo.write:
+            id: pump_2
             level: !lambda 'return level / 100.0;'
