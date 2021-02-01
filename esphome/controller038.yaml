@@ -13,11 +13,13 @@ esphome:
   board: d1_mini
 
 servo:
+
   - id: pump_1
     output: pwm_d7
     min_level: 0
     idle_level: 0
     max_level: 1
+
   - id: pump_2
     output: pwm_d1
     min_level: 0
@@ -26,6 +28,7 @@ servo:
 
 
 binary_sensor:
+
   - platform: gpio
     id: pump_1_water_sensor
     pin:
@@ -34,6 +37,7 @@ binary_sensor:
     name: $description Pump 1 Water Sensor
     filters:
       - invert:
+
   - platform: gpio
     id: pump_2_water_sensor
     pin:
@@ -42,6 +46,7 @@ binary_sensor:
     name: $description Pump 2 Water Sensor
     filters:
       - invert:
+
   - platform: gpio
     id: tank_water_sensor
     pin:
@@ -61,10 +66,12 @@ binary_sensor:
         - servo.detach: pump_2
 
 output:
+
   - platform: esp8266_pwm
     id: pwm_d7
     pin: D7
     frequency: 20000 Hz
+
   - platform: esp8266_pwm
     id: pwm_d1
     pin: D1
@@ -72,6 +79,7 @@ output:
 
 api:
   services:
+
     - service: control_pump_1
       variables:
         level: float
@@ -82,6 +90,7 @@ api:
         - servo.write:
             id: pump_1
             level: !lambda 'return level / 100.0;'
+
     - service: control_pump_2
       variables:
         level: float
