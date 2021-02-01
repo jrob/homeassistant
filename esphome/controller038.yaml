@@ -12,6 +12,19 @@ esphome:
   platform: ESP8266
   board: d1_mini
 
+script:
+  - id: turn_on_fill
+    then:
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: fill_pump_water_sensor
+              - binary_sensor.is_on: tank_water_sensor
+          then:
+            - servo.write:
+                id: fill_pump
+                level: 95%
+
 servo:
 
   # pump 1, drain
@@ -48,6 +61,12 @@ binary_sensor:
     name: $description Fill Pump Water Sensor
     filters:
       - invert:
+    on_release:
+      then:
+        - script.execute: turn_on_fill
+    on_press:
+      then:
+        - servo.detach: fill_pump
 
   - platform: gpio
     id: tank_water_sensor
@@ -57,12 +76,10 @@ binary_sensor:
     name: $description Tank Water Sensor
     filters:
       - invert:
-      - delayed_on_off: 1s
+      - delayed_on_off: 500ms
     on_press:
       then:
-        - servo.write:
-            id: fill_pump
-            level: 95%
+        - script.execute: turn_on_fill
     on_release:
       then:
         - servo.detach: fill_pump
