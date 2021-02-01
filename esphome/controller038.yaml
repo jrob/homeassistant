@@ -24,8 +24,42 @@ servo:
     idle_level: 0
     max_level: 1
 
-# Example output platform
-# On ESP32, use ledc output
+
+binary_sensor:
+  - platform: gpio
+    id: pump_1_water_sensor
+    pin:
+      number: D6
+      mode: INPUT_PULLUP
+    name: $description Pump 1 Water Sensor
+    filters:
+      - invert:
+  - platform: gpio
+    id: pump_2_water_sensor
+    pin:
+      number: D2
+      mode: INPUT_PULLUP
+    name: $description Pump 2 Water Sensor
+    filters:
+      - invert:
+  - platform: gpio
+    id: tank_water_sensor
+    pin:
+      number: D5
+      mode: INPUT_PULLUP
+    name: $description Tank Water Sensor
+    filters:
+      - invert:
+      - delayed_on_off: 1s
+    on_press:
+      then:
+        - servo.write:
+            id: pump_2
+            level: 95%
+    on_release:
+      then:
+        - servo.detach: pump_2
+
 output:
   - platform: esp8266_pwm
     id: pwm_d7
