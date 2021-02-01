@@ -14,7 +14,7 @@ esphome:
 
 servo:
   - id: pump_1
-    output: pwm_d0
+    output: pwm_d7
     min_level: 0
     idle_level: 0
     max_level: 1
@@ -28,8 +28,8 @@ servo:
 # On ESP32, use ledc output
 output:
   - platform: esp8266_pwm
-    id: pwm_d0
-    pin: D0
+    id: pwm_d7
+    pin: D7
     frequency: 20000 Hz
   - platform: esp8266_pwm
     id: pwm_d1
