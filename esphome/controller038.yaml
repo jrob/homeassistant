@@ -14,7 +14,8 @@ esphome:
 
 servo:
 
-  - id: pump_1
+  # pump 1, drain
+  - id: drain_pump
     output: pwm_d7
     min_level: 0
     idle_level: 0
@@ -30,11 +31,11 @@ servo:
 binary_sensor:
 
   - platform: gpio
-    id: pump_1_water_sensor
+    id: drain_pump_water_sensor
     pin:
       number: D6
       mode: INPUT_PULLUP
-    name: $description Pump 1 Water Sensor
+    name: $description Drain Pump Water Sensor
     filters:
       - invert:
 
@@ -80,15 +81,15 @@ output:
 api:
   services:
 
-    - service: control_pump_1
+    - service: control_drain_pump
       variables:
         level: float
       then:
         - logger.log:
-            format: "Pump 1 called with value %.1f"
+            format: "Drain Pump called with value %.1f"
             args: [ 'level' ]
         - servo.write:
-            id: pump_1
+            id: drain_pump
             level: !lambda 'return level / 100.0;'
 
     - service: control_pump_2

@@ -1,7 +1,7 @@
 # Home Assistant configuration
 input_number:
-  servo_control_1:
-    name: Pump 1 Control
+  servo_control_drain_pump:
+    name: Drain Pump Control
     initial: 0
     min: 0
     max: 100
@@ -17,13 +17,13 @@ input_number:
 
 
 automation:
-  - alias: Write Pump 1 Value to ESP
+  - alias: Write Drain Pump Value to ESP
     trigger:
       platform: state
-      entity_id: input_number.servo_control_1
+      entity_id: input_number.servo_control_drain_pump
     action:
       # Replace livingroom with the name you gave the ESP
-      - service: esphome.controller038_control_pump_1
+      - service: esphome.controller038_control_drain_pump
         data_template:
           level: "{{ trigger.to_state.state | int }}"
   - alias: Write Pump 2 Value to ESP
