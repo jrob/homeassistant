@@ -1,6 +1,7 @@
 wifi:
   ssid: !secret iot_wifi
   password: !secret iot_wifi_password
+  #use_address: ${ipaddress}
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -11,8 +12,10 @@ captive_portal:
 
 # Enable Home Assistant API
 api:
+  #password: !secret esphomeapipwd
 
 ota:
+  #password: !secret esphomeotapwd
 
 web_server:
   port: 80
