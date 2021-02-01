@@ -1,0 +1,45 @@
+esphome:
+  name: sensor034
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret iot_wifi
+  password: !secret iot_wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sensor Test Fallback Hotspot"
+    password: !secret fallback_wifi_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+web_server:
+  port: 80
+
+i2c:
+  - id: bus_a
+    sda: 4
+    scl: 5
+
+sensor:
+  - platform: bme280
+    temperature:
+      name: "BME280 Temperature"
+      oversampling: 1x
+    pressure:
+      name: "BME280 Pressure"
+      oversampling: 1x
+    humidity:
+      name: "BME280 Humidity"
+      oversampling: 1x
+    address: 0x76
+    update_interval: 60s
