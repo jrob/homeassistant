@@ -44,8 +44,7 @@ influxdb:
   database: homeassistant
   username: !secret influxdb_username
   password: !secret influxdb_password
-  ssl: true
-  verify_ssl: true
+  default_measurement: state
   tags_attributes:
     - friendly_name
   component_config_glob:
@@ -53,6 +52,9 @@ influxdb:
       override_measurement: humidity
     sensor.*temperature:
       override_measurement: temperature
+
+# Update to be able to monitor host system
+# https://kleypot.com/proxmox-home-assistant-host-system-hardware-monitoring/
 
 sensor:
   - platform: systemmonitor
@@ -68,4 +70,4 @@ sensor:
     sensors:
       water_sensor_2_temperature:
         value_template: "{{ state_attr('binary_sensor.water_sensor_2', 'temperature') }}"
-        unit_of_measurement: '°C'
+        unit_of_measurement: "°C"
