@@ -7,8 +7,8 @@ input_number:
     max: 100
     step: 1
     mode: slider
-  servo_control_2:
-    name: Pump 2 Control
+  servo_control_fill_pump:
+    name: Fill Pump Control
     initial: 0
     min: 0
     max: 100
@@ -26,12 +26,12 @@ automation:
       - service: esphome.controller038_control_drain_pump
         data_template:
           level: "{{ trigger.to_state.state | int }}"
-  - alias: Write Pump 2 Value to ESP
+  - alias: Write Fill Pump 2 Value to ESP
     trigger:
       platform: state
-      entity_id: input_number.servo_control_2
+      entity_id: input_number.servo_control_fill_pump
     action:
       # Replace livingroom with the name you gave the ESP
-      - service: esphome.controller038_control_pump_2
+      - service: esphome.controller038_control_fill_pump
         data_template:
           level: "{{ trigger.to_state.state | int }}"

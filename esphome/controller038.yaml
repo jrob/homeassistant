@@ -21,7 +21,8 @@ servo:
     idle_level: 0
     max_level: 1
 
-  - id: pump_2
+  # pump 2, fill
+  - id: fill_pump
     output: pwm_d1
     min_level: 0
     idle_level: 0
@@ -40,11 +41,11 @@ binary_sensor:
       - invert:
 
   - platform: gpio
-    id: pump_2_water_sensor
+    id: fill_pump_water_sensor
     pin:
       number: D2
       mode: INPUT_PULLUP
-    name: $description Pump 2 Water Sensor
+    name: $description Fill Pump Water Sensor
     filters:
       - invert:
 
@@ -60,11 +61,11 @@ binary_sensor:
     on_press:
       then:
         - servo.write:
-            id: pump_2
+            id: fill_pump
             level: 95%
     on_release:
       then:
-        - servo.detach: pump_2
+        - servo.detach: fill_pump
 
 output:
 
@@ -92,13 +93,13 @@ api:
             id: drain_pump
             level: !lambda 'return level / 100.0;'
 
-    - service: control_pump_2
+    - service: control_fill_pump
       variables:
         level: float
       then:
         - logger.log:
-            format: "Pump 2 called with value %.1f"
+            format: "Fill Pump called with value %.1f"
             args: [ 'level' ]
         - servo.write:
-            id: pump_2
+            id: fill_pump
             level: !lambda 'return level / 100.0;'
