@@ -29,14 +29,14 @@ servo:
 
   # pump 1, drain
   - id: drain_pump
-    output: pwm_d7
+    output: pwm_d2
     min_level: 0
     idle_level: 0
     max_level: 1
 
   # pump 2, fill
   - id: fill_pump
-    output: pwm_d1
+    output: pwm_d7
     min_level: 0
     idle_level: 0
     max_level: 1
@@ -47,7 +47,7 @@ binary_sensor:
   - platform: gpio
     id: drain_pump_water_sensor
     pin:
-      number: D6
+      number: D1
       mode: INPUT_PULLUP
     name: $description Drain Pump Water Sensor
     filters:
@@ -56,7 +56,7 @@ binary_sensor:
   - platform: gpio
     id: fill_pump_water_sensor
     pin:
-      number: D2
+      number: D6
       mode: INPUT_PULLUP
     name: $description Fill Pump Water Sensor
     filters:
@@ -87,13 +87,13 @@ binary_sensor:
 output:
 
   - platform: esp8266_pwm
-    id: pwm_d7
-    pin: D7
+    id: pwm_d2
+    pin: D2
     frequency: 20000 Hz
 
   - platform: esp8266_pwm
-    id: pwm_d1
-    pin: D1
+    id: pwm_d7
+    pin: D7
     frequency: 20000 Hz
 
 api:
