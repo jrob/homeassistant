@@ -112,6 +112,18 @@ binary_sensor:
       then:
         - servo.detach: fill_pump
         - script.stop: set_fill_pump_duration_exceeded
+    on_multi_click:
+      - timing:
+          - ON for at most 1s
+          - OFF for at most 1s
+          - ON for at most 1s
+          - OFF for at most 1s
+          - ON for at most 1s
+          - OFF for at most 1s
+        then:
+          - globals.set:
+              id: error_fill_pump_duration_exceeded
+              value: 'false'
 
 output:
 
