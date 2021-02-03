@@ -11,6 +11,10 @@ esphome:
   name: $name
   platform: ESP8266
   board: d1_mini
+  on_boot:
+    priority: -10
+    then:
+      - script.execute: turn_on_fill
 
 script:
   - id: turn_on_fill
