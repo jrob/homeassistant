@@ -17,6 +17,9 @@ esphome:
     then:
       - script.execute: turn_on_fill
 
+status_led:
+  pin: GPIO2
+
 globals:
   - id: error_fill_pump_duration_exceeded
     type: bool
