@@ -11,12 +11,20 @@ esphome:
   name: $name
   platform: ESP8266
   board: d1_mini
+  esp8266_restore_from_flash: true
   on_boot:
     priority: -10
     then:
       - script.execute: turn_on_fill
 
+globals:
+  - id: error_fill_pump_duration_exceeded
+    type: bool
+    restore_value: yes
+    initial_value: 'false'
+
 script:
+
   - id: turn_on_fill
     then:
       - if:
@@ -24,10 +32,21 @@ script:
             and:
               - binary_sensor.is_off: fill_pump_water_sensor
               - binary_sensor.is_on: tank_water_sensor
+              - lambda: |-
+                  return !id(error_fill_pump_duration_exceeded);
           then:
             - servo.write:
                 id: fill_pump
                 level: 95%
+            - script.execute: set_fill_pump_duration_exceeded
+
+  - id: set_fill_pump_duration_exceeded
+    then:
+      - delay: 15s
+      - globals.set:
+          id: error_fill_pump_duration_exceeded
+          value: 'true'
+      - servo.detach: fill_pump
 
 servo:
 
@@ -47,6 +66,11 @@ servo:
 
 
 binary_sensor:
+
+  - platform: template
+    name: fill_duration_exceeded
+    lambda: |-
+      return id(error_fill_pump_duration_exceeded);
 
   - platform: gpio
     id: drain_pump_water_sensor
@@ -87,6 +111,7 @@ binary_sensor:
     on_release:
       then:
         - servo.detach: fill_pump
+        - script.stop: set_fill_pump_duration_exceeded
 
 output:
 
