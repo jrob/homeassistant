@@ -35,3 +35,24 @@ automation:
       - service: esphome.controller038_control_fill_pump
         data_template:
           level: "{{ trigger.to_state.state | int }}"
+
+automation:
+  - alias: Desk Lamp Culture Lamp Cycle On
+    trigger:
+      platform: time
+      at:
+        - "01:00:00"
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.basement_desk_lamp
+
+  - alias: Desk Lamp Culture Lamp Cycle On
+    trigger:
+      platform: time
+      at:
+        - "05:00:00"
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.basement_desk_lamp
