@@ -15,7 +15,7 @@ esphome:
   on_boot:
     priority: -10
     then:
-      - script.execute: turn_on_fill
+      - script.execute: set_fill_pump_state
 
 status_led:
   pin: GPIO2
@@ -28,7 +28,7 @@ globals:
 
 script:
 
-  - id: turn_on_fill
+  - id: set_fill_pump_state
     then:
       - if:
           condition:
@@ -94,7 +94,7 @@ binary_sensor:
       - invert:
     on_release:
       then:
-        - script.execute: turn_on_fill
+        - script.execute: set_fill_pump_state
     on_press:
       then:
         - servo.detach: fill_pump
@@ -110,7 +110,7 @@ binary_sensor:
       - delayed_on_off: 500ms
     on_press:
       then:
-        - script.execute: turn_on_fill
+        - script.execute: set_fill_pump_state
     on_release:
       then:
         - servo.detach: fill_pump
