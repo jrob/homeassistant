@@ -43,6 +43,18 @@ script:
                 level: 95%
             - script.execute: set_fill_pump_duration_exceeded
 
+  - id: start_drain_pump
+    then:
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: drain_pump_water_sensor
+              - lambda: |-
+                  return !id(error_fill_pump_duration_exceeded);
+          then:
+            - servo.write:
+                id: drain_pump
+                level: 95%
   - id: set_fill_pump_duration_exceeded
     then:
       - delay: 15s
@@ -164,3 +176,14 @@ api:
         - servo.write:
             id: fill_pump
             level: !lambda 'return level / 100.0;'
+
+    - service: run_drain_pump
+      then:
+        - logger.log:
+            format: "Running drain pump"
+        - script.execute: start_drain_pump
+        - delay: 60s
+        - servo.write:
+            id: drain_pump
+            level: 0.0
+        - servo.detach: drain_pump
