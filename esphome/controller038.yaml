@@ -55,9 +55,10 @@ script:
             - servo.write:
                 id: drain_pump
                 level: 95%
+
   - id: set_fill_pump_duration_exceeded
     then:
-      - delay: 15s
+      - delay: 10min
       - globals.set:
           id: error_fill_pump_duration_exceeded
           value: 'true'
