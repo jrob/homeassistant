@@ -61,6 +61,9 @@ script:
       - globals.set:
           id: error_fill_pump_duration_exceeded
           value: 'true'
+      - servo.write:
+          id: fill_pump
+          level: 0.0
       - servo.detach: fill_pump
 
 servo:
@@ -109,6 +112,9 @@ binary_sensor:
         - script.execute: set_fill_pump_state
     on_press:
       then:
+        - servo.write:
+            id: fill_pump
+            level: 0.0
         - servo.detach: fill_pump
 
   - platform: gpio
@@ -125,6 +131,9 @@ binary_sensor:
         - script.execute: set_fill_pump_state
     on_release:
       then:
+        - servo.write:
+            id: fill_pump
+            level: 0.0
         - servo.detach: fill_pump
         - script.stop: set_fill_pump_duration_exceeded
     on_multi_click:
