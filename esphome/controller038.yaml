@@ -49,6 +49,7 @@ script:
           condition:
             and:
               - binary_sensor.is_off: drain_pump_water_sensor
+              - binary_sensor.is_off: fill_pump_water_sensor
               - lambda: |-
                   return !id(error_fill_pump_duration_exceeded);
           then:
