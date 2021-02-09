@@ -1,6 +1,6 @@
 substitutions:
   name: controller038
-  description: Aquarium Auto Top Off
+  description: Aquarium ATO/WC
 
 # Enable logging
 logger:
