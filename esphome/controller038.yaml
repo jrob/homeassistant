@@ -143,7 +143,7 @@ servo:
 binary_sensor:
 
   - platform: template
-    name: fill_duration_exceeded
+    name: $description Error Fill Duration Exceeded
     lambda: |-
       return id(error_fill_pump_duration_exceeded);
 
