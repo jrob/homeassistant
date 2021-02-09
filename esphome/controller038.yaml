@@ -124,6 +124,10 @@ binary_sensor:
             id: fill_pump
             level: 0.0
         - servo.detach: fill_pump
+        - servo.write:
+            id: drain_pump
+            level: 0.0
+        - servo.detach: drain_pump
 
   - platform: gpio
     id: tank_water_sensor
