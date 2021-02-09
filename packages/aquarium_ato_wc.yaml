@@ -17,7 +17,7 @@ input_number:
 
 automation:
 
-  - alias: auto_water_change
+  - alias: Auto Water Change
     trigger:
       platform: time
       at:
