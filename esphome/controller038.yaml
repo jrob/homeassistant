@@ -7,6 +7,60 @@ logger:
 
 <<: !include include/common.yaml
 
+# test scenarios
+# 1.
+#   setup: all sensors and servos off
+#   turn on tank sensor
+#   expected: fill pump turns on
+#   turn off tank sensor
+#   expected: fill pump turns off
+#
+# 2.
+#   setup: tank sensor on, fill pump on
+#   turn on fill sensor
+#   expected: fill pump turns on off
+#   then turn off fill sensor
+#   expected: fill pump turns on
+#
+# 3.
+#   setup: all sensors and servos off
+#   start drain pump via api
+#   expected: after configured time the pump stops
+#
+# 4.
+#   setup: all sensors and servos off
+#   turn on tank sensor
+#   run for longer than the configured error timeout
+#   expected: Error state is triggerd.
+#   start drain pump via api
+#   expected: drain pump does not start
+#   turn on tank sensor
+#   expected: fill pump does not turns on
+#
+# 5.
+#   setup: all sensors and servos off
+#   turn on drain sensor
+#   start drain pump via api
+#   expected: drain pump does not start
+#
+# 6.
+#   setup: all sensors and servos off
+#   turn on fill sensor
+#   start drain pump via api
+#   expected: drain pump does not start
+#
+# 7.
+#   setup: all sensors and servos off
+#   start drain pump via api
+#   turn on fill sensor
+#   expected: drain pump should stop
+#
+# 8.
+#   setup: all sensors and servos off
+#   start drain pump via api
+#   turn on drain sensor
+#   expected: drain pump should stop
+
 esphome:
   name: $name
   platform: ESP8266
