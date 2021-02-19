@@ -1,0 +1,103 @@
+notify:
+  - name: aquarium_ato_wc_group
+    platform: group
+    services:
+      - service: mobile_app_jeremy_phone
+
+# Home Assistant configuration
+input_number:
+  servo_control_drain_pump:
+    name: Drain Pump Control
+    initial: 0
+    min: 0
+    max: 100
+    step: 1
+    mode: slider
+  servo_control_fill_pump:
+    name: Fill Pump Control
+    initial: 0
+    min: 0
+    max: 100
+    step: 1
+    mode: slider
+
+automation:
+
+  - alias: Auto Water Change
+    trigger:
+      platform: time
+      at:
+        - "01:00:00"
+        - "02:00:00"
+    action:
+      repeat:
+        while:
+          - condition: template
+            value_template: '{{ repeat.index <= 10 }}'
+        sequence:
+          - service: esphome.controller038_run_drain_pump
+          - delay: "00:01:30"
+
+  - alias: Write Drain Pump Value to ESP
+    trigger:
+      platform: state
+      entity_id: input_number.servo_control_drain_pump
+    action:
+      # Replace livingroom with the name you gave the ESP
+      - service: esphome.controller038_control_drain_pump
+        data_template:
+          level: "{{ trigger.to_state.state | int }}"
+
+  - alias: Write Fill Pump 2 Value to ESP
+    trigger:
+      platform: state
+      entity_id: input_number.servo_control_fill_pump
+    action:
+      # Replace livingroom with the name you gave the ESP
+      - service: esphome.controller038_control_fill_pump
+        data_template:
+          level: "{{ trigger.to_state.state | int }}"
+
+  - alias: Desk Lamp Culture Lamp Cycle On
+    trigger:
+      platform: time
+      at:
+        - "01:00:00"
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.basement_desk_lamp
+
+  - alias: Desk Lamp Culture Lamp Cycle Off
+    trigger:
+      platform: time
+      at:
+        - "04:00:00"
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.basement_desk_lamp
+
+  - alias: ATO/WC Fill Tank Empty Alarm
+    trigger:
+    - entity_id: binary_sensor.aquarium_ato_wc_fill_pump_water_sensor
+      platform: state
+      from: 'off'
+      to: 'on'
+      for: '00:15:00'
+    action:
+      - service: notify.aquarium_ato_wc_group
+        data:
+          message: Aquarium ATO/WC fill tank empty!
+
+  - alias: ATO/WC Drain Tank Full Alarm
+    trigger:
+    - entity_id: binary_sensor.aquarium_ato_wc_drain_pump_water_sensor
+      platform: state
+      from: 'off'
+      to: 'on'
+      for: '00:15:00'
+    action:
+      - service: notify.aquarium_ato_wc_group
+        data:
+          message: Aquarium ATO/WC drain tank full!

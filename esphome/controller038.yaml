@@ -1,0 +1,265 @@
+substitutions:
+  name: controller038
+  description: Aquarium ATO/WC
+
+# Enable logging
+logger:
+
+<<: !include include/common.yaml
+
+# test scenarios
+# 1.
+#   setup: all sensors and servos off
+#   turn on tank sensor
+#   expected: fill pump turns on
+#   turn off tank sensor
+#   expected: fill pump turns off
+#
+# 2.
+#   setup: tank sensor on, fill pump on
+#   turn on fill sensor
+#   expected: fill pump turns on off
+#   then turn off fill sensor
+#   expected: fill pump turns on
+#
+# 3.
+#   setup: all sensors and servos off
+#   start drain pump via api
+#   expected: after configured time the pump stops
+#
+# 4.
+#   setup: all sensors and servos off
+#   turn on tank sensor
+#   run for longer than the configured error timeout
+#   expected: Error state is triggerd.
+#   start drain pump via api
+#   expected: drain pump does not start
+#   turn on tank sensor
+#   expected: fill pump does not turns on
+#
+# 5.
+#   setup: all sensors and servos off
+#   turn on drain sensor
+#   start drain pump via api
+#   expected: drain pump does not start
+#
+# 6.
+#   setup: all sensors and servos off
+#   turn on fill sensor
+#   start drain pump via api
+#   expected: drain pump does not start
+#
+# 7.
+#   setup: all sensors and servos off
+#   start drain pump via api
+#   turn on fill sensor
+#   expected: drain pump should stop
+#
+# 8.
+#   setup: all sensors and servos off
+#   start drain pump via api
+#   turn on drain sensor
+#   expected: drain pump should stop
+
+esphome:
+  name: $name
+  comment: $description
+  platform: ESP8266
+  board: d1_mini
+  esp8266_restore_from_flash: true
+  on_boot:
+    priority: -10
+    then:
+      - script.execute: set_fill_pump_state
+
+status_led:
+  pin: GPIO2
+
+globals:
+  - id: error_fill_pump_duration_exceeded
+    type: bool
+    restore_value: yes
+    initial_value: 'false'
+
+script:
+
+  - id: set_fill_pump_state
+    then:
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: fill_pump_water_sensor
+              - binary_sensor.is_on: tank_water_sensor
+              - lambda: |-
+                  return !id(error_fill_pump_duration_exceeded);
+          then:
+            - servo.write:
+                id: fill_pump
+                level: 95%
+            - script.execute: set_fill_pump_duration_exceeded
+
+  - id: start_drain_pump
+    then:
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: drain_pump_water_sensor
+              - binary_sensor.is_off: fill_pump_water_sensor
+              - lambda: |-
+                  return !id(error_fill_pump_duration_exceeded);
+          then:
+            - servo.write:
+                id: drain_pump
+                level: 95%
+
+  - id: set_fill_pump_duration_exceeded
+    then:
+      - delay: 10min
+      - globals.set:
+          id: error_fill_pump_duration_exceeded
+          value: 'true'
+      - servo.write:
+          id: fill_pump
+          level: 0.0
+      - servo.detach: fill_pump
+
+servo:
+
+  # pump 1, drain
+  - id: drain_pump
+    output: pwm_d2
+    min_level: 0
+    idle_level: 0
+    max_level: 1
+
+  # pump 2, fill
+  - id: fill_pump
+    output: pwm_d7
+    min_level: 0
+    idle_level: 0
+    max_level: 1
+
+
+binary_sensor:
+
+  - platform: template
+    name: $description Error Fill Duration Exceeded
+    lambda: |-
+      return id(error_fill_pump_duration_exceeded);
+
+  - platform: gpio
+    id: drain_pump_water_sensor
+    name: $description Drain Pump Water Sensor
+    pin:
+      number: D1
+      mode: INPUT_PULLUP
+    filters:
+      - invert:
+    on_press:
+      then:
+        - servo.write:
+            id: drain_pump
+            level: 0.0
+        - servo.detach: drain_pump
+
+  - platform: gpio
+    id: fill_pump_water_sensor
+    name: $description Fill Pump Water Sensor
+    pin:
+      number: D6
+      mode: INPUT_PULLUP
+    filters:
+      - invert:
+    on_release:
+      then:
+        - script.execute: set_fill_pump_state
+    on_press:
+      then:
+        - servo.write:
+            id: fill_pump
+            level: 0.0
+        - servo.detach: fill_pump
+        - servo.write:
+            id: drain_pump
+            level: 0.0
+        - servo.detach: drain_pump
+
+  - platform: gpio
+    id: tank_water_sensor
+    name: $description Tank Water Sensor
+    pin:
+      number: D5
+      mode: INPUT_PULLUP
+    filters:
+      - invert:
+      - delayed_on_off: 500ms
+    on_press:
+      then:
+        - script.execute: set_fill_pump_state
+    on_release:
+      then:
+        - servo.write:
+            id: fill_pump
+            level: 0.0
+        - servo.detach: fill_pump
+        - script.stop: set_fill_pump_duration_exceeded
+    on_multi_click:
+      - timing:
+          - ON for at most 1s
+          - OFF for at most 1s
+          - ON for at most 1s
+          - OFF for at most 1s
+          - ON for at most 1s
+          - OFF for at most 1s
+        then:
+          - globals.set:
+              id: error_fill_pump_duration_exceeded
+              value: 'false'
+
+output:
+
+  - platform: esp8266_pwm
+    id: pwm_d2
+    pin: D2
+    frequency: 20000 Hz
+
+  - platform: esp8266_pwm
+    id: pwm_d7
+    pin: D7
+    frequency: 20000 Hz
+
+api:
+  services:
+
+    - service: control_drain_pump
+      variables:
+        level: float
+      then:
+        - logger.log:
+            format: "Drain Pump called with value %.1f"
+            args: [ 'level' ]
+        - servo.write:
+            id: drain_pump
+            level: !lambda 'return level / 100.0;'
+
+    - service: control_fill_pump
+      variables:
+        level: float
+      then:
+        - logger.log:
+            format: "Fill Pump called with value %.1f"
+            args: [ 'level' ]
+        - servo.write:
+            id: fill_pump
+            level: !lambda 'return level / 100.0;'
+
+    - service: run_drain_pump
+      then:
+        - logger.log:
+            format: "Running drain pump"
+        - script.execute: start_drain_pump
+        - delay: 60s
+        - servo.write:
+            id: drain_pump
+            level: 0.0
+        - servo.detach: drain_pump
