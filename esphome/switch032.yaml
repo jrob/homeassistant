@@ -1,9 +1,6 @@
-# gosund wp5
-
 substitutions:
   name: switch032
   description: Coffee Maker
-
 
 # Enable logging
 logger:
@@ -12,7 +9,7 @@ logger:
 
 esphome:
   name: $name
-  comment: $description
+  comment: $description (Gosund WP5)
   platform: ESP8266
   board: esp01_1m
 
