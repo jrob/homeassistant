@@ -112,6 +112,14 @@ script:
                 id: drain_pump
                 level: 95%
 
+  - id: stop_fill_pump
+    then:
+      - servo.write:
+          id: fill_pump
+          level: 0%
+      - servo.detach: fill_pump
+      - script.stop: set_fill_pump_duration_exceeded
+
   - id: set_fill_pump_duration_exceeded
     then:
       - delay: 10min
@@ -175,10 +183,7 @@ binary_sensor:
         - script.execute: set_fill_pump_state
     on_press:
       then:
-        - servo.write:
-            id: fill_pump
-            level: 0.0
-        - servo.detach: fill_pump
+        - script.execute: stop_fill_pump
         - servo.write:
             id: drain_pump
             level: 0.0
@@ -198,11 +203,7 @@ binary_sensor:
         - script.execute: set_fill_pump_state
     on_release:
       then:
-        - servo.write:
-            id: fill_pump
-            level: 0.0
-        - servo.detach: fill_pump
-        - script.stop: set_fill_pump_duration_exceeded
+        - script.execute: stop_fill_pump
     on_multi_click:
       - timing:
           - ON for at most 1s
