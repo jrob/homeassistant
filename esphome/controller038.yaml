@@ -111,6 +111,11 @@ script:
             - servo.write:
                 id: drain_pump
                 level: 95%
+            - delay: 60s
+            - servo.write:
+                id: drain_pump
+                level: 0.0
+            - servo.detach: drain_pump
 
   - id: stop_fill_pump
     then:
@@ -259,8 +264,3 @@ api:
         - logger.log:
             format: "Running drain pump"
         - script.execute: start_drain_pump
-        - delay: 60s
-        - servo.write:
-            id: drain_pump
-            level: 0.0
-        - servo.detach: drain_pump
