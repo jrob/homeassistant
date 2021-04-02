@@ -1,6 +1,6 @@
 substitutions:
   name: switch004
-  description: Doughnut Lights
+  description: !secret light_02_name
 
 # Enable logging
 logger:

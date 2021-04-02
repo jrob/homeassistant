@@ -1,0 +1,25 @@
+substitutions:
+  name: switch044
+  description: Mini Aquarium Light
+
+# Enable logging
+logger:
+
+<<: !include include/common.yaml
+
+esphome:
+  name: $name
+  comment: $description
+  platform: ESP8266
+  board: d1_mini
+
+light:
+  - platform: monochromatic
+    name: $description Light
+    output: output_component1
+
+# Example output entry
+output:
+  - platform: esp8266_pwm
+    id: output_component1
+    pin: D1
