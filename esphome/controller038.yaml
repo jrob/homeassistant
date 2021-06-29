@@ -264,3 +264,11 @@ api:
         - logger.log:
             format: "Running drain pump"
         - script.execute: start_drain_pump
+
+    - service: reset_error_fill_pump_duration_exceeded
+      then:
+        - logger.log:
+            format: "Reseting pump duration error"
+        - globals.set:
+            id: error_fill_pump_duration_exceeded
+            value: 'false'
