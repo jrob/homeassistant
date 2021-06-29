@@ -127,7 +127,7 @@ script:
 
   - id: set_fill_pump_duration_exceeded
     then:
-      - delay: 10min
+      - delay: 20min
       - globals.set:
           id: error_fill_pump_duration_exceeded
           value: 'true'
