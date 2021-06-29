@@ -78,6 +78,28 @@ automation:
         data:
           entity_id: light.basement_desk_lamp
 
+  - alias: Mini Aquarium Light Cycle On
+    trigger:
+      platform: time
+      at:
+        - "09:00:00"
+    action:
+      - service: light.turn_on
+        data:
+          brightness_pct: 40
+          entity_id: light.mini_aquarium_light_light
+
+  - alias: Mini Aquarium Light Cycle Off
+    trigger:
+      platform: time
+      at:
+        - "21:00:00"
+    action:
+      - service: light.turn_off
+        data:
+          #transition: 3600
+          entity_id: light.mini_aquarium_light_light
+
   - alias: ATO/WC Fill Tank Empty Alarm
     trigger:
     - entity_id: binary_sensor.aquarium_ato_wc_fill_pump_water_sensor
