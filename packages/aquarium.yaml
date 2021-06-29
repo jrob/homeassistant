@@ -100,6 +100,31 @@ automation:
           #transition: 3600
           entity_id: light.mini_aquarium_light_light
 
+  - alias: CO2 On
+    trigger:
+      platform: time
+      at:
+        - "08:00:00"
+    action:
+      - service: switch.turn_on
+        data:
+          entity_id: switch.co2_valve
+
+  - alias: CO2 Off
+    trigger:
+      platform: time
+      at:
+        - "18:00:00"
+        - "19:00:00"
+        - "20:00:00"
+        - "21:00:00"
+        - "22:00:00"
+        - "23:00:00"
+    action:
+      - service: switch.turn_off
+        data:
+          entity_id: switch.co2_valve
+
   - alias: ATO/WC Fill Tank Empty Alarm
     trigger:
     - entity_id: binary_sensor.aquarium_ato_wc_fill_pump_water_sensor
