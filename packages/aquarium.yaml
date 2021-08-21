@@ -38,6 +38,21 @@ automation:
           - service: esphome.controller038_run_drain_pump
           - delay: "00:01:30"
 
+  - alias: Auto Water Change Daphnia Tank
+    trigger:
+      platform: time
+      at:
+        - "04:00:00"
+    action:
+      - service: switch.turn_on
+        target:
+          entity_id: switch.daphnia_ato_wc_pump
+      - delay: "00:25:00"
+      - service: switch.turn_off
+        target:
+          entity_id: switch.daphnia_ato_wc_pump
+
+
   - alias: Write Drain Pump Value to ESP
     trigger:
       platform: state
