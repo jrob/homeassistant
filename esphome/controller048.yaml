@@ -1,0 +1,49 @@
+substitutions:
+  name: controller048
+  description: Daphnia ATO WC
+  static_ip: ""
+
+# Enable logging
+logger:
+
+<<: !include include/common.yaml
+
+esphome:
+  name: $name
+  comment: $description
+  platform: ESP8266
+  board: d1_mini
+
+status_led:
+  pin: GPIO2
+
+
+binary_sensor:
+
+  - platform: gpio
+    id: reservoir_full_sensor
+    name: $description Reservoir Full Sensor
+    pin:
+      number: D1
+      mode: INPUT_PULLUP
+    filters:
+      - delayed_on_off: 1000ms
+    on_press:
+      then:
+        - switch.turn_off: relay_1
+    on_release:
+      then:
+        - switch.turn_on: relay_1
+
+switch:
+
+  - platform: gpio
+    id: relay_1
+    pin: D2
+    name: $description Valve
+
+  # 98 ml per minute
+  - platform: gpio
+    id: relay_2
+    pin: D7
+    name: $description Pump
