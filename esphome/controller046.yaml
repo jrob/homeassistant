@@ -1,0 +1,79 @@
+substitutions:
+  name: controller046
+  description: Garage Door Opener
+
+# Enable logging
+logger:
+
+<<: !include include/common.yaml
+
+esphome:
+  name: $name
+  comment: $description
+  platform: ESP8266
+  board: d1_mini
+
+status_led:
+  pin: GPIO2
+
+switch:
+
+  - platform: gpio
+    id: relay_1
+    pin: D5
+    name: $description Button
+
+binary_sensor:
+
+  - platform: gpio
+    id: garage_door_sensor_open
+    name: $description Sensor Open
+    pin:
+      number: D1
+      mode: INPUT_PULLUP
+    filters:
+      - invert:
+    on_press:
+      then:
+         - lambda: id(garage_door_cover).publish_state(COVER_OPEN);
+
+  - platform: gpio
+    id: garage_door_sensor_closed
+    name: $description Sensor Closed
+    pin:
+      number: D6
+      mode: INPUT_PULLUP
+    filters:
+      - invert:
+    on_press:
+      then:
+         - lambda: id(garage_door_cover).publish_state(COVER_CLOSED);
+#        - script.execute: set_fill_pump_state
+#    on_press:
+#      then:
+#        - script.execute: stop_fill_pump
+#        - servo.write:
+#            id: drain_pump
+#            level: 0.0
+#        - servo.detach: drain_pump
+
+cover:
+  - platform: template
+    id: garage_door_cover
+    name: "Garage Door"
+    device_class: garage
+    open_action:
+      # Turn the OPEN switch on briefly
+      - switch.turn_on: relay_1
+      - delay: 0.25s
+      - switch.turn_off: relay_1
+    close_action:
+      - switch.turn_on: relay_1
+      - delay: 0.25s
+      - switch.turn_off: relay_1
+    stop_action:
+      - switch.turn_on: relay_1
+      - delay: 0.25s
+      - switch.turn_off: relay_1
+    #optimistic: true
+    #assumed_state: true
