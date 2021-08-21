@@ -101,7 +101,8 @@ automation:
     action:
       - service: light.turn_on
         data:
-          brightness_pct: 40
+          brightness_pct: 45
+          transition: 600
           entity_id: light.mini_aquarium_light_light
 
   - alias: Mini Aquarium Light Cycle Off
@@ -112,7 +113,7 @@ automation:
     action:
       - service: light.turn_off
         data:
-          #transition: 3600
+          transition: 600
           entity_id: light.mini_aquarium_light_light
 
   - alias: CO2 On
