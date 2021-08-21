@@ -1,0 +1,67 @@
+substitutions:
+  name: controller047
+  description: Drain Sump
+  static_ip: ""
+
+# Enable logging
+logger:
+
+<<: !include include/common.yaml
+
+esphome:
+  name: $name
+  comment: $description
+  platform: ESP8266
+  board: d1_mini
+
+status_led:
+  pin: GPIO2
+
+
+binary_sensor:
+
+  - platform: gpio
+    id: reservoir_full_sensor
+    name: $description Reservoir Full Sensor
+    pin:
+      number: D1
+      mode: INPUT_PULLUP
+    on_press:
+      then:
+        - script.execute: start_drain_pump
+
+  - platform: gpio
+    id: reservoir_empty_sensor
+    name: $description Reservoir Empty Sensor
+    pin:
+      number: D6
+      mode: INPUT_PULLUP
+    filters:
+       invert:
+    on_press:
+      then:
+        - script.execute: start_drain_pump
+
+switch:
+  - platform: gpio
+    id: relay_1
+    pin: D2
+    name: $description Pump
+
+
+script:
+  - id: start_drain_pump
+    then:
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: reservoir_empty_sensor
+              - binary_sensor.is_on: reservoir_full_sensor
+          then:
+            - switch.turn_on: relay_1
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_on: reservoir_empty_sensor
+          then:
+            - switch.turn_off: relay_1
