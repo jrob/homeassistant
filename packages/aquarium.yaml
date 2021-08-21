@@ -2,7 +2,7 @@ notify:
   - name: aquarium_ato_wc_group
     platform: group
     services:
-      - service: mobile_app_jeremy_phone
+      - service: mobile_app_jeremy
 
 # Home Assistant configuration
 input_number:
