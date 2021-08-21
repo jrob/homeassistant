@@ -1,6 +1,6 @@
 substitutions:
   name: switch004
-  description: !secret light_02_name
+  description: Green Water Grow Light
 
 # Enable logging
 logger:

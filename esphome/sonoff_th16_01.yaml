@@ -1,5 +1,6 @@
 esphome:
   name: sonoff_th16_01
+  comment: Aquarium Temperature
   platform: ESP8266
   board: esp01_1m
 
