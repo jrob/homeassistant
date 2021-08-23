@@ -1,9 +1,9 @@
 substitutions:
   name: switch002
-  description: !secret lamp_01_name
+  description: Garden Irrigation
 
 # Enable logging
 logger:
 
 <<: !include include/common.yaml
-<<: !include include/gosund_wp5_light.yaml
+<<: !include include/gosund_wp5.yaml

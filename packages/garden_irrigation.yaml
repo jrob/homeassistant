@@ -1,0 +1,26 @@
+input_datetime:
+  garden_irrigation_start:
+    name: Time to start watering the garden.
+    has_date: false
+    has_time: true
+
+input_boolean:
+  enable_garden_irrigation:
+    name: Water Garden
+    icon: mdi:watering-can
+
+automation:
+  - alias: Garden Irrigation Start
+    id: garden_irrigation_start
+    condition: "{{ states('input_boolean.enable_garden_irrigation') == 'on' }}"
+    trigger:
+      platform: time
+      at: input_datetime.garden_irrigation_start
+    action:
+      - service: switch.turn_on
+        target:
+          entity_id: switch.garden_irrigation
+      - delay: "01:00"
+      - service: switch.turn_off
+        target:
+          entity_id: switch.garden_irrigation
