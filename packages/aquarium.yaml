@@ -117,6 +117,26 @@ automation:
           transition: 600
           entity_id: light.mini_aquarium_light_light
 
+  - alias: Green Water Grow Light Cycle On
+    trigger:
+      platform: time
+      at:
+        - "09:00:00"
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.green_water_grow_light
+
+  - alias: Green Water Grow Light Cycle Off
+    trigger:
+      platform: time
+      at:
+        - "21:00:00"
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.green_water_grow_light
+
   - alias: CO2 On
     trigger:
       platform: time
