@@ -13,12 +13,33 @@ esphome:
   comment: $description
   platform: ESP8266
   board: d1_mini
+  esp8266_restore_from_flash: true
 
 status_led:
   pin: GPIO2
 
+globals:
+  - id: error_fill_pump_duration_exceeded
+    type: bool
+    restore_value: yes
+    initial_value: 'false'
+
+script:
+
+  - id: set_fill_pump_duration_exceeded
+    then:
+      - delay: 10min
+      - globals.set:
+          id: error_fill_pump_duration_exceeded
+          value: 'true'
+      - switch.turn_off: relay_1
 
 binary_sensor:
+
+  - platform: template
+    name: $description Error Fill Duration Exceeded
+    lambda: |-
+      return id(error_fill_pump_duration_exceeded);
 
   - platform: gpio
     id: reservoir_full_sensor
@@ -31,9 +52,16 @@ binary_sensor:
     on_press:
       then:
         - switch.turn_off: relay_1
+        - script.stop: set_fill_pump_duration_exceeded
     on_release:
-      then:
-        - switch.turn_on: relay_1
+      - if:
+          condition:
+            and:
+              - lambda: |-
+                  return !id(error_fill_pump_duration_exceeded);
+          then:
+            - switch.turn_on: relay_1
+            - script.execute: set_fill_pump_duration_exceeded
 
 switch:
 
@@ -47,3 +75,14 @@ switch:
     id: relay_2
     pin: D7
     name: $description Pump
+
+api:
+  services:
+
+    - service: reset_error_fill_pump_duration_exceeded
+      then:
+        - logger.log:
+            format: "Reseting pump duration error"
+        - globals.set:
+            id: error_fill_pump_duration_exceeded
+            value: 'false'
