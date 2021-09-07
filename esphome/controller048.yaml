@@ -19,10 +19,16 @@ status_led:
   pin: GPIO2
 
 globals:
+
   - id: error_fill_pump_duration_exceeded
     type: bool
     restore_value: yes
     initial_value: 'false'
+
+  - id: enabled
+    type: bool
+    restore_value: yes
+    initial_value: 'true'
 
 script:
 
@@ -41,6 +47,11 @@ binary_sensor:
     lambda: |-
       return id(error_fill_pump_duration_exceeded);
 
+  - platform: template
+    name: $description Enabled
+    lambda: |-
+      return id(enabled);
+
   - platform: gpio
     id: reservoir_full_sensor
     name: $description Reservoir Full Sensor
@@ -56,9 +67,8 @@ binary_sensor:
     on_release:
       - if:
           condition:
-            and:
-              - lambda: |-
-                  return !id(error_fill_pump_duration_exceeded);
+            - lambda: |-
+                return id(enabled) && !id(error_fill_pump_duration_exceeded);
           then:
             - switch.turn_on: relay_1
             - script.execute: set_fill_pump_duration_exceeded
@@ -86,3 +96,18 @@ api:
         - globals.set:
             id: error_fill_pump_duration_exceeded
             value: 'false'
+
+    - service: toggle_enable
+      then:
+        - if:
+            condition:
+              - lambda: |-
+                  return id(enabled);
+            then:
+              - globals.set:
+                  id: enabled
+                  value: 'false'
+            else:
+              - globals.set:
+                  id: enabled
+                  value: 'true'
