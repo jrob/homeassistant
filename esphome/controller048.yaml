@@ -84,7 +84,35 @@ switch:
   - platform: gpio
     id: relay_2
     pin: D7
+    #name: $description Pump
+    #on_turn_on:
+      #- if:
+          #condition:
+            #- lambda: |-
+                #return !id(enabled);
+          #then:
+            #- delay: 1ms
+            #- switch.turn_off: relay_2
+
+  - platform: template
     name: $description Pump
+    id: relay_2_pub
+    lambda: |-
+      if (id(relay_2).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - if:
+          condition:
+            - lambda: |-
+                return id(enabled);
+          then:
+            - switch.turn_on: relay_2
+    turn_off_action:
+      then:
+        - switch.turn_off: relay_2
 
 api:
   services:
@@ -104,6 +132,8 @@ api:
               - lambda: |-
                   return id(enabled);
             then:
+              - switch.turn_off: relay_1
+              - switch.turn_off: relay_2
               - globals.set:
                   id: enabled
                   value: 'false'
