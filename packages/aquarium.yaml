@@ -40,6 +40,7 @@ automation:
           - delay: "00:01:30"
 
   - alias: Auto Water Change Daphnia Tank
+    # 10 percent = 730ml per minute, 25L tank, 3.5 minutes.
     trigger:
       platform: time
       at:
@@ -48,7 +49,7 @@ automation:
       - service: switch.turn_on
         target:
           entity_id: switch.daphnia_ato_wc_pump
-      - delay: "00:25:00"
+      - delay: "00:03:30"
       - service: switch.turn_off
         target:
           entity_id: switch.daphnia_ato_wc_pump

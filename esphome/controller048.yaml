@@ -80,7 +80,8 @@ switch:
     pin: D2
     name: $description Valve
 
-  # 98 ml per minute
+  # 98 ml per minute - Peristaltic pump
+  # 728 ml per minute, 90s, 1092 ml, gikfun diaphram pump
   - platform: gpio
     id: relay_2
     pin: D7
