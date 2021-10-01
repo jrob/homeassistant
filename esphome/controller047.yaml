@@ -26,6 +26,8 @@ binary_sensor:
     pin:
       number: D1
       mode: INPUT_PULLUP
+    filters:
+      - delayed_on_off: 500ms
     on_press:
       then:
         - script.execute: start_drain_pump
@@ -37,7 +39,8 @@ binary_sensor:
       number: D6
       mode: INPUT_PULLUP
     filters:
-       invert:
+      - invert:
+      - delayed_on_off: 500ms
     on_press:
       then:
         - script.execute: start_drain_pump
