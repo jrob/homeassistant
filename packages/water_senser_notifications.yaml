@@ -26,7 +26,7 @@ automation:
   action:
     - service: notify.water_sensor_group_emergency
       data:
-        message: Aquarium water sensor alarm sensor triggered!
+        message: Aquarium water sensor alarm triggered!
 
 - alias: Drain Tank Water Sensor Alarm
   trigger:
@@ -48,7 +48,7 @@ automation:
   action:
     - service: notify.water_sensor_group_emergency
       data:
-        message: Washing Machine water sensor alarm sensor triggered!
+        message: Washing Machine water sensor alarm triggered!
 
 - alias: Washing Machine Battery Sensor Alarm
   trigger:
@@ -58,4 +58,4 @@ automation:
   action:
     - service: notify.water_sensor_group
       data:
-        message: Washing Machine battery sensor alarm sensor triggered.
+        message: Washing Machine battery sensor alarm triggered.
