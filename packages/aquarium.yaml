@@ -108,7 +108,7 @@ automation:
         data:
           brightness_pct: 45
           transition: 600
-          entity_id: light.mini_aquarium_light_light
+          entity_id: light.wall_aquarium_display_light_1
 
   - alias: Mini Aquarium Light Cycle Off
     trigger:
@@ -119,7 +119,7 @@ automation:
       - service: light.turn_off
         data:
           transition: 600
-          entity_id: light.mini_aquarium_light_light
+          entity_id: light.wall_aquarium_display_light_1
 
   - alias: Green Water Grow Light Cycle On
     trigger:
@@ -129,7 +129,9 @@ automation:
     action:
       - service: light.turn_on
         data:
-          entity_id: light.green_water_grow_light
+          brightness_pct: 60
+          transition: 60
+          entity_id: light.wall_aquarium_display_light_2
 
   - alias: Green Water Grow Light Cycle Off
     trigger:
@@ -139,7 +141,8 @@ automation:
     action:
       - service: light.turn_off
         data:
-          entity_id: light.green_water_grow_light
+          transition: 60
+          entity_id: light.wall_aquarium_display_light_2
 
   - alias: CO2 On
     trigger:
