@@ -44,10 +44,10 @@ automation:
       platform: time
       at:
         - "04:00:00"
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.drain_sump_reservoir_full_sensor
-        state: off
+    condition:
+      condition: state
+      entity_id: binary_sensor.drain_sump_reservoir_full_sensor
+      state: "off"
     action:
       - service: switch.turn_on
         target:
