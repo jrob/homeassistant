@@ -13,6 +13,10 @@ esphome:
   comment: $description
   platform: ESP8266
   board: d1_mini
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: start_drain_pump
 
 status_led:
   pin: GPIO2
