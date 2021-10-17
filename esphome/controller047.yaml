@@ -21,6 +21,13 @@ esphome:
 status_led:
   pin: GPIO2
 
+globals:
+
+  - id: enabled
+    type: bool
+    restore_value: yes
+    initial_value: 'true'
+
 script:
   - id: start_drain_pump
     then:
@@ -29,6 +36,8 @@ script:
             and:
               - binary_sensor.is_off: reservoir_empty_sensor
               - binary_sensor.is_on: reservoir_full_sensor
+              - lambda: |-
+                  return id(enabled);
           then:
             - switch.turn_on: relay_1
       - if:
@@ -39,6 +48,11 @@ script:
             - switch.turn_off: relay_1
 
 binary_sensor:
+
+  - platform: template
+    name: $description Enabled
+    lambda: |-
+      return id(enabled);
 
   - platform: gpio
     id: reservoir_full_sensor
@@ -66,7 +80,46 @@ binary_sensor:
         - script.execute: start_drain_pump
 
 switch:
+
   - platform: gpio
     id: relay_1
     pin: D2
+
+  - platform: template
     name: $description Pump
+    id: relay_1_pub
+    lambda: |-
+      if (id(relay_1).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - if:
+          condition:
+            - lambda: |-
+                return id(enabled);
+          then:
+            - switch.turn_on: relay_1
+    turn_off_action:
+      then:
+        - switch.turn_off: relay_1
+
+api:
+  services:
+
+    - service: toggle_enable
+      then:
+        - if:
+            condition:
+              - lambda: |-
+                  return id(enabled);
+            then:
+              - switch.turn_off: relay_1
+              - globals.set:
+                  id: enabled
+                  value: 'false'
+            else:
+              - globals.set:
+                  id: enabled
+                  value: 'true'
