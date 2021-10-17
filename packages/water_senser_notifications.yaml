@@ -19,7 +19,7 @@ automation:
 
 - alias: Aquarium Water Sensor Alarm
   trigger:
-  - entity_id: binary_sensor.aquarium_water_sensor
+  - entity_id: binary_sensor.water_sensor_0050
     platform: state
     from: 'off'
     to: 'on'
