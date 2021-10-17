@@ -128,7 +128,7 @@ switch:
 light:
 
   - platform: monochromatic
-    name: $description Light 1
+    name: $description Light
     output: output_component1
 
 output:
