@@ -1,6 +1,6 @@
 substitutions:
   name: switch044
-  description: Mini Aquarium Light
+  description: Wall Aquarium Display
 
 # Enable logging
 logger:
@@ -15,11 +15,16 @@ esphome:
 
 light:
   - platform: monochromatic
-    name: $description Light
+    name: $description Light 1
     output: output_component1
+  - platform: monochromatic
+    name: $description Light 2
+    output: output_component2
 
-# Example output entry
 output:
   - platform: esp8266_pwm
     id: output_component1
-    pin: D1
+    pin: D6
+  - platform: esp8266_pwm
+    id: output_component2
+    pin: D7
