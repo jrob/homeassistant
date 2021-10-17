@@ -71,3 +71,14 @@ sensor:
       water_sensor_2_temperature:
         value_template: "{{ state_attr('binary_sensor.water_sensor_2', 'temperature') }}"
         unit_of_measurement: "°C"
+
+lovelace:
+  mode: storage
+  # Add yaml dashboards
+  dashboards:
+    lovelace-yaml:
+      mode: yaml
+      title: YAML
+      icon: mdi:script
+      show_in_sidebar: true
+      filename: lovelace.yaml

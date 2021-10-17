@@ -1,0 +1,269 @@
+title: Roberts Island 2
+views:
+  - badges:
+      - entity: binary_sensor.updater
+      - entity: person.jrob
+      - entity: person.lesley
+      - entity: person.lex
+      - entity: person.luke
+      - entity: sun.sun
+    cards:
+      - entity: weather.roberts_island
+        type: weather-forecast
+      - entities:
+          - entity: light.garage_fluorescent_light
+          - entity: light.garage_overhead_light
+          - entity: light.living_room_lamp
+          - entity: light.luke_accent_light
+          - entity: light.living_room_floor_lamp
+        title: Lights
+        type: entities
+      - type: glance
+        title: Basement
+        entities:
+          - entity: light.basement_tv_ceiling_fan_lights
+            name: TV Lights
+            tap_action:
+              action: toggle
+          - entity: light.basement_table_ceiling_fan_lights
+            name: Table Lights
+            tap_action:
+              action: toggle
+          - entity: light.basement_office_ceiling_fan_lights
+            name: Desk Lights
+            tap_action:
+              action: toggle
+          - entity: fan.basement_tv_fan
+            name: TV Fan
+            tap_action:
+              action: toggle
+          - entity: fan.basement_table_fan
+            name: Table Fan
+            tap_action:
+              action: toggle
+          - entity: light.basement_desk_lamp
+            name: Desk Lamp
+            tap_action:
+              action: toggle
+        columns: 3
+      - entities:
+          - entity: fan.garage_floor_fan
+        title: Fans
+        type: entities
+      - entities:
+          - entity: scene.work
+            icon: mdi:briefcase
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              service_data:
+                entity_id: scene.work
+          - entity: scene.workout
+            icon: mdi:dumbbell
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              service_data:
+                entity_id: scene.workout
+          - entity: scene.tv_and_dinner
+            icon: mdi:microwave
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              service_data:
+                entity_id: scene.tv_and_dinner
+          - entity: scene.movie_time
+            icon: mdi:television
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              service_data:
+                entity_id: scene.movie_time
+        show_icon: true
+        show_name: true
+        show_state: false
+        title: Scenes
+        type: glance
+      - entity: binary_sensor.front_door
+        type: entity
+      - type: entities
+        entities:
+          - entity: binary_sensor.basement_door
+          - entity: binary_sensor.front_door
+          - entity: binary_sensor.interior_garage_door
+          - entity: binary_sensor.back_door
+      - type: entities
+        entities:
+          - entity: sensor.brother_hl_l3290cdw_series_bk
+          - entity: sensor.brother_hl_l3290cdw_series_c
+          - entity: sensor.brother_hl_l3290cdw_series_m
+          - entity: sensor.brother_hl_l3290cdw_series_y
+      - type: entities
+        entities:
+          - entity: sensor.bme280_temperature
+          - entity: sensor.bme280_humidity
+          - entity: sensor.aquarium_temperature
+      - type: entities
+        entities:
+          - entity: binary_sensor.water_sensor_0035
+          - entity: binary_sensor.water_sensor_0036
+          - entity: binary_sensor.aquarium_water_sensor
+      - type: entities
+        entities:
+          - entity: light.basement_desk_lamp
+          - entity: fan.basement_table_fan
+          - entity: fan.basement_tv_fan
+        title: Basement
+      - type: glance
+        entities:
+          - entity: input_boolean.enable_coffee_maker
+            tap_action:
+              action: toggle
+          - entity: input_datetime.coffee_maker_start
+            name: Coffee Time
+      - type: glance
+        entities:
+          - entity: input_boolean.enable_garden_irrigation
+            tap_action:
+              action: toggle
+          - entity: input_datetime.garden_irrigation_start
+            name: Water Garden Time
+      - type: entities
+        entities:
+          - entity: switch.garden_irrigation
+          - entity: switch.electric_fence
+    path: default_view
+    title: Home
+  - icon: ''
+    title: Aquarium
+    path: aquarium
+    badges: []
+    cards:
+      - type: light
+        entity: light.mini_aquarium_light_light
+      - type: button
+        tap_action:
+          action: toggle
+        entity: switch.aquarium_pump
+        show_state: false
+        show_icon: true
+        icon: mdi:water-pump
+      - entity: sensor.aquarium_temperature
+        graph: line
+        type: sensor
+      - entity: binary_sensor.aquarium_water_sensor
+        type: entity
+      - type: iframe
+        url: >-
+          https://ha.robertsisland.com:8122/api/hassio_ingress/aoIRQbOnOGdUiw3eMuLeJ_WM8uSpj4TgGA_H8Z39soQ/d-solo/RQ9a5nJGk/homeassistant?orgId=1&panelId=2&refresh=1m&from=now-1d&to=now
+        aspect_ratio: 70%
+      - type: entity
+        entity: binary_sensor.aquarium_ato_wc_error_fill_duration_exceeded
+      - type: button
+        tap_action:
+          action: call-service
+          service: esphome.controller038_reset_error_fill_pump_duration_exceeded
+          service_data: {}
+          target: {}
+        entity: binary_sensor.aquarium_ato_wc_error_fill_duration_exceeded
+        show_state: false
+        icon: hass:alert
+      - type: button
+        tap_action:
+          action: toggle
+        entity: switch.co2_valve
+        icon: mdi:molecule-co2
+      - type: entities
+        entities:
+          - entity: light.green_water_grow_light
+      - type: glance
+        entities:
+          - entity: binary_sensor.daphnia_ato_wc_enabled
+            name: ATO Fill Enabled
+            tap_action:
+              action: call-service
+              service: esphome.controller048_toggle_enable
+          - entity: binary_sensor.daphnia_ato_wc_error_fill_duration_exceeded
+            name: Error
+            tap_action:
+              action: call-service
+              service: esphome.controller048_reset_error_fill_pump_duration_exceeded
+            icon: hass:alert
+          - entity: switch.daphnia_ato_wc_pump
+            name: 10% WC
+            icon: mdi:water-pump
+            tap_action:
+              action: call-service
+              service: automation.trigger
+              service_data:
+                entity_id: automation.auto_water_change_daphnia_tank
+          - entity: switch.daphnia_ato_wc_pump
+            tap_action:
+              action: call-service
+              service: switch.toggle
+              target:
+                entity_id: switch.daphnia_ato_wc_pump
+        title: Daphnia Tank
+  - badges: []
+    cards:
+      - entity: sensor.processor_use
+        graph: line
+        type: sensor
+      - entity: sensor.disk_use_percent
+        max: 100
+        min: 0
+        type: gauge
+      - type: button
+        tap_action:
+          action: toggle
+        entity: switch.qnap
+      - type: entities
+        entities:
+          - entity: sensor.cert_expiry_ha
+          - entity: sensor.cert_expiry_nas
+          - entity: sensor.cert_expiry_prox
+    path: system
+    title: System
+  - badges: []
+    cards:
+      - type: iframe
+        url: >-
+          https://ha.robertsisland.com:8123/api/hassio_ingress/aoIRQbOnOGdUiw3eMuLeJ_WM8uSpj4TgGA_H8Z39soQ/d-solo/RQ9a5nJGk/homeassistant?orgId=1&panelId=2&refresh=1m
+        aspect_ratio: '1.5'
+      - type: entities
+        entities:
+          - entity: input_number.servo_control_drain_pump
+          - entity: input_number.servo_control_fill_pump
+      - type: entity
+        entity: input_datetime.coffee_maker_start
+      - type: entity
+        entity: input_boolean.enable_coffee_maker
+      - type: button
+        tap_action:
+          action: toggle
+        entity: input_boolean.enable_coffee_maker
+      - type: glance
+        entities:
+          - entity: input_boolean.enable_coffee_maker
+            tap_action:
+              action: toggle
+          - entity: input_datetime.coffee_maker_start
+            name: Coffee Time
+      - type: light
+        entity: light.daphnia_light
+      - type: custom:mail-and-packages-card
+        name: Mail Summary
+        updated: sensor.mail_updated
+        details: true
+        image: false
+        fedex_packages: sensor.mail_fedex_packages
+      - type: entities
+        entities:
+          - entity: binary_sensor.garage_door_opener_sensor_closed
+          - entity: binary_sensor.garage_door_opener_sensor_open
+          - entity: cover.garage_door
+    icon: mdi:account-hard-hat
+    path: dev
+    title: Dev
+    visible:
+      - user: 2c154a94ec3b401087a47941aff97cbf
