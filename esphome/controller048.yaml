@@ -50,6 +50,7 @@ script:
           condition:
             and:
               - binary_sensor.is_off: reservoir_full_sensor
+              - binary_sensor.is_off: reservoir_full_backup_sensor
               - lambda: |-
                   return id(enabled) && !id(error_fill_pump_duration_exceeded);
           then:
@@ -57,8 +58,9 @@ script:
             - script.execute: set_fill_pump_duration_exceeded
       - if:
           condition:
-            and:
+            or:
               - binary_sensor.is_on: reservoir_full_sensor
+              - binary_sensor.is_on: reservoir_full_backup_sensor
           then:
             - switch.turn_off: relay_1
             - script.stop: set_fill_pump_duration_exceeded
@@ -96,6 +98,9 @@ binary_sensor:
       inverted: true
     filters:
       - delayed_on_off: 1000ms
+    on_press:
+      then:
+        - switch.turn_off: relay_1
 
 switch:
 
