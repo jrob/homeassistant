@@ -73,6 +73,16 @@ binary_sensor:
             - switch.turn_on: relay_1
             - script.execute: set_fill_pump_duration_exceeded
 
+  - platform: gpio
+    id: reservoir_full_backup_sensor
+    name: $description Reservoir Full Backup Sensor
+    pin:
+      number: D6
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on_off: 1000ms
+
 switch:
 
   - platform: gpio
