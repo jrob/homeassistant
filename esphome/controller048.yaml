@@ -115,6 +115,20 @@ switch:
       then:
         - switch.turn_off: relay_2
 
+light:
+
+  - platform: monochromatic
+    name: $description Light 1
+    output: output_component1
+
+output:
+
+  - platform: esp8266_pwm
+    id: output_component1
+    pin: D5
+    min_power: 0.001
+    zero_means_zero: true
+
 api:
   services:
 
