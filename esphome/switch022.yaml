@@ -5,13 +5,28 @@
 #------------------------------------------------
 substitutions:
   name: switch022
-  description: Lab Test Plug 22 A
+  description: Work Computer
   #ipaddress: 192.168.30.35
-  wattage_calibration: 588.4 -> 100  #  switch -> killawatt
-  amperage_calibration: 0.99 -> 0.82 # switch -> killawatt
-  voltage_calibration1: 0.0 -> 0.0
-  voltage_calibration2: 296.7 -> 115.7
+  #wattage_calibration: 588.4 -> 100  #  switch -> killawatt
+  #amperage_calibration: 0.99 -> 0.82 # switch -> killawatt
+  #voltage_calibration1: 0.0 -> 0.0
+  #voltage_calibration2: 296.7 -> 115.7
 
+  # 0.04 A, 1 W idle
+
+  #wattage_calibration: 1 -> 1 #  switch -> killawatt
+  #amperage_calibration: 1 -> 1 # switch -> killawatt
+  #voltage_calibration1: 0 -> 0
+  #voltage_calibration2: 1 -> 1
+
+  # Led Flood lamp
+  wattage_calibration1: 103.5 -> 18 #  switch -> killawatt
+  amperage_calibration1: 0.33 -> 0.29 # switch -> killawatt
+  # dehumidifier
+  wattage_calibration2: 366.5 -> 63 #  switch -> killawatt
+  amperage_calibration2: 1.05 -> 0.87 # switch -> killawatt
+  voltage_calibration1: 0 -> 0
+  voltage_calibration2: 317.5 -> 123.5
 
 <<: !include include/common.yaml
 
@@ -80,7 +95,8 @@ sensor:
         - calibrate_linear:
             # Map 0.0 (from sensor) to 0.0 (true value)
             - 0.0 -> 0.0 #Need to keep 0 mapped to 0 for when connected device is not drawing any power
-            - ${wattage_calibration} #Tested using a Kill-A-Watt meter and LED bulb minus 0.7W from just this plug with LED bulb off
+            - ${wattage_calibration1} #Tested using a Kill-A-Watt meter and LED bulb minus 0.7W from just this plug with LED bulb off
+            - ${wattage_calibration2}
     current:
       name: ${description} Current
       unit_of_measurement: A
@@ -88,7 +104,8 @@ sensor:
         - calibrate_linear:
             # Map 0.0 (from sensor) to 0.0 (true value)
             - 0.0 -> 0.0 #Need to keep 0 mapped to 0 for when connected device is not drawing any power
-            - ${amperage_calibration} #Tested using a Kill-A-Watt meter and LED bulb minus 0.02A from just this plug with LED bulb off
+            - ${amperage_calibration1} #Tested using a Kill-A-Watt meter and LED bulb minus 0.02A from just this plug with LED bulb off
+            - ${amperage_calibration2}
     voltage:
       name: ${description} Voltage
       unit_of_measurement: V
@@ -118,7 +135,7 @@ switch:
   name: ${description}
   pin: GPIO4
   id: relay
-  restore_mode: ALWAYS_OFF #Try to restore relay state after reboot/power-loss event.
+  restore_mode: ALWAYS_ON #Try to restore relay state after reboot/power-loss event.
   #RESTORE_DEFAULT_OFF (Default) - Attempt to restore state and default to OFF if not possible to restore. Uses flash write cycles.
   #RESTORE_DEFAULT_ON - Attempt to restore state and default to ON. Uses flash write cycles.
   #ALWAYS_OFF - Always initialize the pin as OFF on bootup. Does not use flash write cycles.
