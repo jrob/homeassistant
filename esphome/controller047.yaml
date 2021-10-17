@@ -21,6 +21,22 @@ esphome:
 status_led:
   pin: GPIO2
 
+script:
+  - id: start_drain_pump
+    then:
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: reservoir_empty_sensor
+              - binary_sensor.is_on: reservoir_full_sensor
+          then:
+            - switch.turn_on: relay_1
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_on: reservoir_empty_sensor
+          then:
+            - switch.turn_off: relay_1
 
 binary_sensor:
 
@@ -54,21 +70,3 @@ switch:
     id: relay_1
     pin: D2
     name: $description Pump
-
-
-script:
-  - id: start_drain_pump
-    then:
-      - if:
-          condition:
-            and:
-              - binary_sensor.is_off: reservoir_empty_sensor
-              - binary_sensor.is_on: reservoir_full_sensor
-          then:
-            - switch.turn_on: relay_1
-      - if:
-          condition:
-            and:
-              - binary_sensor.is_on: reservoir_empty_sensor
-          then:
-            - switch.turn_off: relay_1
