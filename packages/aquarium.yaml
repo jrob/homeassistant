@@ -3,6 +3,7 @@ notify:
     platform: group
     services:
       - service: mobile_app_jeremy
+      - service: pushover_jeremy
 
 # Home Assistant configuration
 input_number:
@@ -199,3 +200,27 @@ automation:
       - service: notify.aquarium_ato_wc_group
         data:
           message: Aquarium ATO/WC drain tank full!
+
+  - alias: Daphnia Tank Full Backup Sensor Alarm
+    trigger:
+    - entity_id: binary_sensor.daphnia_ato_wc_reservoir_full_backup_sensor
+      platform: state
+      from: 'off'
+      to: 'on'
+      for: '00:00:10'
+    action:
+      - service: notify.aquarium_ato_wc_group
+        data:
+          message: Daphnia Tank Full Backup Sensor is on!
+
+  - alias: Drain Sump Full Alarm
+    trigger:
+    - entity_id: binary_sensor.drain_sump_reservoir_full_sensor
+      platform: state
+      from: 'off'
+      to: 'on'
+      for: '00:05:00'
+    action:
+      - service: notify.aquarium_ato_wc_group
+        data:
+          message: Drain Sump full for too long!
