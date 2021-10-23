@@ -162,7 +162,7 @@ binary_sensor:
 
   - platform: gpio
     id: drain_pump_water_sensor
-    name: $description Drain Pump Water Sensor
+    name: $description Drain Reservoir Full Sensor
     pin:
       number: D1
       mode: INPUT_PULLUP
@@ -177,7 +177,7 @@ binary_sensor:
 
   - platform: gpio
     id: fill_pump_water_sensor
-    name: $description Fill Pump Water Sensor
+    name: $description Fill Reservoir Empty Sensor
     pin:
       number: D6
       mode: INPUT_PULLUP
