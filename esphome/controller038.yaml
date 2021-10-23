@@ -88,7 +88,7 @@ script:
       - if:
           condition:
             and:
-              - binary_sensor.is_off: fill_pump_water_sensor
+              - binary_sensor.is_off: fill_reservoir_empty_sensor
               - binary_sensor.is_off: tank_water_sensor
               - lambda: |-
                   return !id(error_fill_pump_duration_exceeded);
@@ -103,8 +103,8 @@ script:
       - if:
           condition:
             and:
-              - binary_sensor.is_off: drain_pump_water_sensor
-              - binary_sensor.is_off: fill_pump_water_sensor
+              - binary_sensor.is_off: drain_reservoir_full_sensor
+              - binary_sensor.is_off: fill_reservoir_empty_sensor
               - lambda: |-
                   return !id(error_fill_pump_duration_exceeded);
           then:
@@ -161,7 +161,7 @@ binary_sensor:
       return id(error_fill_pump_duration_exceeded);
 
   - platform: gpio
-    id: drain_pump_water_sensor
+    id: drain_reservoir_full_sensor
     name: $description Drain Reservoir Full Sensor
     pin:
       number: D1
@@ -176,7 +176,7 @@ binary_sensor:
         - servo.detach: drain_pump
 
   - platform: gpio
-    id: fill_pump_water_sensor
+    id: fill_reservoir_empty_sensor
     name: $description Fill Reservoir Empty Sensor
     pin:
       number: D6
