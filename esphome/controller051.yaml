@@ -14,6 +14,13 @@ esphome:
   platform: ESP32
   board: esp32doit-devkit-v1
 
+globals:
+
+  - id: enabled
+    type: bool
+    restore_value: yes
+    initial_value: 'true'
+
 light:
   - platform: monochromatic
     name: $description Light
@@ -24,3 +31,38 @@ output:
   - platform: ledc
     pin: GPIO33
     id: output_gpio_33
+
+binary_sensor:
+
+  - platform: template
+    name: $description Enabled
+    lambda: |-
+      return id(enabled);
+
+switch:
+
+  # xxx ml per minute, xxs, xxxx ml, gikfun diaphram pump
+  - platform: gpio
+    id: relay_pump
+    pin: GPIO16
+    restore_mode: ALWAYS_OFF
+
+  - platform: template
+    name: $description Pump
+    id: relay_pump_pub
+    lambda: |-
+      if (id(relay_pump).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - if:
+          condition:
+            - lambda: |-
+                return id(enabled);
+          then:
+            - switch.turn_on: relay_pump
+    turn_off_action:
+      then:
+        - switch.turn_off: relay_pump
