@@ -41,6 +41,32 @@ binary_sensor:
 
 switch:
 
+  - platform: gpio
+    id: relay_valve
+    pin: GPIO17
+    restore_mode: ALWAYS_OFF
+
+  - platform: template
+    name: $description Valve
+    id: relay_valve_pub
+    lambda: |-
+      if (id(relay_valve).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - if:
+          condition:
+            - lambda: |-
+                return id(enabled);
+          then:
+            - switch.turn_on: relay_valve
+    turn_off_action:
+      then:
+        - switch.turn_off: relay_valve
+
+
   # xxx ml per minute, xxs, xxxx ml, gikfun diaphram pump
   - platform: gpio
     id: relay_pump
