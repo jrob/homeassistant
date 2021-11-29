@@ -39,6 +39,15 @@ binary_sensor:
     lambda: |-
       return id(enabled);
 
+  - platform: gpio
+    id: reservoir_full_sensor
+    name: $description Full Sensor
+    pin:
+      number: GPIO27
+      mode: INPUT_PULLUP
+    filters:
+      - delayed_on_off: 1000ms
+
 switch:
 
   - platform: gpio
@@ -92,3 +101,31 @@ switch:
     turn_off_action:
       then:
         - switch.turn_off: relay_pump
+
+dallas:
+  - pin: GPIO26
+
+sensor:
+  - platform: dallas
+    address: 0x2D011921144A0228
+    name: $description Temperature
+
+api:
+  services:
+
+    - service: toggle_enable
+      then:
+        - if:
+            condition:
+              - lambda: |-
+                  return id(enabled);
+            then:
+              - switch.turn_off: relay_1
+              - switch.turn_off: relay_2
+              - globals.set:
+                  id: enabled
+                  value: 'false'
+            else:
+              - globals.set:
+                  id: enabled
+                  value: 'true'
