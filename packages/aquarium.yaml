@@ -58,6 +58,25 @@ automation:
         target:
           entity_id: switch.daphnia_ato_wc_pump
 
+  - alias: Auto Water Change Aquarium 02
+    # 10 percent = 674ml per minute, 37L tank, 5.5 minutes.
+    trigger:
+      platform: time
+      at:
+        - "02:30:00"
+        - "04:30:00"
+    condition:
+      condition: state
+      entity_id: binary_sensor.drain_sump_reservoir_full_sensor
+      state: "off"
+    action:
+      - service: switch.turn_on
+        target:
+          entity_id: switch.aquarium_02_pump
+      - delay: "00:02:45"
+      - service: switch.turn_off
+        target:
+          entity_id: switch.aquarium_02_pump
 
   - alias: Write Drain Pump Value to ESP
     trigger:
