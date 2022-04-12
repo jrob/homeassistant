@@ -144,6 +144,10 @@ output:
   - platform: ledc
     id: output_gpio_33
     pin: GPIO33
+    # 6
+    #min_power: 0.001
+    min_power: 0.002
+    zero_means_zero: true
 
 dallas:
   - pin: GPIO26

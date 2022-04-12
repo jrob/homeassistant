@@ -152,6 +152,22 @@ servo:
     idle_level: 0
     max_level: 1
 
+switch:
+
+  # pump 1, drain
+  - platform: output
+    id: drain_pump_sw
+    name: $description Drain Pump
+    icon: mdi:water-remove
+    output: pwm_d2
+
+  # pump 2, fill
+  - platform: output
+    id: fill_pump_sw
+    name: $description Fill Pump
+    icon: mdi:water-plus
+    output: pwm_d7
+
 
 binary_sensor:
 
