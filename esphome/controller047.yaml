@@ -1,7 +1,7 @@
 substitutions:
   name: controller047
   description: Drain Sump
-  static_ip: ""
+  # use_address: 192.168.1.100
 
 # Enable logging
 logger:

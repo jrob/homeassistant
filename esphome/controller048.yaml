@@ -116,15 +116,6 @@ switch:
     id: relay_2
     pin: D7
     restore_mode: ALWAYS_OFF
-    #name: $description Pump
-    #on_turn_on:
-      #- if:
-          #condition:
-            #- lambda: |-
-                #return !id(enabled);
-          #then:
-            #- delay: 1ms
-            #- switch.turn_off: relay_2
 
   - platform: template
     name: $description Pump
