@@ -1,8 +1,10 @@
 substitutions:
   name: light054
   friendly_name: Kauf Bulb BR30
+
 packages:
   kauf.rgbww: github://KaufHA/kauf-rgbww-bulbs/kauf-bulb.yaml
+
 esphome:
   name_add_mac_suffix: false
   name: $name
@@ -11,12 +13,3 @@ esphome:
 wifi:
   ssid: !secret iot_wifi
   password: !secret iot_wifi_password
-  #use_address: ${use_address}
-  manual_ip:
-    static_ip: !secret light054_ip
-    gateway: !secret gateway
-    subnet: !secret subnet
-
-#wifi:
-  #ssid: !secret wifi_ssid
-  #password: !secret wifi_password

@@ -4,7 +4,6 @@
 substitutions:
   name: sensor052
   description: Main Energy Monitor
-  static_ip: !secret sensor052_ip
 # Change the disp_name to something you want
   disp_name: 6C
 # Interval of how often the power is updated
