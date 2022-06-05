@@ -1,0 +1,205 @@
+notify:
+  - name: bbq_group
+    platform: group
+    services:
+      - service: mobile_app_jeremy
+      - service: pushover_jeremy
+        data:
+          data:
+            sound: echo
+            priority: 0
+
+input_number:
+
+  grill_alert_low:
+    name: Grill Low Temp
+    min: 100
+    max: 500
+    step: 5
+    icon: mdi:thermometer-alert
+    unit_of_measurement: ºF
+
+  grill_alert_high:
+    name: Grill High Temp
+    min: 100
+    max: 500
+    step: 5
+    icon: mdi:thermometer-alert
+    unit_of_measurement: ºF
+
+  grill_probe_1_target:
+    name: Probe 1 Target Temp
+    min: 60
+    max: 250
+    step: 1
+    icon: mdi:target
+    unit_of_measurement: ºF
+
+  grill_probe_2_target:
+    name: Probe 2 Target Temp
+    min: 60
+    max: 250
+    step: 1
+    icon: mdi:target
+    unit_of_measurement: ºF
+
+  grill_probe_3_target:
+    name: Probe 3 Target Temp
+    min: 60
+    max: 250
+    step: 1
+    icon: mdi:target
+    unit_of_measurement: ºF
+
+sensor:
+  - platform: template
+    sensors:
+
+      grill_alert_temp:
+        value_template:
+          '{% if (states.sensor.ibbq_probe_4.state | int) < (states.input_number.grill_alert_low.state | int) or (states.sensor.ibbq_probe_4.state | int)  > (states.input_number.grill_alert_high.state | int) %}
+            Alert
+           {% else %}
+            Normal
+           {% endif %}'
+        friendly_name: Grill Temp Alert
+        icon_template:
+          '{% if (states.sensor.ibbq_probe_4.state | int) < (states.input_number.grill_alert_low.state | int) or (states.sensor.ibbq_probe_4.state | int)  > (states.input_number.grill_alert_high.state | int) %}
+            mdi:alert-circle
+           {% else %}
+            mdi:alert-circle-check
+           {% endif %}'
+
+      target_alert_temp_probe_1:
+        value_template:
+          '{% if (states.sensor.ibbq_probe_1.state | int) >= (states.input_number.grill_probe_1_target.state | int) %}
+            Alert
+           {% else %}
+            Normal
+           {% endif %}'
+        friendly_name: Probe 1 Target Alert
+        icon_template:
+          '{% if (states.sensor.ibbq_probe_1.state | int) >= (states.input_number.grill_probe_1_target.state | int) %}
+            mdi:alert-circle
+           {% else %}
+            mdi:alert-circle-check
+           {% endif %}'
+
+      target_alert_temp_probe_2:
+        value_template:
+          '{% if (states.sensor.ibbq_probe_2.state | int) >= (states.input_number.grill_probe_2_target.state | int) %}
+            Alert
+           {% else %}
+            Normal
+           {% endif %}'
+        friendly_name: Probe 2 Target Alert
+        icon_template:
+          '{% if (states.sensor.ibbq_probe_2.state | int) >= (states.input_number.grill_probe_2_target.state | int) %}
+            mdi:alert-circle
+           {% else %}
+            mdi:alert-circle-check
+           {% endif %}'
+
+      target_alert_temp_probe_3:
+        value_template:
+          '{% if (states.sensor.ibbq_probe_3.state | int) >= (states.input_number.grill_probe_3_target.state | int) %}
+            Alert
+           {% else %}
+            Normal
+           {% endif %}'
+        friendly_name: Probe 3 Target Alert
+        icon_template:
+          '{% if (states.sensor.ibbq_probe_3.state | int) >= (states.input_number.grill_probe_3_target.state | int) %}
+            mdi:alert-circle
+           {% else %}
+            mdi:alert-circle-check
+           {% endif %}'
+
+automation:
+
+  - alias: "Monitor Grill Temp Alert"
+    trigger:
+      - platform: state
+        entity_id: sensor.grill_alert_temp
+        to: 'Alert'
+    action:
+      - service: notify.bbq_group
+        data:
+          message: "Grill temp outside limits. Currently {{ states.sensor.ibbq_probe_4.state }} F"
+          title: "Grill Temp"
+          data:
+            #url: "[LINK TO BBQ DASHBOARD]"
+            sound: pianobar
+            priority: 0
+
+  - alias: "Monitor Grill Temp Normal"
+    trigger:
+      - platform: state
+        entity_id: sensor.grill_alert_temp
+        to: 'Normal'
+    action:
+      - service: notify.bbq_group
+        data:
+          message: "Grill temp within limits. Currently {{ states.sensor.ibbq_probe_4.state }} F"
+          title: "Grill Temp"
+          data:
+            sound: pianobar
+            priority: 0
+
+  - alias: "Probe 1 Target Temp"
+    trigger:
+      - platform: state
+        entity_id: sensor.target_alert_temp_probe_1
+        to: 'Alert'
+    action:
+      - service: notify.bbq_group
+        data:
+          message: "Probe 1 has reached the target temp. Currently {{ states.sensor.ibbq_probe_1.state }} F"
+          title: "Target Temperature"
+          data:
+            sound: pianobar
+            priority: 0
+
+  - alias: "Probe 2 Target Temp"
+    trigger:
+      - platform: state
+        entity_id: sensor.target_alert_temp_probe_2
+        to: 'Alert'
+    action:
+      - service: notify.bbq_group
+        data:
+          message: "Probe 2 has reached the target temp. Currently {{ states.sensor.ibbq_probe_2.state }} F"
+          title: "Target Temperature"
+          data:
+            sound: pianobar
+            priority: 0
+
+  - alias: "Probe 3 Target Temp"
+    trigger:
+      - platform: state
+        entity_id: sensor.target_alert_temp_probe_3
+        to: 'Alert'
+    action:
+      - service: notify.bbq_group
+        data:
+          message: "Probe 3 has reached the target temp. Currently {{ states.sensor.ibbq_probe_3.state }} F"
+          title: "Target Temperature"
+          data:
+            sound: pianobar
+            priority: 0
+
+alert:
+  probe_1:
+    name: Probe 1 Temeprature Reached
+    entity_id: sensor.target_alert_temp_probe_1
+    state: 'Alert'
+    repeat: 1
+    notifiers:
+      - bbq_group
+  probe_2:
+    name: Probe 2 Temeprature Reached
+    entity_id: sensor.target_alert_temp_probe_2
+    state: 'Alert'
+    repeat: 1
+    notifiers:
+      - bbq_group
