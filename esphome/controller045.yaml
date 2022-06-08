@@ -1,0 +1,55 @@
+substitutions:
+  name: controller045
+  description: Water Monitor and Cutoff
+
+<<: !include include/common.yaml
+
+esphome:
+  name: $name
+  comment: $description
+
+esp32:
+  board: nodemcu-32s
+
+# Enable logging
+logger:
+
+switch:
+
+  - platform: gpio
+    id: relay_1
+    pin: GPIO32
+    name: $description Valve
+    restore_mode: ALWAYS_OFF
+
+sensor:
+
+    # https://www.digiten.shop/products/digiten-1-4-quick-connect-0-3-10l-min-water-hall-effect-flow-sensor-meter
+    # Frequency: F=36 * Q (L / Min) error: ± 2%
+    # Pulses per liter 2160 = 36 * 60
+
+    # using 1902 pulses per liter
+    # 613 g
+    # 1170 total pulses
+    # 0.62368 measured by sensor
+
+    # using 1904 pulses per liter
+    # 610 g
+    # 1185 total pulses
+    # 0.62237 measured by sensor
+
+  - platform: pulse_counter
+    #pin: 19
+    pin: GPIO34
+    update_interval: 15s
+    unit_of_measurement: lpm
+    name: $description Water LPM
+    accuracy_decimals: 1
+    filters:
+      - lambda: return x / 1904 * (60 / 15);
+    total:
+      name: $description Total Liters
+      unit_of_measurement: L # Liters
+      accuracy_decimals: 1
+      filters:
+        - lambda: return x / 1904;

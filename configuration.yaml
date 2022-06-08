@@ -82,3 +82,17 @@ lovelace:
       icon: mdi:script
       show_in_sidebar: true
       filename: lovelace.yaml
+
+utility_meter:
+  util_water_usage_hourly:
+    source: sensor.water_monitor_and_cutoff_total_liters
+    cycle: hourly
+  util_water_usage_daily:
+    source: sensor.water_monitor_and_cutoff_total_liters
+    cycle: daily
+  util_water_usage_monthly:
+    source: sensor.water_monitor_and_cutoff_total_liters
+    cycle: monthly
+  util_water_usage_yearly:
+    source: sensor.water_monitor_and_cutoff_total_liters
+    cycle: yearly
