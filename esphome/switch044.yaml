@@ -6,10 +6,11 @@ substitutions:
 logger:
 
 packages:
-  common: !include include/common.yaml
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
 #wifi:
-#  use_address: 192.168.x.x
+#  use_address: 191.168.x.x
 
 esphome:
   name: $name

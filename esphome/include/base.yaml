@@ -1,0 +1,12 @@
+captive_portal:
+
+# Enable Home Assistant API
+api:
+  reboot_timeout: 2h
+  #password: !secret esphomeapipwd
+
+ota:
+  #password: !secret esphomeotapwd
+
+web_server:
+  port: 80
