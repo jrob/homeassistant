@@ -23,7 +23,6 @@ input_number:
     mode: slider
 
 automation:
-
   - alias: Auto Water Change
     trigger:
       platform: time
@@ -34,7 +33,7 @@ automation:
       repeat:
         while:
           - condition: template
-            value_template: '{{ repeat.index <= 10 }}'
+            value_template: "{{ repeat.index <= 10 }}"
         sequence:
           - service: esphome.controller038_run_drain_pump
           - delay: "00:01:30"
@@ -60,9 +59,15 @@ automation:
           entity_id: switch.daphnia_ato_wc_pump
 
   - alias: Auto Water Change Aquarium 02
-    #  10 percent = 674ml per minute, 37L tank, 5.5 minutes.
-    #   5 percent = 674ml per minute, 37L tank, 2.75 minutes.
-    # 3.5 percent = ~ 675 per min, 37L, 2 min
+    # 6 g or 22.75 L
+    # (11.5 * 11.5 * 11.25) - (11.5 * 11.5 * 0.75) = 1388 in^3 ~= 22.75 L
+    # 665 ml/min calculated on 2022-07-21
+    #  15 percent = 3.4 minutes.
+    #  10 percent = 3.4 minutes.
+    #   5 percent = 1.7 minutes.
+    #       2 min = 5.8 %
+    #       4 min = 11.7 %
+    #       6 min = 17.5 %
     trigger:
       platform: time
       at:
@@ -193,11 +198,11 @@ automation:
 
   - alias: ATO/WC Fill Tank Empty Alarm
     trigger:
-    - entity_id: binary_sensor.aquarium_ato_wc_fill_reservoir_empty_sensor
-      platform: state
-      from: 'off'
-      to: 'on'
-      for: '00:15:00'
+      - entity_id: binary_sensor.aquarium_ato_wc_fill_reservoir_empty_sensor
+        platform: state
+        from: "off"
+        to: "on"
+        for: "00:15:00"
     action:
       - service: notify.aquarium_ato_wc_group
         data:
@@ -205,11 +210,11 @@ automation:
 
   - alias: ATO/WC Drain Tank Full Alarm
     trigger:
-    - entity_id: binary_sensor.aquarium_ato_wc_drain_reservoir_full_sensor
-      platform: state
-      from: 'off'
-      to: 'on'
-      for: '00:15:00'
+      - entity_id: binary_sensor.aquarium_ato_wc_drain_reservoir_full_sensor
+        platform: state
+        from: "off"
+        to: "on"
+        for: "00:15:00"
     action:
       - service: notify.aquarium_ato_wc_group
         data:
@@ -217,11 +222,11 @@ automation:
 
   - alias: Daphnia Tank Full Backup Sensor Alarm
     trigger:
-    - entity_id: binary_sensor.daphnia_ato_wc_reservoir_full_backup_sensor
-      platform: state
-      from: 'off'
-      to: 'on'
-      for: '00:00:10'
+      - entity_id: binary_sensor.daphnia_ato_wc_reservoir_full_backup_sensor
+        platform: state
+        from: "off"
+        to: "on"
+        for: "00:00:10"
     action:
       - service: notify.aquarium_ato_wc_group
         data:
@@ -229,11 +234,11 @@ automation:
 
   - alias: Drain Sump Full Alarm
     trigger:
-    - entity_id: binary_sensor.drain_sump_reservoir_full_sensor
-      platform: state
-      from: 'off'
-      to: 'on'
-      for: '00:05:00'
+      - entity_id: binary_sensor.drain_sump_reservoir_full_sensor
+        platform: state
+        from: "off"
+        to: "on"
+        for: "00:05:00"
     action:
       - service: notify.aquarium_ato_wc_group
         data:
