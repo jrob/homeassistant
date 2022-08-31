@@ -1,6 +1,6 @@
 substitutions:
   name: switch004
-  description: Green Water Grow Light
+  description: Aqurium Controller Power Switch
 
 # Enable logging
 logger:
