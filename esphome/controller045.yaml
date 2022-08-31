@@ -14,13 +14,74 @@ esp32:
 # Enable logging
 logger:
 
+globals:
+
+  - id: error_flow_duration_exceeded
+    type: bool
+    restore_value: yes
+    initial_value: 'false'
+
+  - id: enabled
+    type: bool
+    restore_value: yes
+    initial_value: 'true'
+
+number:
+  - platform: template
+    name: Error delay (m)
+    id: error_delay
+    icon: mdi:numeric
+    restore_value: true
+    initial_value: 5
+    optimistic: true
+    min_value: 1
+    step: 1
+    max_value: 120
+
+script:
+
+  - id: set_flow_duration_exceeded
+    then:
+      - delay: !lambda "return id(error_delay).state * 1000 * 60;"
+      - globals.set:
+          id: error_flow_duration_exceeded
+          value: 'true'
+      - switch.turn_off: relay_valve
+
 switch:
 
+  - platform: template
+    name: $description Error
+    icon: mdi:alert
+    lambda: |-
+      return id(error_flow_duration_exceeded);
+    turn_off_action:
+      then:
+        - globals.set:
+            id: error_flow_duration_exceeded
+            value: 'false'
+
   - platform: gpio
-    id: relay_1
+    id: relay_valve
     pin: GPIO32
+    restore_mode: RESTORE_DEFAULT_OFF
+
+  - platform: template
     name: $description Valve
-    restore_mode: ALWAYS_OFF
+    id: relay_valve_pub
+    icon: mdi:pipe-valve
+    lambda: |-
+      return id(relay_valve).state;
+    turn_on_action:
+      - if:
+          condition:
+            - lambda: |-
+                return id(enabled);
+          then:
+            - switch.turn_on: relay_valve
+    turn_off_action:
+      then:
+        - switch.turn_off: relay_valve
 
 sensor:
 
@@ -38,18 +99,65 @@ sensor:
     # 1185 total pulses
     # 0.62237 measured by sensor
 
+# 'Water Monitor and Cutoff Water LPM': Total : 312 pulses
+# 21:58:55	[D]	[sensor:125]
+# 'Water Monitor and Cutoff Total Liters': Sending state 0.16387 L with 1 decimals of accuracy
+# 21:59:01	[D]	[pulse_counter:162]
+# 'Water Monitor and Cutoff Water LPM': Retrieved counter: 320.00 pulses/min
+# 21:59:01	[D]	[sensor:125]
+# 'Water Monitor and Cutoff Water LPM': Sending state 1.68067 lpm with 1 decimals of accuracy
+# 21:59:01	[D]	[pulse_counter:168]
+# 'Water Monitor and Cutoff Water LPM': Total : 344 pulses
+# 21:59:01	[D]	[sensor:125]
+
+
   - platform: pulse_counter
-    #pin: 19
+    id: water_lpm
+    icon: mdi:speedometer
     pin: GPIO34
-    update_interval: 15s
+    update_interval: 6s
     unit_of_measurement: lpm
     name: $description Water LPM
     accuracy_decimals: 1
     filters:
-      - lambda: return x / 1904 * (60 / 15);
+      - lambda: return x / 1904 * (60 / 6) / 10;
     total:
       name: $description Total Liters
       unit_of_measurement: L # Liters
       accuracy_decimals: 1
       filters:
         - lambda: return x / 1904;
+
+binary_sensor:
+
+  - platform: template
+    name: $description Flow Duration Exceeded
+    lambda: |-
+      return id(error_flow_duration_exceeded);
+
+  - platform: template
+    name: $description Water Flowing
+    lambda: |-
+      if (id(water_lpm).state > 0) {
+        // Water is flowing.
+        return true;
+      } else {
+        // Water is not flowing.
+        return false;
+      }
+    on_press:
+      - script.execute: set_flow_duration_exceeded
+    on_release:
+      - script.stop: set_flow_duration_exceeded
+
+api:
+
+  services:
+
+    - service: reset_error_flow_duration_exceeded
+      then:
+        - logger.log:
+            format: "Reseting flow duration error"
+        - globals.set:
+            id: error_flow_duration_exceeded
+            value: 'false'
