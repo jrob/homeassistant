@@ -167,20 +167,3 @@ api:
         - globals.set:
             id: error_fill_pump_duration_exceeded
             value: 'false'
-
-    - service: toggle_enable
-      then:
-        - if:
-            condition:
-              - lambda: |-
-                  return id(enabled);
-            then:
-              - switch.turn_off: relay_valve
-              - switch.turn_off: relay_pump
-              - globals.set:
-                  id: enabled
-                  value: 'false'
-            else:
-              - globals.set:
-                  id: enabled
-                  value: 'true'
