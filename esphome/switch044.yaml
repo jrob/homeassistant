@@ -5,7 +5,11 @@ substitutions:
 # Enable logging
 logger:
 
-<<: !include include/common.yaml
+packages:
+  common: !include include/common.yaml
+
+#wifi:
+#  use_address: 192.168.x.x
 
 esphome:
   name: $name
