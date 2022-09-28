@@ -31,3 +31,265 @@
     entity_id: switch.desk_lamp_relay
     type: turn_off
   mode: single
+- id: '1662082206171'
+  alias: Bedroom lamp button single turn on ve
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.button_0057_action
+    to: single
+  condition:
+  - condition: state
+    state: 'off'
+    entity_id: light.bulb_0056
+  action:
+  - service: light.turn_on
+    data:
+      color_temp: 270
+      transition: 0
+      brightness_pct: 0
+    target:
+      entity_id: light.bulb_0056
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+    enabled: false
+  - service: light.turn_on
+    data:
+      transition: 0
+      brightness_pct: 100
+      color_temp: 270
+    target:
+      entity_id: light.bulb_0056
+  mode: single
+- id: '1662082583068'
+  alias: Bedroom lamp button single turn off ve
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.button_0057_action
+    to: single
+  condition:
+  - condition: state
+    entity_id: light.bulb_0056
+    state: 'on'
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.bulb_0056
+  mode: single
+- id: '1662082644203'
+  alias: Bedroom lamp button long press ve
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.button_0057_action
+    to: long
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      rgb_color:
+      - 255
+      - 0
+      - 0
+      brightness_pct: 15
+    target:
+      entity_id: light.bulb_0056
+  mode: single
+- id: '1662093369982'
+  alias: test test
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.button_0058_action
+    to: single
+  condition: []
+  action:
+  - type: toggle
+    device_id: 5180f266ed254be48fdf9218ccd8ab13
+    entity_id: light.basement_table_ceiling_fan_lights
+    domain: light
+  mode: single
+- id: '1662154713030'
+  alias: Luke Diamond Light turn on
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.button_0058_action
+    to: single
+  condition:
+  - condition: state
+    entity_id: light.bulb_0055
+    state: 'off'
+  action:
+  - service: light.turn_on
+    data:
+      transition: 1
+      brightness_pct: 100
+      color_temp: 268
+    target:
+      entity_id: light.bulb_0055
+  mode: single
+- id: '1662154805178'
+  alias: Luke Diamond Light turn off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.button_0058_action
+    to: single
+  condition:
+  - condition: state
+    entity_id: light.bulb_0055
+    state: 'on'
+  action:
+  - service: light.turn_off
+    data:
+      transition: 1
+    target:
+      entity_id: light.bulb_0055
+  mode: single
+- id: '1662156895666'
+  alias: Luke Diamond Light party mode
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.button_0058_action
+    to: double
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness_pct: 100
+      rgb_color:
+      - 255
+      - 0
+      - 0
+    target:
+      entity_id: light.bulb_0055
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness_pct: 100
+      rgb_color:
+      - 255
+      - 136
+      - 0
+    target:
+      entity_id: light.bulb_0055
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness_pct: 100
+      rgb_color:
+      - 255
+      - 255
+      - 0
+    target:
+      entity_id: light.bulb_0055
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness_pct: 100
+      rgb_color:
+      - 0
+      - 255
+      - 0
+    target:
+      entity_id: light.bulb_0055
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness_pct: 100
+      rgb_color:
+      - 0
+      - 0
+      - 255
+    target:
+      entity_id: light.bulb_0055
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness_pct: 100
+      rgb_color:
+      - 170
+      - 0
+      - 255
+    target:
+      entity_id: light.bulb_0055
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness_pct: 100
+      rgb_color:
+      - 255
+      - 0
+      - 0
+    target:
+      entity_id: light.bulb_0055
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  mode: parallel
+  max: 100
+- id: '1662176346051'
+  alias: Luke Diamond Light Sleep mode
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.button_0058_action
+    to: long
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      transition: 1
+      brightness_pct: 1
+      color_temp: 375
+    target:
+      entity_id: light.bulb_0055
+  mode: single

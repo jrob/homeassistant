@@ -139,3 +139,37 @@
       friendly_name: Desk Lamp Red LED
       icon: ''
       state: 'off'
+- id: '1662082948025'
+  name: Bedside Lamp Red
+  entities:
+    light.0xb0ce18140018661d:
+      min_mireds: 154
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: xy
+      brightness: 20
+      energy: 0
+      linkquality: 255
+      power: 0.1
+      update:
+        state: idle
+      update_available: false
+      friendly_name: bulb-0056
+      supported_features: 59
+      color:
+        x: 0.701
+        y: 0.299
+      hs_color:
+      - 0
+      - 100
+      rgb_color:
+      - 255
+      - 0
+      - 0
+      xy_color:
+      - 0.701
+      - 0.299
+      state: 'on'
+  metadata: {}
