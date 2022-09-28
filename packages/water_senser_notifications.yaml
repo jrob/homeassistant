@@ -17,45 +17,67 @@ notify:
 
 automation:
 
-- alias: Aquarium Water Sensor Alarm
-  trigger:
-  - entity_id: binary_sensor.water_sensor_0050
-    platform: state
-    from: 'off'
-    to: 'on'
-  action:
-    - service: notify.water_sensor_group_emergency
-      data:
-        message: Aquarium water sensor alarm triggered!
+  - alias: Cube Aquarium Water Sensor Alarm
+    trigger:
+      - entity_id: binary_sensor.water_sensor_0063_water_leak
+        platform: state
+        from: "off"
+        to: "on"
+    action:
+      - service: notify.water_sensor_group_emergency
+        data:
+          message: Cube Aquarium water sensor alarm triggered!
 
-- alias: Drain Tank Water Sensor Alarm
-  trigger:
-  - entity_id: binary_sensor.water_sensor_0036
-    platform: state
-    from: 'off'
-    to: 'on'
-  action:
-    - service: notify.water_sensor_group_emergency
-      data:
-        message: Drain Tank water sensor alarm triggered!
+  - alias: Aquarium Water Sensor Alarm
+    trigger:
+      - entity_id: binary_sensor.water_sensor_0050_water_leak
+        platform: state
+        from: "off"
+        to: "on"
+    action:
+      - service: notify.water_sensor_group_emergency
+        data:
+          message: Aquarium water sensor alarm triggered!
 
-- alias: Washing Machine Water Sensor Alarm
-  trigger:
-  - entity_id: binary_sensor.water_sensor_0035
-    platform: state
-    from: 'off'
-    to: 'on'
-  action:
-    - service: notify.water_sensor_group_emergency
-      data:
-        message: Washing Machine water sensor alarm triggered!
+  - alias: Drain Tank Water Sensor Alarm
+    trigger:
+      - entity_id: binary_sensor.water_sensor_0036_water_leak
+        platform: state
+        from: "off"
+        to: "on"
+    action:
+      - service: notify.water_sensor_group_emergency
+        data:
+          message: Drain Tank water sensor alarm triggered!
 
-- alias: Washing Machine Battery Sensor Alarm
-  trigger:
-  - entity_id: sensor.water_sensor_0035_battery_level
-    platform: numeric_state
-    below: 25
-  action:
-    - service: notify.water_sensor_group
-      data:
-        message: Washing Machine battery sensor alarm triggered.
+  - alias: Washing Machine Water Sensor Alarm
+    trigger:
+      - entity_id: binary_sensor.water_sensor_0035_water_leak
+        platform: state
+        from: "off"
+        to: "on"
+    action:
+      - service: notify.water_sensor_group_emergency
+        data:
+          message: Washing Machine water sensor alarm triggered!
+
+  - alias: Dishwasher Water Sensor Alarm
+    trigger:
+      - entity_id: binary_sensor.water_sensor_0064_water_leak
+        platform: state
+        from: "off"
+        to: "on"
+    action:
+      - service: notify.water_sensor_group_emergency
+        data:
+          message: Dishwasher water sensor alarm triggered!
+
+  - alias: Washing Machine Battery Sensor Alarm
+    trigger:
+      - entity_id: sensor.water_sensor_0035_battery_level
+        platform: numeric_state
+        below: 25
+    action:
+      - service: notify.water_sensor_group
+        data:
+          message: Washing Machine battery sensor alarm triggered.
