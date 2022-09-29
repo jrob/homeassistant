@@ -1,12 +1,13 @@
 substitutions:
   name: controller047
   description: Drain Sump
-  # use_address: 192.168.1.100
 
 # Enable logging
 logger:
 
-<<: !include include/common.yaml
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
 esphome:
   name: $name
