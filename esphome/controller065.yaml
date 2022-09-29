@@ -1,0 +1,112 @@
+substitutions:
+  name: controller065
+  description: Aquarium Lights A
+  static_ip: ""
+
+# Enable logging
+logger:
+
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
+
+
+esphome:
+  name: $name
+  comment: $description
+  platform: ESP32
+  board: esp32doit-devkit-v1
+
+binary_sensor:
+
+  - platform: gpio
+    id: switch_a
+    name: $description Switch 1
+    filters:
+      - invert:
+    pin:
+      number: GPIO4
+      mode: INPUT_PULLUP
+
+  - platform: gpio
+    id: switch_b
+    name: $description Switch 2
+    filters:
+      - invert:
+    pin:
+      number: GPIO18
+      mode: INPUT_PULLUP
+
+  - platform: gpio
+    id: switch_c
+    name: $description Switch 3
+    filters:
+      - invert:
+    pin:
+      number: GPIO19
+      mode: INPUT_PULLUP
+
+  - platform: gpio
+    id: switch_d
+    name: $description Switch 4
+    filters:
+      - invert:
+    pin:
+      number: GPIO21
+      mode: INPUT_PULLUP
+
+light:
+
+  - platform: monochromatic
+    name: $description Light 1
+    output: output_gpio_27
+
+  - platform: monochromatic
+    name: $description Light 2
+    output: output_gpio_26
+
+  - platform: monochromatic
+    name: $description Light 3
+    output: output_gpio_33
+
+  - platform: monochromatic
+    name: $description Light 4
+    output: output_gpio_25
+
+output:
+
+  - platform: ledc
+    id: output_gpio_27
+    pin: GPIO27
+    #min_power: 0.002
+    #zero_means_zero: true
+
+  - platform: ledc
+    id: output_gpio_26
+    pin: GPIO26
+    #min_power: 0.002
+    #zero_means_zero: true
+
+  - platform: ledc
+    id: output_gpio_25
+    pin: GPIO25
+    #min_power: 0.002
+    #zero_means_zero: true
+
+  - platform: ledc
+    id: output_gpio_33
+    pin: GPIO33
+    #min_power: 0.002
+    #zero_means_zero: true
+
+# Lights
+# 27 - 1
+# 26 - 3
+# 25 - 2
+# 33 - 4
+
+# Switches
+#  4 - 1
+# 18 - 2
+# 19 - 3
+# 21 - 4
