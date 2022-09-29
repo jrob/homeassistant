@@ -58,7 +58,7 @@ automation:
         target:
           entity_id: switch.daphnia_ato_wc_pump
 
-  - alias: Auto Water Change Aquarium 02
+  - alias: Auto Water Change Aquarium 2
     # 6 g or 22.75 L
     # (11.5 * 11.5 * 11.25) - (11.5 * 11.5 * 0.75) = 1388 in^3 ~= 22.75 L
     # 665 ml/min calculated on 2022-07-21
@@ -124,9 +124,9 @@ automation:
           entity_id: light.daphnia_ato_wc_light
       - service: light.turn_on
         data:
-          brightness_pct: 85
+          brightness_pct: 100
           transition: 60
-          entity_id: light.aquarium_02_light
+          entity_id: light.aquarium_lights_a_light_1
 
   - alias: Aquarium Light Cycle Off
     trigger:
@@ -145,7 +145,7 @@ automation:
       - service: light.turn_off
         data:
           transition: 60
-          entity_id: light.aquarium_02_light
+          entity_id: light.aquarium_lights_a_light_1
 
   - alias: Green Water Grow Light Cycle On
     trigger:
