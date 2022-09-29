@@ -1,9 +1,0 @@
-substitutions:
-  name: switch030
-  description: Electric Fence
-
-# Enable logging
-logger:
-
-<<: !include include/common.yaml
-<<: !include include/gosund_wp5.yaml
