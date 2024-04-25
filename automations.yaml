@@ -433,3 +433,25 @@
   - service: switch.turn_off
     entity_id: switch.coffee_maker
   mode: single
+- id: '1714085070087'
+  alias: Water Monitor Bypass auto turn back on
+  description: When the Bypass is enabled to allow for longer running water, this
+    automation will turn it back on after some period so it does not inadvertently
+    get left off.
+  trigger:
+  - platform: state
+    entity_id:
+    - switch.water_monitor_and_cutoff_bypass_flow_duration_check
+    to: 'on'
+    for:
+      hours: 8
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.water_monitor_and_cutoff_bypass_flow_duration_check
+  mode: single

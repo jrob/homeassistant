@@ -21,6 +21,11 @@ globals:
     restore_value: yes
     initial_value: 'false'
 
+  - id: bypass_flow_duration
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
   - id: enabled
     type: bool
     restore_value: yes
@@ -43,12 +48,33 @@ script:
   - id: set_flow_duration_exceeded
     then:
       - delay: !lambda "return id(error_delay).state * 1000 * 60;"
-      - globals.set:
-          id: error_flow_duration_exceeded
-          value: 'true'
-      - switch.turn_off: relay_valve
+      - if:
+          condition:
+            lambda: 'return !id(bypass_flow_duration);'
+          then:
+            - globals.set:
+                id: error_flow_duration_exceeded
+                value: 'true'
+            - switch.turn_off: relay_valve
 
 switch:
+
+  - platform: template
+    name: $description Bypass Flow Duration Check
+    icon: mdi:alert
+    lambda: |-
+      return id(bypass_flow_duration);
+    turn_on_action:
+      then:
+        - globals.set:
+            id: bypass_flow_duration
+            value: 'true'
+    turn_off_action:
+      then:
+        - globals.set:
+            id: bypass_flow_duration
+            value: 'false'
+        - script.execute: set_flow_duration_exceeded
 
   - platform: template
     name: $description Error
