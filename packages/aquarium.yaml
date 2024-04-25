@@ -157,79 +157,9 @@ automation:
           transition: 6
           entity_id: light.aquarium_lights_a_light_2
 
-  - alias: Green Water Grow Light Cycle On
-    trigger:
-      platform: time
-      at:
-        - "03:00:00"
-    action:
-      - service: light.turn_on
-        data:
-          brightness_pct: 65
-          transition: 60
-          entity_id: light.wall_aquarium_display_light_2
 
-  - alias: Green Water Grow Light Cycle Off
-    trigger:
-      platform: time
-      at:
-        - "21:00:00"
-    action:
-      - service: light.turn_off
-        data:
-          transition: 60
-          entity_id: light.wall_aquarium_display_light_2
 
-  - alias: CO2 On
-    trigger:
-      platform: time
-      at:
-        - "09:00:00"
-    action:
-      - service: switch.turn_on
-        data:
-          entity_id: switch.co2_valve
 
-  - alias: CO2 Off
-    trigger:
-      platform: time
-      at:
-        - "16:00:00"
-        - "17:00:00"
-        - "18:00:00"
-        - "19:00:00"
-        - "20:00:00"
-        - "21:00:00"
-        - "22:00:00"
-        - "23:00:00"
-    action:
-      - service: switch.turn_off
-        data:
-          entity_id: switch.co2_valve
-
-  - alias: ATO/WC Fill Tank Empty Alarm
-    trigger:
-      - entity_id: binary_sensor.aquarium_ato_wc_fill_reservoir_empty_sensor
-        platform: state
-        from: "off"
-        to: "on"
-        for: "00:15:00"
-    action:
-      - service: notify.aquarium_ato_wc_group
-        data:
-          message: Aquarium ATO/WC fill tank empty!
-
-  - alias: ATO/WC Drain Tank Full Alarm
-    trigger:
-      - entity_id: binary_sensor.aquarium_ato_wc_drain_reservoir_full_sensor
-        platform: state
-        from: "off"
-        to: "on"
-        for: "00:15:00"
-    action:
-      - service: notify.aquarium_ato_wc_group
-        data:
-          message: Aquarium ATO/WC drain tank full!
 
   - alias: Daphnia Tank Full Backup Sensor Alarm
     trigger:

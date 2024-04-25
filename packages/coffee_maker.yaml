@@ -9,17 +9,3 @@ input_boolean:
     name: Delay Brew
     icon: mdi:coffee-maker
 
-automation:
-  - alias: Coffee Maker Start
-    condition: "{{ states('input_boolean.enable_coffee_maker') == 'on' }}"
-    trigger:
-      platform: time
-      at: input_datetime.coffee_maker_start
-    action:
-      - service: switch.turn_on
-        entity_id: switch.coffee_maker
-      - service: input_boolean.turn_off
-        entity_id: input_boolean.enable_coffee_maker
-      - delay: 0:15
-      - service: switch.turn_off
-        entity_id: switch.coffee_maker
