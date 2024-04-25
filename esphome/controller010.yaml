@@ -1,0 +1,74 @@
+substitutions:
+  name: controller010
+  description: Aquarium Temp and Switch
+
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
+
+esphome:
+  name: $name
+  comment: $description
+  platform: ESP8266
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+dallas:
+  - pin: GPIO14
+
+sensor:
+  - platform: dallas
+    address: 0xBB3C01B5565A6A28
+    name: $description Temperature
+    on_value_range:
+      - above: !lambda 'return id(max_temp).state;'
+        then:
+          - logger.log: "The temperature is too high!"
+          - switch.turn_off: relay_1
+      - below: !lambda 'return id(max_temp).state;'
+        then:
+          - logger.log: "The temperature is OK."
+          - switch.turn_on: relay_1
+
+switch:
+  - platform: gpio
+    id: relay_1
+    pin: GPIO12
+    name: $description Relay
+    restore_mode: RESTORE_DEFAULT_ON
+  - platform: gpio
+    id: blue_led
+    pin: GPIO13
+    inverted: true
+    name: $description Blue LED
+  - platform: restart
+    name: $description Restart
+
+number:
+  - platform: template
+    name: $description Max Temp
+    id: max_temp
+    restore_value: true
+    optimistic: true
+    min_value: 15
+    max_value: 30
+    step: 1
+    mode: box
+
+
+#script:
+  #- id: my_script
+    #then:
+      #- if:
+          #condition:
+            #and:
+              #lambda: 'return id(some_sensor).state >= return id(max_temp).state;'
+          #then:
+            #- logger.log: "The temperature is too high!"
+            #- switch.turn_off: relay_1
+            #- delay: 5s
+          #else:
+            #- logger.log: "The temperature is OK."
+            #- switch.turn_off: relay_1

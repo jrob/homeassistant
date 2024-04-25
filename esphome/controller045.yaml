@@ -124,7 +124,7 @@ sensor:
     total:
       name: $description Total Liters
       unit_of_measurement: L # Liters
-      accuracy_decimals: 1
+      accuracy_decimals: 2
       filters:
         - lambda: return x / 1904;
 

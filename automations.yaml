@@ -133,9 +133,13 @@
   action:
   - service: light.turn_on
     data:
-      transition: 1
+      transition: 3
       brightness_pct: 100
-      color_temp: 268
+      color_temp: 315
+      rgb_color:
+      - 255
+      - 255
+      - 255
     target:
       entity_id: light.bulb_0055
   mode: single
@@ -292,4 +296,58 @@
       color_temp: 375
     target:
       entity_id: light.bulb_0055
+  mode: single
+- id: '1710996246602'
+  alias: Cube Aquarium Refugium Light On
+  description: ''
+  trigger:
+  - platform: time
+    at: '20:00:00'
+  condition: []
+  action:
+  - service: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.cube_aquarium_power_strip_outlet_1
+  mode: single
+- id: '1710996314281'
+  alias: Cube Aquarium Refugium Light Off
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:00:00
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id:
+      - switch.cube_aquarium_power_strip_outlet_1
+    data: {}
+  mode: single
+- id: '1711470600001'
+  alias: Auto Water Change Counter Aquarium
+  description: "Auto water change for the counter top aquarium system.\n\n74 liter
+    total volume\n15 percent = 13.3 minutes\n10 percent = 8.8 minutes\n  5 percent
+    = 4.4 minutes\n  2 min = 2.3 %\n  4 min = 4.5 %"
+  trigger:
+  - platform: time
+    at: '10:30:00'
+  - platform: time
+    at: '10:45:00'
+    enabled: false
+  condition:
+  - condition: state
+    entity_id: binary_sensor.drain_sump_reservoir_full_sensor
+    state: 'off'
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.aquarium_02_pump
+    data: {}
+  - delay: 00:02:00
+  - service: switch.turn_off
+    target:
+      entity_id: switch.aquarium_02_pump
+    data: {}
   mode: single

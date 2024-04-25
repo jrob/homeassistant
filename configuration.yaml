@@ -62,20 +62,12 @@ influxdb:
 # https://kleypot.com/proxmox-home-assistant-host-system-hardware-monitoring/
 
 sensor:
-  - platform: systemmonitor
-    resources:
-      - type: disk_use_percent
-        arg: /
-      - type: disk_use
-        arg: /
-      - type: processor_use
-      - type: last_boot
-      - type: memory_use_percent
-  - platform: template
-    sensors:
-      water_sensor_2_temperature:
-        value_template: "{{ state_attr('binary_sensor.water_sensor_2', 'temperature') }}"
-        unit_of_measurement: "°C"
+  - platform: statistics
+    name: aquarium_water_usage_24_hours
+    entity_id: sensor.water_monitor_and_cutoff_total_liters
+    state_characteristic: sum_differences_nonnegative
+    max_age:
+      hours: 24
 
 lovelace:
   mode: storage

@@ -58,43 +58,44 @@ automation:
         target:
           entity_id: switch.daphnia_ato_wc_pump
 
-  - alias: Auto Water Change Aquarium 2
-    # 6 g or 22.75 L
-    # (11.5 * 11.5 * 11.25) - (11.5 * 11.5 * 0.75) = 1388 in^3 ~= 22.75 L
-    # 665 ml/min calculated on 2022-07-21
-    #  15 percent = 3.4 minutes.
-    #  10 percent = 3.4 minutes.
-    #   5 percent = 1.7 minutes.
-    #       2 min = 5.8 %
-    #       4 min = 11.7 %
-    #       6 min = 17.5 %
-    trigger:
-      platform: time
-      at:
-        - "10:30:00"
-        - "10:45:00"
-    condition:
-      condition: state
-      entity_id: binary_sensor.drain_sump_reservoir_full_sensor
-      state: "off"
-    action:
-      - service: switch.turn_on
-        target:
-          entity_id: switch.aquarium_02_pump
-      - delay: "00:02:00"
-      - service: switch.turn_off
-        target:
-          entity_id: switch.aquarium_02_pump
-
-  - alias: Write Drain Pump Value to ESP
-    trigger:
-      platform: state
-      entity_id: input_number.servo_control_drain_pump
-    action:
-      # Replace livingroom with the name you gave the ESP
-      - service: esphome.controller038_control_drain_pump
-        data_template:
-          level: "{{ trigger.to_state.state | int }}"
+#  - alias: Auto Water Change Counter Aquarium
+#    # 74 liter total volume
+#    #  15 percent = 13.3 minutes
+#    #  10 percent = 8.8 minutes
+#    #   5 percent = 4.4 minutes
+#    #       2 min = 2.3 %
+#    #       4 min = 4.5 %
+#    trigger:
+#      platform: time
+#      at:
+#        - "10:30:00"
+#        #- "10:45:00"
+#    condition:
+#      - condition: state
+#        entity_id: binary_sensor.drain_sump_reservoir_full_sensor
+#        state: "off"
+#      #- condition: time
+#      #  weekday:
+#      #    - mon
+#      #    - fri
+#    action:
+#      - service: switch.turn_on
+#        target:
+#          entity_id: switch.aquarium_02_pump
+#      - delay: "00:02:00"
+#      - service: switch.turn_off
+#        target:
+#          entity_id: switch.aquarium_02_pump
+#
+#  - alias: Write Drain Pump Value to ESP
+#    trigger:
+#      platform: state
+#      entity_id: input_number.servo_control_drain_pump
+#    action:
+#      # Replace livingroom with the name you gave the ESP
+#      - service: esphome.controller038_control_drain_pump
+#        data_template:
+#          level: "{{ trigger.to_state.state | int }}"
 
   - alias: Write Fill Pump 2 Value to ESP
     trigger:
@@ -115,18 +116,23 @@ automation:
       - service: light.turn_on
         data:
           brightness_pct: 45
-          transition: 600
+          transition: 6
           entity_id: light.wall_aquarium_display_light_1
       - service: light.turn_on
         data:
           brightness_pct: 40
-          transition: 60
+          transition: 6
           entity_id: light.daphnia_ato_wc_light
       - service: light.turn_on
         data:
           brightness_pct: 100
-          transition: 60
+          transition: 6
           entity_id: light.aquarium_lights_a_light_1
+      - service: light.turn_on
+        data:
+          brightness_pct: 60
+          transition: 6
+          entity_id: light.aquarium_lights_a_light_2
 
   - alias: Aquarium Light Cycle Off
     trigger:
@@ -136,16 +142,20 @@ automation:
     action:
       - service: light.turn_off
         data:
-          transition: 600
+          transition: 6
           entity_id: light.wall_aquarium_display_light_1
       - service: light.turn_off
         data:
-          transition: 60
+          transition: 6
           entity_id: light.daphnia_ato_wc_light
       - service: light.turn_off
         data:
-          transition: 60
+          transition: 6
           entity_id: light.aquarium_lights_a_light_1
+      - service: light.turn_off
+        data:
+          transition: 6
+          entity_id: light.aquarium_lights_a_light_2
 
   - alias: Green Water Grow Light Cycle On
     trigger:

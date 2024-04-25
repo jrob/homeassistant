@@ -13,7 +13,7 @@ input_number:
 
   grill_alert_low:
     name: Grill Low Temp
-    min: 100
+    min: 50
     max: 500
     step: 5
     icon: mdi:thermometer-alert
@@ -199,6 +199,13 @@ alert:
   probe_2:
     name: Probe 2 Temeprature Reached
     entity_id: sensor.target_alert_temp_probe_2
+    state: 'Alert'
+    repeat: 1
+    notifiers:
+      - bbq_group
+  probe_4:
+    name: Grill temp alert
+    entity_id: sensor.grill_alert_temp
     state: 'Alert'
     repeat: 1
     notifiers:

@@ -33,7 +33,7 @@ script:
 
   - id: set_fill_pump_duration_exceeded
     then:
-      - delay: 5min
+      - delay: 10min
       - globals.set:
           id: error_fill_pump_duration_exceeded
           value: 'true'
@@ -107,12 +107,14 @@ switch:
         return false;
       }
     turn_on_action:
-      - if:
-          condition:
-            - lambda: |-
-                return id(enabled);
-          then:
-            - switch.turn_on: relay_pump
+#      - if:
+#          condition:
+#            - lambda: |-
+#                return id(enabled);
+#          then:
+#            - switch.turn_on: relay_pump
+        then:
+          - switch.turn_on: relay_pump
     turn_off_action:
       then:
         - switch.turn_off: relay_pump
@@ -170,3 +172,19 @@ api:
         - globals.set:
             id: error_fill_pump_duration_exceeded
             value: 'false'
+
+    - service: toggle_enable
+      then:
+        - if:
+            condition:
+              - lambda: |-
+                  return id(enabled);
+            then:
+              - switch.turn_off: relay_valve
+              - globals.set:
+                  id: enabled
+                  value: 'false'
+            else:
+              - globals.set:
+                  id: enabled
+                  value: 'true'

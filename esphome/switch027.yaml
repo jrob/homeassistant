@@ -1,6 +1,6 @@
 substitutions:
   name: switch027
-  description: switch027
+  description: Lamp Switch 27
 
 # Enable logging
 logger:
