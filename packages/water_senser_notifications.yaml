@@ -17,17 +17,6 @@ notify:
 
 automation:
 
-  - alias: Cube Aquarium Water Sensor Alarm
-    trigger:
-      - entity_id: binary_sensor.water_sensor_0063_water_leak
-        platform: state
-        from: "off"
-        to: "on"
-    action:
-      - service: notify.water_sensor_group_emergency
-        data:
-          message: Cube Aquarium water sensor alarm triggered!
-
   - alias: Aquarium Water Sensor Alarm
     trigger:
       - entity_id: binary_sensor.water_sensor_0050_water_leak
