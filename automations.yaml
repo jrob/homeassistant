@@ -456,7 +456,7 @@
       entity_id: switch.water_monitor_and_cutoff_bypass_flow_duration_check
   mode: single
 - id: '1714244548301'
-  alias: Cube Aquarium Water Sensor Alarm
+  alias: Countertop Aquarium Water Sensor Alarm
   description: ''
   trigger:
   - entity_id: binary_sensor.water_sensor_0063_water_leak
@@ -467,5 +467,5 @@
   action:
   - service: notify.water_sensor_group_emergency
     data:
-      message: Cube Aquarium water sensor alarm triggered!
+      message: Countertop Aquarium water sensor alarm triggered!
   mode: single
