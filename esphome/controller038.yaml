@@ -1,6 +1,7 @@
 substitutions:
   name: controller038
   description: Aquarium ATO/WC
+  # Upstairs 15 inch cube aquarium. No longer used.
 
 # Enable logging
 logger:

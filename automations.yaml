@@ -351,36 +351,6 @@
       entity_id: switch.aquarium_02_pump
     data: {}
   mode: single
-- id: '1714074206373'
-  alias: ATO/WC Fill Tank Empty Alarm
-  description: ''
-  trigger:
-  - entity_id: binary_sensor.aquarium_ato_wc_fill_reservoir_empty_sensor
-    platform: state
-    from: 'off'
-    to: 'on'
-    for: 00:15:00
-  condition: []
-  action:
-  - service: notify.aquarium_ato_wc_group
-    data:
-      message: Aquarium ATO/WC fill tank empty!
-  mode: single
-- id: '1714074356077'
-  alias: ATO/WC Drain Tank Full Alarm
-  description: ''
-  trigger:
-  - entity_id: binary_sensor.aquarium_ato_wc_drain_reservoir_full_sensor
-    platform: state
-    from: 'off'
-    to: 'on'
-    for: 00:15:00
-  condition: []
-  action:
-  - service: notify.aquarium_ato_wc_group
-    data:
-      message: Aquarium ATO/WC drain tank full!
-  mode: single
 - id: '1714074884992'
   alias: CO2 Off
   description: ''
