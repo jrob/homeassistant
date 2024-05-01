@@ -24,7 +24,7 @@ globals:
     restore_value: yes
     initial_value: 'false'
 
-  - id: enabled
+  - id: ato_enabled
     type: bool
     restore_value: yes
     initial_value: 'true'
@@ -47,7 +47,7 @@ script:
               - binary_sensor.is_off: reservoir_full_sensor
               #- binary_sensor.is_off: reservoir_full_backup_sensor
               - lambda: |-
-                  return id(enabled) && !id(error_fill_pump_duration_exceeded);
+                  return id(ato_enabled) && !id(error_fill_pump_duration_exceeded);
           then:
             - switch.turn_on: relay_valve
             - script.execute: set_fill_pump_duration_exceeded
@@ -68,9 +68,9 @@ binary_sensor:
       return id(error_fill_pump_duration_exceeded);
 
   - platform: template
-    name: $description Enabled
+    name: $description ATO Enabled
     lambda: |-
-      return id(enabled);
+      return id(ato_enabled);
 
   - platform: gpio
     id: reservoir_full_sensor
@@ -110,7 +110,7 @@ switch:
 #      - if:
 #          condition:
 #            - lambda: |-
-#                return id(enabled);
+#                return id(ato_enabled);
 #          then:
 #            - switch.turn_on: relay_pump
         then:
@@ -132,7 +132,7 @@ switch:
       - if:
           condition:
             - lambda: |-
-                return id(enabled);
+                return id(ato_enabled);
           then:
             - switch.turn_on: relay_valve
     turn_off_action:
@@ -173,18 +173,18 @@ api:
             id: error_fill_pump_duration_exceeded
             value: 'false'
 
-    - service: toggle_enable
+    - service: toggle_ato_enable
       then:
         - if:
             condition:
               - lambda: |-
-                  return id(enabled);
+                  return id(ato_enabled);
             then:
               - switch.turn_off: relay_valve
               - globals.set:
-                  id: enabled
+                  id: ato_enabled
                   value: 'false'
             else:
               - globals.set:
-                  id: enabled
+                  id: ato_enabled
                   value: 'true'
