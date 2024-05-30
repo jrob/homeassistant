@@ -343,12 +343,12 @@
   action:
   - service: switch.turn_on
     target:
-      entity_id: switch.aquarium_02_pump
+      entity_id: switch.countertop_aquarium_pump
     data: {}
   - delay: 00:02:00
   - service: switch.turn_off
     target:
-      entity_id: switch.aquarium_02_pump
+      entity_id: switch.countertop_aquarium_pump
     data: {}
   mode: single
 - id: '1714074884992'
@@ -469,6 +469,7 @@
       entity_id:
       - switch.cube_aquarium_power_strip_outlet_4
     data: {}
+    enabled: false
   mode: single
 - id: '1714389962438'
   alias: Aquarium Light Cycle On
@@ -504,4 +505,35 @@
     data: {}
     target:
       entity_id: switch.cube_aquarium_power_strip_outlet_4
+    enabled: false
+  mode: single
+- id: '1716837101291'
+  alias: Cube Aquarium Light Off
+  description: ''
+  trigger:
+  - platform: time
+    at:
+    - '20:00:00'
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id:
+      - switch.cube_aquarium_power_strip_outlet_4
+    data: {}
+  mode: single
+- id: '1716837181123'
+  alias: Cube Aquarium Light On
+  description: ''
+  trigger:
+  - platform: time
+    at:
+    - '10:00:00'
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id:
+      - switch.cube_aquarium_power_strip_outlet_4
+    data: {}
   mode: single

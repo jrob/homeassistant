@@ -1,6 +1,6 @@
 substitutions:
   name: controller051
-  description: Aquarium 02
+  description: Countertop Aquarium
   static_ip: ""
 
 # Enable logging
