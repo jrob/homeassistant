@@ -29,11 +29,24 @@ globals:
     restore_value: yes
     initial_value: 'true'
 
+number:
+
+  - platform: template
+    name: Error delay (m)
+    id: error_delay
+    icon: mdi:numeric
+    restore_value: true
+    initial_value: 10
+    optimistic: true
+    min_value: 1
+    step: 1
+    max_value: 120
+
 script:
 
   - id: set_fill_pump_duration_exceeded
     then:
-      - delay: 10min
+      - delay: !lambda "return id(error_delay).state * 1000 * 60;"
       - globals.set:
           id: error_fill_pump_duration_exceeded
           value: 'true'
@@ -181,6 +194,7 @@ api:
                   return id(ato_enabled);
             then:
               - switch.turn_off: relay_valve
+              - script.stop: set_fill_pump_duration_exceeded
               - globals.set:
                   id: ato_enabled
                   value: 'false'
@@ -188,3 +202,9 @@ api:
               - globals.set:
                   id: ato_enabled
                   value: 'true'
+              - script.execute: set_fill_valve
+
+    - service: e_stop
+      then:
+        - switch.turn_off: relay_valve
+        - switch.turn_off: relay_pump
