@@ -1,0 +1,195 @@
+substitutions:
+  name: controller070
+  description: Cube Aquarium ATO WC Controller
+  static_ip: ""
+
+# Enable logging
+logger:
+
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
+
+esphome:
+  name: $name
+  comment: $description
+  platform: ESP32
+  board: esp32doit-devkit-v1
+
+globals:
+
+  - id: error_fill_duration_exceeded
+    type: bool
+    restore_value: yes
+    initial_value: 'false'
+
+  - id: ato_enabled
+    type: bool
+    restore_value: yes
+    initial_value: 'true'
+
+number:
+
+  - platform: template
+    name: Error delay (m)
+    id: error_delay
+    icon: mdi:numeric
+    restore_value: true
+    initial_value: 10
+    optimistic: true
+    min_value: 1
+    step: 1
+    max_value: 120
+
+script:
+
+  - id: fill_duration_guard
+    then:
+      - delay: !lambda "return id(error_delay).state * 1000 * 60;"
+      - globals.set:
+          id: error_fill_duration_exceeded
+          value: 'true'
+      - switch.turn_off: relay_valve
+
+  - id: set_fill_valve_on_off
+    then:
+      - logger.log: "set_fill_valve_on_off"
+      - if:
+          condition:
+            and:
+              - binary_sensor.is_off: sump_full
+              - lambda: |-
+                  return id(ato_enabled) && !id(error_fill_duration_exceeded);
+          then:
+            - logger.log: "64"
+            - logger.log: "turn on relay_valve"
+            - switch.turn_on: relay_valve
+            - script.execute: fill_duration_guard
+      - if:
+          condition:
+            or:
+              - binary_sensor.is_on: sump_full
+          then:
+            - logger.log: "73"
+            - logger.log: "turn off relay_valve"
+            - switch.turn_off: relay_valve
+            - script.stop: fill_duration_guard
+
+binary_sensor:
+
+  - platform: template
+    name: $description Error Fill Duration Exceeded
+    lambda: |-
+      return id(error_fill_duration_exceeded);
+
+  - platform: gpio
+    name: $description Button Pump
+    pin:
+      number: GPIO26
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on_off: 50ms
+    on_press:
+          then:
+            - switch.toggle: relay_pump
+
+  - platform: gpio
+    name: $description Button Valve
+    pin:
+      number: GPIO27
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on_off: 25ms
+    on_press:
+          then:
+            - switch.toggle: relay_valve
+
+  - platform: gpio
+    name: $description Sump Full
+    id: sump_full
+    pin:
+      number: GPIO16
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on_off: 25ms
+    on_state:
+      then:
+        - script.execute: set_fill_valve_on_off
+
+  - platform: gpio
+    name: $description Sump Low
+    id: sump_low
+    pin:
+      number: GPIO17
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on_off: 50ms
+
+  - platform: gpio
+    name: $description Moisture Sensor
+    pin:
+      number: GPIO21
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on_off: 1s
+
+switch:
+
+  - platform: gpio
+    name: $description Pump
+    id: relay_pump
+    pin: GPIO2
+    restore_mode: ALWAYS_OFF
+
+  - platform: gpio
+    name: $description Valve
+    id: relay_valve
+    pin: GPIO4
+    restore_mode: ALWAYS_OFF
+
+  - platform: template
+    name: $description ATO Enabled
+    lambda: |-
+      return id(ato_enabled);
+    turn_on_action:
+      then:
+        - globals.set:
+            id: ato_enabled
+            value: 'true'
+        - script.execute: set_fill_valve_on_off
+        - logger.log: "ATO Enable on"
+    turn_off_action:
+      then:
+        - switch.turn_off: relay_valve
+        - script.stop: fill_duration_guard
+        - globals.set:
+            id: ato_enabled
+            value: 'false'
+        - logger.log: "ATO Enable off"
+
+api:
+
+  services:
+
+    - service: reset_error_fill_duration_exceeded
+      then:
+        - logger.log:
+            format: "Reseting pump duration error"
+        - globals.set:
+            id: error_fill_duration_exceeded
+            value: 'false'
