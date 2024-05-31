@@ -31,7 +31,7 @@ i2c:
     scl: 5
 
 sensor:
-  - platform: bme280
+  - platform: bme280_i2c
     temperature:
       name: "BME280 Temperature"
       oversampling: 1x

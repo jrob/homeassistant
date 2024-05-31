@@ -39,8 +39,8 @@ switch:
     on_turn_on:
       - switch.turn_on: blue_led
       - switch.turn_off: red_led
-      - script.stop: start_delay
-      - script.execute: start_delay
+      #- script.stop: start_delay
+      #- script.execute: start_delay
     on_turn_off:
       - switch.turn_on: red_led
       - switch.turn_off: blue_led
