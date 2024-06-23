@@ -9,34 +9,34 @@ notify:
             sound: echo
             priority: 1
 
-alert:
-
-  aquarium_02_unavailable:
-    entity_id: switch.aquarium_02_valve
-    name: Tetra Aquarium controller is unavailable
-    can_acknowledge: true
-    state: "unavailable"
-    skip_first: true
-    repeat:
-      - 5
-      - 10
-      - 30
-    data:
-      inline_keyboard:
-        - 'Acknowledge:/aquarium_acknowledge'
-    notifiers:
-      - test_group
-      - telegram_jrob
-
-automation:
-
-- alias: "Telegram callback to stop alerts for aquarium controller"
-  trigger:
-    - platform: event
-      event_type: telegram_callback
-      event_data:
-        data: "/aquarium_acknowledge"
-  action:
-    - service: alert.turn_off
-      target:
-        entity_id: alert.aquarium_02_unavailable
+# alert:
+#
+#   aquarium_02_unavailable:
+#     entity_id: switch.aquarium_02_valve
+#     name: Tetra Aquarium controller is unavailable
+#     can_acknowledge: true
+#     state: "unavailable"
+#     skip_first: true
+#     repeat:
+#       - 5
+#       - 10
+#       - 30
+#     data:
+#       inline_keyboard:
+#         - 'Acknowledge:/aquarium_acknowledge'
+#     notifiers:
+#       - test_group
+#       - telegram_jrob
+#
+# automation:
+#
+# - alias: "Telegram callback to stop alerts for aquarium controller"
+#   trigger:
+#     - platform: event
+#       event_type: telegram_callback
+#       event_data:
+#         data: "/aquarium_acknowledge"
+#   action:
+#     - service: alert.turn_off
+#       target:
+#         entity_id: alert.aquarium_02_unavailable

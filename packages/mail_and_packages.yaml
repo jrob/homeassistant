@@ -7,7 +7,7 @@ automation:
     entity_id: sensor.mail_usps_delivered
     above: 0
   action:
-    - service: notify.mobile_app_jeremy_phone
+    - service: notify.mobile_app_jeremy
       data_template:
         title: "USPS Delivery!"
         message: "Total USPS packages today is: {{ states('sensor.mail_usps_delivered') }}"
@@ -19,7 +19,7 @@ automation:
     entity_id: sensor.mail_ups_delivered
     above: 0
   action:
-    - service: notify.mobile_app_jeremy_phone
+    - service: notify.mobile_app_jeremy
       data_template:
         title: "UPS Delivery!"
         message: "Total UPS packages today is: {{ states('sensor.mail_ups_delivered') }}"
@@ -31,7 +31,7 @@ automation:
     entity_id: sensor.mail_fedex_delivered
     above: 0
   action:
-    - service: notify.mobile_app_jeremy_phone
+    - service: notify.mobile_app_jeremy
       data_template:
         title: "Fedex Delivery!"
         message: "Total Fedex packages today is: {{ states('sensor.mail_fedex_delivered') }}"
