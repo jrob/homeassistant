@@ -326,7 +326,7 @@
     data: {}
   mode: single
 - id: '1711470600001'
-  alias: Auto Water Change Counter Aquarium
+  alias: ' Counter Aquarium Auto Water Change'
   description: "Auto water change for the counter top aquarium system.\n\n74 liter
     total volume\n15 percent = 13.3 minutes\n10 percent = 8.8 minutes\n  5 percent
     = 4.4 minutes\n  2 min = 2.3 %\n  4 min = 4.5 %"
@@ -340,7 +340,20 @@
   - condition: state
     entity_id: binary_sensor.drain_sump_reservoir_full_sensor
     state: 'off'
+  - condition: state
+    entity_id: switch.countertop_aquarium_ato_enabled
+    state: 'on'
   action:
+  - service: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.countertop_aquarium_ato_enabled
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
   - service: switch.turn_on
     target:
       entity_id: switch.countertop_aquarium_pump
@@ -349,6 +362,16 @@
   - service: switch.turn_off
     target:
       entity_id: switch.countertop_aquarium_pump
+    data: {}
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: switch.turn_on
+    target:
+      entity_id:
+      - switch.countertop_aquarium_ato_enabled
     data: {}
   mode: single
 - id: '1714074884992'
@@ -543,6 +566,9 @@
   - condition: state
     entity_id: switch.cube_aquarium_ato_wc_controller_ato_enabled
     state: 'on'
+  - condition: state
+    entity_id: binary_sensor.cube_aquarium_ato_wc_controller_sump_low
+    state: 'off'
   action:
   - service: switch.turn_off
     data: {}
@@ -601,5 +627,45 @@
   - type: turn_off
     device_id: c7e5aa02b2d71de49a88e7a7d34dd4f8
     entity_id: ec4539035d2dd474b9b32e6568946945
+    domain: switch
+  mode: single
+- id: '1719162623691'
+  alias: Cube Aquarium Sump Low Guard
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.cube_aquarium_ato_wc_controller_sump_low
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id:
+      - switch.cube_aquarium_power_strip_outlet_6
+    data: {}
+  mode: single
+- id: '1719509898490'
+  alias: Cube Aquarium Feeding
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - type: turn_off
+    device_id: ed1875d160234de6f46ca1c2ac9be084
+    entity_id: a18a2428f897c190dc793a344d438583
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 15
+      seconds: 0
+      milliseconds: 0
+  - type: turn_on
+    device_id: ed1875d160234de6f46ca1c2ac9be084
+    entity_id: a18a2428f897c190dc793a344d438583
     domain: switch
   mode: single

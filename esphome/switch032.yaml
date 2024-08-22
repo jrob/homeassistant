@@ -1,6 +1,9 @@
 substitutions:
   name: switch032
-  description: Lightning Light
+  description: Lava Lamp
+
+ota:
+  - platform: esphome
 
 # Enable logging
 logger:

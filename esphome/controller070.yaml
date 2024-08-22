@@ -3,6 +3,9 @@ substitutions:
   description: Cube Aquarium ATO WC Controller
   static_ip: ""
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 
@@ -61,7 +64,6 @@ script:
               - lambda: |-
                   return id(ato_enabled) && !id(error_fill_duration_exceeded);
           then:
-            - logger.log: "64"
             - logger.log: "turn on relay_valve"
             - switch.turn_on: relay_valve
             - script.execute: fill_duration_guard
@@ -70,17 +72,11 @@ script:
             or:
               - binary_sensor.is_on: sump_full
           then:
-            - logger.log: "73"
             - logger.log: "turn off relay_valve"
             - switch.turn_off: relay_valve
             - script.stop: fill_duration_guard
 
 binary_sensor:
-
-  - platform: template
-    name: $description Error Fill Duration Exceeded
-    lambda: |-
-      return id(error_fill_duration_exceeded);
 
   - platform: gpio
     name: $description Button Pump
@@ -93,8 +89,18 @@ binary_sensor:
     filters:
       - delayed_on_off: 50ms
     on_press:
-          then:
-            - switch.toggle: relay_pump
+      - switch.toggle: relay_pump_pub
+      #- if:
+      #    condition:
+      #      - binary_sensor.is_off: sump_low
+      #      - switch.is_off: relay_pump
+      #    then:
+      #      - switch.turn_on: relay_pump
+      #- if:
+      #    condition:
+      #      - switch.is_on: relay_pump
+      #    then:
+      #      - switch.turn_off: relay_pump
 
   - platform: gpio
     name: $description Button Valve
@@ -126,6 +132,7 @@ binary_sensor:
         - script.execute: set_fill_valve_on_off
 
   - platform: gpio
+
     name: $description Sump Low
     id: sump_low
     pin:
@@ -136,6 +143,9 @@ binary_sensor:
         pullup: true
     filters:
       - delayed_on_off: 50ms
+    on_press:
+      then:
+        - switch.turn_off: relay_pump
 
   - platform: gpio
     name: $description Moisture Sensor
@@ -151,7 +161,7 @@ binary_sensor:
 switch:
 
   - platform: gpio
-    name: $description Pump
+    #name: $description Pump Priv
     id: relay_pump
     pin: GPIO2
     restore_mode: ALWAYS_OFF
@@ -163,7 +173,22 @@ switch:
     restore_mode: ALWAYS_OFF
 
   - platform: template
+    name: $description Pump
+    id: relay_pump_pub
+    lambda: |-
+      return id(relay_pump).state;
+    turn_on_action:
+      - if:
+          condition:
+            - binary_sensor.is_off: sump_low
+          then:
+            - switch.turn_on: relay_pump
+    turn_off_action:
+      - switch.turn_off: relay_pump
+
+  - platform: template
     name: $description ATO Enabled
+    restore_mode: RESTORE_DEFAULT_OFF
     lambda: |-
       return id(ato_enabled);
     turn_on_action:
@@ -182,14 +207,12 @@ switch:
             value: 'false'
         - logger.log: "ATO Enable off"
 
-api:
-
-  services:
-
-    - service: reset_error_fill_duration_exceeded
-      then:
-        - logger.log:
-            format: "Reseting pump duration error"
+  - platform: template
+    name: $description Error Fill Duration Exceeded
+    id: error_fill_duration_switch
+    lambda: |-
+      return id(error_fill_duration_exceeded);
+    turn_off_action:
         - globals.set:
             id: error_fill_duration_exceeded
             value: 'false'

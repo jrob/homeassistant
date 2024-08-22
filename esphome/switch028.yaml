@@ -1,6 +1,6 @@
 substitutions:
   name: switch028
-  description: Aquarium Pump
+  description: Bat Strobe
 
 # Enable logging
 logger:
@@ -12,6 +12,9 @@ esphome:
   comment: $description (Gosund WP5)
   platform: ESP8266
   board: esp01_1m
+
+ota:
+  - platform: esphome
 
 binary_sensor:
   - platform: gpio
