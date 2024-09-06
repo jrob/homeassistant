@@ -19,17 +19,19 @@ esphome:
   platform: ESP32
   board: esp32doit-devkit-v1
 
-globals:
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: set_fill_valve_on_off
+      - if:
+          condition:
+            and:
+              - switch.is_on: ato_enabled
+          then:
+            - logger.log: "Start up ato enabled"
+          else:
+            - logger.log: "Start up ato disabled"
 
-  - id: error_fill_duration_exceeded
-    type: bool
-    restore_value: yes
-    initial_value: 'false'
-
-  - id: ato_enabled
-    type: bool
-    restore_value: yes
-    initial_value: 'true'
 
 number:
 
@@ -49,20 +51,19 @@ script:
   - id: fill_duration_guard
     then:
       - delay: !lambda "return id(error_delay).state * 1000 * 60;"
-      - globals.set:
-          id: error_fill_duration_exceeded
-          value: 'true'
+      - switch.turn_on: error_fill_duration_exceeded
       - switch.turn_off: relay_valve
 
   - id: set_fill_valve_on_off
     then:
       - logger.log: "set_fill_valve_on_off"
+      - delay: 50ms
       - if:
           condition:
             and:
+              - switch.is_off: error_fill_duration_exceeded
+              - switch.is_on: ato_enabled
               - binary_sensor.is_off: sump_full
-              - lambda: |-
-                  return id(ato_enabled) && !id(error_fill_duration_exceeded);
           then:
             - logger.log: "turn on relay_valve"
             - switch.turn_on: relay_valve
@@ -90,17 +91,6 @@ binary_sensor:
       - delayed_on_off: 50ms
     on_press:
       - switch.toggle: relay_pump_pub
-      #- if:
-      #    condition:
-      #      - binary_sensor.is_off: sump_low
-      #      - switch.is_off: relay_pump
-      #    then:
-      #      - switch.turn_on: relay_pump
-      #- if:
-      #    condition:
-      #      - switch.is_on: relay_pump
-      #    then:
-      #      - switch.turn_off: relay_pump
 
   - platform: gpio
     name: $description Button Valve
@@ -111,7 +101,7 @@ binary_sensor:
         input: true
         pullup: true
     filters:
-      - delayed_on_off: 25ms
+      - delayed_on_off: 50ms
     on_press:
           then:
             - switch.toggle: relay_valve
@@ -121,7 +111,6 @@ binary_sensor:
     id: sump_full
     pin:
       number: GPIO16
-      inverted: true
       mode:
         input: true
         pullup: true
@@ -129,6 +118,7 @@ binary_sensor:
       - delayed_on_off: 25ms
     on_state:
       then:
+        - logger.log: "Sump Full On"
         - script.execute: set_fill_valve_on_off
 
   - platform: gpio
@@ -161,16 +151,28 @@ binary_sensor:
 switch:
 
   - platform: gpio
-    #name: $description Pump Priv
     id: relay_pump
     pin: GPIO2
     restore_mode: ALWAYS_OFF
 
   - platform: gpio
-    name: $description Valve
     id: relay_valve
     pin: GPIO4
     restore_mode: ALWAYS_OFF
+
+  - platform: template
+    name: $description Valve
+    id: relay_valve_pub
+    lambda: |-
+      return id(relay_valve).state;
+    turn_on_action:
+      - logger.log: "Valve turn on"
+      - switch.turn_on: relay_valve
+      - script.execute: fill_duration_guard
+    turn_off_action:
+      - logger.log: "valve turn off"
+      - switch.turn_off: relay_valve
+      - script.stop: fill_duration_guard
 
   - platform: template
     name: $description Pump
@@ -178,41 +180,33 @@ switch:
     lambda: |-
       return id(relay_pump).state;
     turn_on_action:
+      - logger.log: "Pump turn on"
       - if:
           condition:
             - binary_sensor.is_off: sump_low
           then:
             - switch.turn_on: relay_pump
     turn_off_action:
+      - logger.log: "Pump turn off"
       - switch.turn_off: relay_pump
 
   - platform: template
     name: $description ATO Enabled
+    id: ato_enabled
     restore_mode: RESTORE_DEFAULT_OFF
-    lambda: |-
-      return id(ato_enabled);
+    optimistic: true
     turn_on_action:
       then:
-        - globals.set:
-            id: ato_enabled
-            value: 'true'
         - script.execute: set_fill_valve_on_off
         - logger.log: "ATO Enable on"
     turn_off_action:
       then:
         - switch.turn_off: relay_valve
         - script.stop: fill_duration_guard
-        - globals.set:
-            id: ato_enabled
-            value: 'false'
         - logger.log: "ATO Enable off"
 
   - platform: template
     name: $description Error Fill Duration Exceeded
-    id: error_fill_duration_switch
-    lambda: |-
-      return id(error_fill_duration_exceeded);
-    turn_off_action:
-        - globals.set:
-            id: error_fill_duration_exceeded
-            value: 'false'
+    id: error_fill_duration_exceeded
+    restore_mode: RESTORE_DEFAULT_OFF
+    optimistic: true
