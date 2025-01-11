@@ -32,11 +32,10 @@ esphome:
           else:
             - logger.log: "Start up ato disabled"
 
-
 number:
 
   - platform: template
-    name: Error delay (m)
+    name: $description Error delay (m)
     id: error_delay
     icon: mdi:numeric
     restore_value: true
@@ -44,7 +43,7 @@ number:
     optimistic: true
     min_value: 1
     step: 1
-    max_value: 120
+    max_value: 30
 
 script:
 
@@ -110,29 +109,28 @@ binary_sensor:
     name: $description Sump Full
     id: sump_full
     pin:
-      number: GPIO16
+      number: GPIO18
       mode:
         input: true
         pullup: true
     filters:
-      - delayed_on_off: 25ms
+      - delayed_on_off: 500ms
     on_state:
       then:
         - logger.log: "Sump Full On"
         - script.execute: set_fill_valve_on_off
 
   - platform: gpio
-
     name: $description Sump Low
     id: sump_low
     pin:
-      number: GPIO17
+      number: GPIO19
       inverted: true
       mode:
         input: true
         pullup: true
     filters:
-      - delayed_on_off: 50ms
+      - delayed_on_off: 500ms
     on_press:
       then:
         - switch.turn_off: relay_pump
