@@ -12,14 +12,18 @@ esphome:
   platform: ESP8266
   board: esp01_1m
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 
-dallas:
-  - pin: GPIO14
+one_wire:
+  - platform: gpio
+    pin: GPIO14
 
 sensor:
-  - platform: dallas
+  - platform: dallas_temp
     address: 0xBB3C01B5565A6A28
     name: $description Temperature
     on_value_range:

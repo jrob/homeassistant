@@ -35,6 +35,9 @@ esphome:
   platform: ESP8266
   board: esp01_1m
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
   baud_rate: 0 #disable UART logging

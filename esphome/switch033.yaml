@@ -1,6 +1,9 @@
 substitutions:
-  name: switch001
-  description: Living Room Lamp
+  name: switch033
+  description: Luke Bedroom Switch 2
+
+ota:
+  - platform: esphome
 
 # Enable logging
 logger:

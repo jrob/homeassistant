@@ -3,6 +3,9 @@ substitutions:
   description: Aquarium Lights A
   static_ip: ""
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 

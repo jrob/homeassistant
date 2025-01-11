@@ -2,6 +2,9 @@ substitutions:
   name: switch008
   description: Basement TV Fan
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 

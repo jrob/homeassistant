@@ -2,6 +2,9 @@ substitutions:
   name: switch027
   description: Side Table Lamp
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 

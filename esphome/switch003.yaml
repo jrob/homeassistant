@@ -8,6 +8,9 @@ mqtt:
   password: !secret mqtt_password
   discovery: false
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 

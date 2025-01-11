@@ -29,6 +29,9 @@ esphome:
   platform: ESP32
   board: nodemcu-32s
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 

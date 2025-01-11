@@ -2,6 +2,9 @@ substitutions:
   name: switch002
   description: Garden Irrigation
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 

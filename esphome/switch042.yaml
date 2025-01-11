@@ -1,6 +1,6 @@
 substitutions:
-  name: switch005
-  description: Garage Overhead Light
+  name: switch042
+  description: switch042
 
 ota:
   - platform: esphome

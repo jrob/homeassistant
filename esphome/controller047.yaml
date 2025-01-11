@@ -2,6 +2,9 @@ substitutions:
   name: controller047
   description: Drain Sump
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 

@@ -2,6 +2,9 @@ substitutions:
   name: switch004
   description: Aqurium Circulation Pump
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 

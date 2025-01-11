@@ -3,6 +3,9 @@ substitutions:
   description: Cube Aquarium Power Strip
   static_ip: ""
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 

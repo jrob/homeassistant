@@ -2,6 +2,9 @@ substitutions:
   name: switch026
   description: CO2 Valve
 
+ota:
+  - platform: esphome
+
 # Enable logging
 logger:
 
