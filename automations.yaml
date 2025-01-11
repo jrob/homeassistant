@@ -524,14 +524,14 @@
   trigger:
   - platform: time
     at:
-    - '20:00:00'
+    - '18:00:00'
   condition: []
   action:
-  - service: switch.turn_off
-    target:
+  - target:
       entity_id:
       - switch.cube_aquarium_power_strip_outlet_4
     data: {}
+    action: switch.turn_off
   mode: single
 - id: '1716837181123'
   alias: Cube Aquarium Light On
@@ -539,14 +539,14 @@
   trigger:
   - platform: time
     at:
-    - '10:00:00'
+    - '12:00:00'
   condition: []
   action:
-  - service: switch.turn_on
-    target:
+  - target:
       entity_id:
       - switch.cube_aquarium_power_strip_outlet_4
     data: {}
+    action: switch.turn_on
   mode: single
 - id: '1717099654249'
   alias: Cube Aquarium Auto Water Change
@@ -569,40 +569,43 @@
   - condition: state
     entity_id: binary_sensor.cube_aquarium_ato_wc_controller_sump_low
     state: 'off'
+  - condition: state
+    entity_id: switch.cube_aquarium_ato_wc_controller_error_fill_duration_exceeded
+    state: 'off'
   action:
-  - service: switch.turn_off
-    data: {}
+  - data: {}
     target:
       entity_id: switch.cube_aquarium_ato_wc_controller_ato_enabled
+    action: switch.turn_off
   - delay:
       hours: 0
       minutes: 0
       seconds: 1
       milliseconds: 0
-  - service: switch.turn_on
-    target:
+  - target:
       entity_id:
       - switch.cube_aquarium_ato_wc_controller_pump
     data: {}
+    action: switch.turn_on
   - delay:
       hours: 0
       minutes: 2
       seconds: 0
       milliseconds: 0
-  - service: switch.turn_off
-    data: {}
+  - data: {}
     target:
       entity_id: switch.cube_aquarium_ato_wc_controller_pump
+    action: switch.turn_off
   - delay:
       hours: 0
       minutes: 0
       seconds: 1
       milliseconds: 0
-  - service: switch.turn_on
-    target:
+  - target:
       entity_id:
       - switch.cube_aquarium_ato_wc_controller_ato_enabled
     data: {}
+    action: switch.turn_on
   mode: single
 - id: '1718988697087'
   alias: Scar bedroom doorbell
@@ -668,4 +671,11 @@
     device_id: ed1875d160234de6f46ca1c2ac9be084
     entity_id: a18a2428f897c190dc793a344d438583
     domain: switch
+  mode: single
+- id: '1733004513121'
+  alias: Christmas loop
+  description: ''
+  triggers: []
+  conditions: []
+  actions: []
   mode: single

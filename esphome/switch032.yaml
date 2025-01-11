@@ -1,6 +1,6 @@
 substitutions:
   name: switch032
-  description: Lava Lamp
+  description: Christmas 5
 
 ota:
   - platform: esphome
