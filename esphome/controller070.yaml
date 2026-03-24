@@ -16,9 +16,6 @@ packages:
 esphome:
   name: $name
   comment: $description
-  platform: ESP32
-  board: esp32doit-devkit-v1
-
   on_boot:
     priority: -100
     then:
@@ -31,6 +28,11 @@ esphome:
             - logger.log: "Start up ato enabled"
           else:
             - logger.log: "Start up ato disabled"
+
+esp32:
+  board: esp32doit-devkit-v1
+  framework:
+    type: esp-idf
 
 number:
 
