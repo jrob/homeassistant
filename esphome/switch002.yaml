@@ -5,6 +5,4 @@ substitutions:
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
-
-
-<<: !include include/gosund_wp5.yaml
+  body: !include include/gosund_wp5.yaml

@@ -5,5 +5,4 @@ substitutions:
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
-
-<<: !include include/sonoff_mini_light.yaml
+  body: !include include/sonoff_mini_light.yaml

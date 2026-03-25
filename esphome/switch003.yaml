@@ -11,5 +11,4 @@ mqtt:
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
-
-<<: !include include/gosund_wp5_fan.yaml
+  body: !include include/gosund_wp5_fan.yaml
