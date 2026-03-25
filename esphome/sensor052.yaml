@@ -23,6 +23,10 @@ substitutions:
   #voltage_cal: '7305'
   voltage_cal: '7389'
 
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
+
 esphome:
   name: $name
   comment: $description
@@ -31,10 +35,6 @@ esp32:
   board: nodemcu-32s
   framework:
     type: esp-idf
-
-packages:
-  base: !include include/base.yaml
-  wifi: !include include/wifi_not.yaml
 
 #wifi:
 #  ssid: !secret wifi_ssid
