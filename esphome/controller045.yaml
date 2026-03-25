@@ -2,8 +2,6 @@ substitutions:
   name: controller045
   description: Water Monitor and Cutoff
 
-#<<: !include include/common.yaml
-
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml

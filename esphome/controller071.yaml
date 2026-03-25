@@ -7,21 +7,6 @@ packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
 
-#wifi:
-#  ssid: !secret not_wifi
-#  password: !secret not_wifi_password
-#  fast_connect: true
-#
-#  # Enable fallback hotspot (captive portal) in case wifi connection fails
-#  ap:
-#    ssid: $name Fallback Hotspot
-#    password: !secret fallback_wifi_password
-#
-#  manual_ip:
-#    static_ip: 192.168.40.151
-#    gateway: 192.168.40.1
-#    subnet: 255.255.255.0
-
 esphome:
   name: $name
   comment: $description
