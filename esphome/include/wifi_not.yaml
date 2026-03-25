@@ -1,6 +1,7 @@
 wifi:
   ssid: !secret not_wifi
   password: !secret not_wifi_password
+  fast_connect: true
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
