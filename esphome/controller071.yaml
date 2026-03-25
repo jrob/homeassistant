@@ -1,0 +1,208 @@
+substitutions:
+  name: controller071
+  description: Cube Aquarium LED Controller
+  static_ip: ""
+
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
+
+#wifi:
+#  ssid: !secret not_wifi
+#  password: !secret not_wifi_password
+#  fast_connect: true
+#
+#  # Enable fallback hotspot (captive portal) in case wifi connection fails
+#  ap:
+#    ssid: $name Fallback Hotspot
+#    password: !secret fallback_wifi_password
+#
+#  manual_ip:
+#    static_ip: 192.168.40.151
+#    gateway: 192.168.40.1
+#    subnet: 255.255.255.0
+
+esphome:
+  name: $name
+  comment: $description
+
+esp32:
+  board: esp32doit-devkit-v1
+  framework:
+    type: esp-idf
+
+binary_sensor:
+
+  - platform: gpio
+    id: switch_1
+    name: $description Switch 1
+    filters:
+      - invert:
+    pin:
+      number: GPIO32
+      mode: INPUT_PULLUP
+    on_click:
+      min_length: 5ms
+      then:
+        - light.toggle: light_1
+
+  - platform: gpio
+    id: switch_2
+    name: $description Switch 2
+    filters:
+      - invert:
+    pin:
+      number: GPIO33
+      mode: INPUT_PULLUP
+    on_click:
+      min_length: 5ms
+      then:
+        - light.toggle: light_2
+
+  - platform: gpio
+    id: switch_3
+    name: $description Switch 3
+    filters:
+      - invert:
+    pin:
+      number: GPIO25
+      mode: INPUT_PULLUP
+    on_click:
+      min_length: 5ms
+      then:
+        - light.toggle: light_3
+
+  - platform: gpio
+    id: switch_4
+    name: $description Switch 4
+    filters:
+      - invert:
+    pin:
+      number: GPIO26
+      mode: INPUT_PULLUP
+    on_click:
+      min_length: 5ms
+      then:
+        - light.toggle: light_4
+
+light:
+
+  - platform: monochromatic
+    id: light_1
+    name: $description Light 1
+    output: output_gpio_23
+    on_state:
+      then:
+        if:
+          condition:
+            light.is_on: light_1
+          then:
+            - light.turn_off: light_indicator_1
+          else:
+            - light.turn_on: light_indicator_1
+
+  - platform: monochromatic
+    id: light_2
+    name: $description Light 2
+    output: output_gpio_22
+    on_state:
+      then:
+        if:
+          condition:
+            light.is_on: light_2
+          then:
+            - light.turn_off: light_indicator_2
+          else:
+            - light.turn_on: light_indicator_2
+
+  - platform: monochromatic
+    id: light_3
+    name: $description Light 3
+    output: output_gpio_19
+    on_state:
+      then:
+        if:
+          condition:
+            light.is_on: light_3
+          then:
+            - light.turn_off: light_indicator_3
+          else:
+            - light.turn_on: light_indicator_3
+
+  - platform: monochromatic
+    id: light_4
+    name: $description Light 4
+    output: output_gpio_18
+    on_state:
+      then:
+        if:
+          condition:
+            light.is_on: light_4
+          then:
+            - light.turn_off: light_indicator_4
+          else:
+            - light.turn_on: light_indicator_4
+
+  - platform: monochromatic
+    id: light_power_led
+    output: output_power_led
+    restore_mode: ALWAYS_ON
+
+  - platform: monochromatic
+    id: light_indicator_1
+    output: output_indicator_1
+
+  - platform: monochromatic
+    id: light_indicator_2
+    output: output_indicator_2
+
+  - platform: monochromatic
+    id: light_indicator_3
+    output: output_indicator_3
+
+  - platform: monochromatic
+    id: light_indicator_4
+    output: output_indicator_4
+
+output:
+
+  - platform: ledc
+    id: output_gpio_23
+    pin: GPIO23
+
+  - platform: ledc
+    id: output_gpio_22
+    pin: GPIO22
+
+  - platform: ledc
+    id: output_gpio_19
+    pin: GPIO19
+
+  - platform: ledc
+    id: output_gpio_18
+    pin: GPIO18
+
+  - platform: ledc
+    id: output_power_led
+    pin: GPIO4
+    max_power: 0.1
+
+  - platform: ledc
+    id: output_indicator_1
+    pin: GPIO27
+    max_power: 0.025
+
+  - platform: ledc
+    id: output_indicator_2
+    pin: GPIO14
+    max_power: 0.025
+
+  - platform: ledc
+    id: output_indicator_3
+    pin: GPIO12
+    max_power: 0.025
+
+  - platform: ledc
+    id: output_indicator_4
+    pin: GPIO13
+    max_power: 0.025
