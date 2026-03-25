@@ -194,7 +194,7 @@ sensor:
     update_interval: ${update_time}
 #Total Watts
   - platform: template
-    name: ${description} Total Watts
+    name: ${description} Total Watts CT1 CT2
     id: totalWatts_house
     lambda: return id(ct1Watts).state + id(ct2Watts).state;
     accuracy_decimals: 1
