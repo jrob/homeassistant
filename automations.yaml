@@ -632,7 +632,7 @@
   - data:
       transition: 0
       brightness_pct: 100
-      color_temp: 270
+      color_temp_kelvin: 3802
     target:
       entity_id: light.bulb_0056
     action: light.turn_on
@@ -651,21 +651,9 @@
     entity_id: light.bulb_0056
     state: 'on'
   actions:
-  - data:
-      color_temp: 270
-      brightness_pct: 0
-      transition: 0
-    target:
+  - target:
       entity_id: light.bulb_0056
-    action: light.turn_on
-  - data:
-      transition: 0
-      brightness_pct: 100
-      color_temp: 270
-    target:
-      entity_id: light.bulb_0056
-    action: light.turn_on
-    enabled: false
+    action: light.turn_off
   mode: single
 - id: '1739459245132'
   alias: Bedroom lamp button long press
