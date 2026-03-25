@@ -31,78 +31,6 @@
     entity_id: switch.desk_lamp_relay
     type: turn_off
   mode: single
-- id: '1662082206171'
-  alias: Bedroom lamp button single turn on ve
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - sensor.button_0057_action
-    to: single
-  condition:
-  - condition: state
-    state: 'off'
-    entity_id: light.bulb_0056
-  action:
-  - service: light.turn_on
-    data:
-      color_temp: 270
-      transition: 0
-      brightness_pct: 0
-    target:
-      entity_id: light.bulb_0056
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 1
-      milliseconds: 0
-    enabled: false
-  - service: light.turn_on
-    data:
-      transition: 0
-      brightness_pct: 100
-      color_temp: 270
-    target:
-      entity_id: light.bulb_0056
-  mode: single
-- id: '1662082583068'
-  alias: Bedroom lamp button single turn off ve
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - sensor.button_0057_action
-    to: single
-  condition:
-  - condition: state
-    entity_id: light.bulb_0056
-    state: 'on'
-  action:
-  - service: light.turn_off
-    data: {}
-    target:
-      entity_id: light.bulb_0056
-  mode: single
-- id: '1662082644203'
-  alias: Bedroom lamp button long press ve
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - sensor.button_0057_action
-    to: long
-  condition: []
-  action:
-  - service: light.turn_on
-    data:
-      rgb_color:
-      - 255
-      - 0
-      - 0
-      brightness_pct: 15
-    target:
-      entity_id: light.bulb_0056
-  mode: single
 - id: '1662093369982'
   alias: test test
   description: ''
@@ -300,30 +228,30 @@
 - id: '1710996246602'
   alias: Cube Aquarium Refugium Light On
   description: ''
-  trigger:
-  - platform: time
-    at: '20:00:00'
-  condition: []
-  action:
-  - service: switch.turn_on
-    metadata: {}
+  triggers:
+  - at: '15:00:00'
+    trigger: time
+  conditions: []
+  actions:
+  - metadata: {}
     data: {}
     target:
       entity_id: switch.cube_aquarium_power_strip_outlet_1
+    action: switch.turn_on
   mode: single
 - id: '1710996314281'
   alias: Cube Aquarium Refugium Light Off
   description: ''
-  trigger:
-  - platform: time
-    at: 08:00:00
-  condition: []
-  action:
-  - service: switch.turn_off
-    target:
+  triggers:
+  - at: 03:00:00
+    trigger: time
+  conditions: []
+  actions:
+  - target:
       entity_id:
       - switch.cube_aquarium_power_strip_outlet_1
     data: {}
+    action: switch.turn_off
   mode: single
 - id: '1711470600001'
   alias: ' Counter Aquarium Auto Water Change'
@@ -465,88 +393,71 @@
 - id: '1714389921014'
   alias: Aquarium Light Cycle Off
   description: ''
-  trigger:
-  - platform: time
-    at:
+  triggers:
+  - at:
     - '21:00:00'
-  condition: []
-  action:
-  - service: light.turn_off
-    data:
-      transition: 6
-      entity_id: light.wall_aquarium_display_light_1
-  - service: light.turn_off
-    data:
-      transition: 6
-      entity_id: light.daphnia_ato_wc_light
-  - service: light.turn_off
-    data:
+    trigger: time
+  conditions: []
+  actions:
+  - data:
       transition: 6
       entity_id: light.aquarium_lights_a_light_1
-  - service: light.turn_off
-    data:
+    action: light.turn_off
+  - data:
       transition: 6
       entity_id: light.aquarium_lights_a_light_2
+    action: light.turn_off
   mode: single
 - id: '1714389962438'
   alias: Aquarium Light Cycle On
   description: ''
-  trigger:
-  - platform: time
-    at:
+  triggers:
+  - at:
     - 09:00:00
-  condition: []
-  action:
-  - service: light.turn_on
-    data:
-      brightness_pct: 45
-      transition: 6
-      entity_id: light.wall_aquarium_display_light_1
-  - service: light.turn_on
-    data:
-      brightness_pct: 40
-      transition: 6
-      entity_id: light.daphnia_ato_wc_light
-  - service: light.turn_on
-    data:
+    trigger: time
+  conditions: []
+  actions:
+  - data:
       brightness_pct: 100
       transition: 6
       entity_id: light.aquarium_lights_a_light_1
-  - service: light.turn_on
-    data:
+    action: light.turn_on
+  - data:
       brightness_pct: 60
       transition: 6
       entity_id: light.aquarium_lights_a_light_2
+    action: light.turn_on
   mode: single
 - id: '1716837101291'
   alias: Cube Aquarium Light Off
   description: ''
-  trigger:
-  - platform: time
-    at:
+  triggers:
+  - at:
     - '18:00:00'
-  condition: []
-  action:
-  - target:
-      entity_id:
-      - switch.cube_aquarium_power_strip_outlet_4
-    data: {}
-    action: switch.turn_off
+    trigger: time
+  conditions: []
+  actions:
+  - action: light.turn_off
+    target:
+      entity_id: light.cube_aquarium_led_controller_light_1
+    data:
+      transition: 60
   mode: single
 - id: '1716837181123'
   alias: Cube Aquarium Light On
   description: ''
-  trigger:
-  - platform: time
-    at:
+  triggers:
+  - at:
     - '12:00:00'
-  condition: []
-  action:
-  - target:
-      entity_id:
-      - switch.cube_aquarium_power_strip_outlet_4
-    data: {}
-    action: switch.turn_on
+    trigger: time
+  conditions: []
+  actions:
+  - action: light.turn_on
+    target:
+      entity_id: light.cube_aquarium_led_controller_light_1
+    data:
+      transition: 60
+      brightness_pct: 75
   mode: single
 - id: '1717099654249'
   alias: Cube Aquarium Auto Water Change
@@ -610,14 +521,14 @@
 - id: '1718988697087'
   alias: Scar bedroom doorbell
   description: ''
-  trigger:
-  - platform: device
-    domain: mqtt
+  triggers:
+  - domain: mqtt
     device_id: e89aa5ef7de9d76476573ff26d133f6f
     type: action
     subtype: single
-  condition: []
-  action:
+    trigger: device
+  conditions: []
+  actions:
   - type: turn_on
     device_id: c7e5aa02b2d71de49a88e7a7d34dd4f8
     entity_id: ec4539035d2dd474b9b32e6568946945
@@ -625,7 +536,7 @@
   - delay:
       hours: 0
       minutes: 0
-      seconds: 7
+      seconds: 3
       milliseconds: 0
   - type: turn_off
     device_id: c7e5aa02b2d71de49a88e7a7d34dd4f8
@@ -678,4 +589,182 @@
   triggers: []
   conditions: []
   actions: []
+  mode: single
+- id: '1736622849463'
+  alias: Kitchen WLED Under Cab Switch
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.kitchen_under_cabinet_led_strips_switch
+    from:
+    to:
+  conditions: []
+  actions:
+  - action: light.toggle
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.wled_kitchen_under_cabinet_main
+  mode: single
+- id: '1739458842886'
+  alias: Bedroom lamp button single turn on
+  description: ''
+  triggers:
+  - domain: mqtt
+    device_id: 3b20935f42a283b609b5858928697175
+    type: action
+    subtype: single
+    trigger: device
+  conditions:
+  - condition: state
+    entity_id: light.bulb_0056
+    state: 'off'
+  actions:
+  - data:
+      color_temp: 270
+      brightness_pct: 0
+      transition: 0
+    target:
+      entity_id: light.bulb_0056
+    action: light.turn_on
+    enabled: false
+  - data:
+      transition: 0
+      brightness_pct: 100
+      color_temp: 270
+    target:
+      entity_id: light.bulb_0056
+    action: light.turn_on
+  mode: single
+- id: '1739459059012'
+  alias: Bedroom lamp button single turn off
+  description: ''
+  triggers:
+  - domain: mqtt
+    device_id: 3b20935f42a283b609b5858928697175
+    type: action
+    subtype: single
+    trigger: device
+  conditions:
+  - condition: state
+    entity_id: light.bulb_0056
+    state: 'on'
+  actions:
+  - data:
+      color_temp: 270
+      brightness_pct: 0
+      transition: 0
+    target:
+      entity_id: light.bulb_0056
+    action: light.turn_on
+  - data:
+      transition: 0
+      brightness_pct: 100
+      color_temp: 270
+    target:
+      entity_id: light.bulb_0056
+    action: light.turn_on
+    enabled: false
+  mode: single
+- id: '1739459245132'
+  alias: Bedroom lamp button long press
+  description: ''
+  triggers:
+  - domain: mqtt
+    device_id: 3b20935f42a283b609b5858928697175
+    type: action
+    subtype: long
+    trigger: device
+  conditions: []
+  actions:
+  - target:
+      entity_id: light.bulb_0056
+    data:
+      rgb_color:
+      - 255
+      - 0
+      - 0
+      brightness_pct: 15
+    action: light.turn_on
+  mode: single
+- id: '1745462329395'
+  alias: 'Wak up '
+  description: ''
+  triggers:
+  - trigger: time
+    at: 06:45:00
+  conditions:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 100
+    target:
+      device_id: 18289a0b0cb7f31653c0ec1463247bda
+  mode: single
+- id: '1745462710540'
+  alias: Sleep
+  description: ''
+  triggers:
+  - type: turned_on
+    device_id: 18289a0b0cb7f31653c0ec1463247bda
+    entity_id: 206138caa19b67f87f8ac5eea41f6bae
+    domain: light
+    trigger: device
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  conditions:
+  - condition: time
+    after: '22:30:00'
+    before: 01:00:00
+    weekday:
+    - sun
+    - mon
+    - tue
+    - wed
+    - thu
+  actions:
+  - type: turn_off
+    device_id: 18289a0b0cb7f31653c0ec1463247bda
+    entity_id: 206138caa19b67f87f8ac5eea41f6bae
+    domain: light
+  mode: single
+- id: '1745547491594'
+  alias: Eep
+  description: ''
+  triggers:
+  - trigger: time
+    at: '22:30:00'
+  conditions:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - sun
+    - thu
+  actions: []
+  mode: single
+- id: '1760582948014'
+  alias: Party
+  description: ''
+  triggers:
+  - trigger: conversation
+    command: Party time
+  conditions: []
+  actions:
+  - device_id: e251028b43a7f9125ef82f41050657f1
+    domain: light
+    entity_id: ef64c5392c8343bc08029a706639b009
+    type: flash
   mode: single
