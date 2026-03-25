@@ -2,10 +2,9 @@ substitutions:
   name: switch028
   description: Bat Strobe
 
-# Enable logging
-logger:
-
-<<: !include include/common.yaml
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
 esphome:
   name: $name

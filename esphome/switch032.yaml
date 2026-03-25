@@ -2,11 +2,9 @@ substitutions:
   name: switch032
   description: Christmas 5
 
-ota:
-  - platform: esphome
-
-# Enable logging
-logger:
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
 <<: !include include/common.yaml
 

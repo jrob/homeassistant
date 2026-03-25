@@ -32,13 +32,9 @@ esp32:
   framework:
     type: esp-idf
 
-ota:
-  - platform: esphome
-
-# Enable logging
-logger:
-
-<<: !include include/common.yaml
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
 #wifi:
 #  ssid: !secret wifi_ssid

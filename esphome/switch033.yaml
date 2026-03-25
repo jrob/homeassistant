@@ -2,11 +2,8 @@ substitutions:
   name: switch033
   description: Luke Bedroom Switch 2
 
-ota:
-  - platform: esphome
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
-# Enable logging
-logger:
-
-<<: !include include/common.yaml
 <<: !include include/gosund_wp5_light.yaml

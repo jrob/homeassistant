@@ -2,13 +2,9 @@ substitutions:
   name: switch004
   description: Aqurium Circulation Pump
 
-ota:
-  - platform: esphome
-
-# Enable logging
-logger:
-
-<<: !include include/common.yaml
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
 esphome:
   name: $name

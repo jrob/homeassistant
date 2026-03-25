@@ -13,3 +13,4 @@ esphome:
 wifi:
   ssid: !secret iot_wifi
   password: !secret iot_wifi_password
+  fast_connect: true

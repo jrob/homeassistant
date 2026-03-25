@@ -8,11 +8,8 @@ mqtt:
   password: !secret mqtt_password
   discovery: false
 
-ota:
-  - platform: esphome
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
-# Enable logging
-logger:
-
-<<: !include include/common.yaml
 <<: !include include/gosund_wp5_fan.yaml

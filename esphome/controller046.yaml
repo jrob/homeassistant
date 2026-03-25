@@ -2,12 +2,6 @@ substitutions:
   name: controller046
   description: Garage Door Opener
 
-ota:
-  - platform: esphome
-
-# Enable logging
-logger:
-
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml

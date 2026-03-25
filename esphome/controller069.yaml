@@ -3,12 +3,6 @@ substitutions:
   description: Cube Aquarium Power Strip
   static_ip: ""
 
-ota:
-  - platform: esphome
-
-# Enable logging
-logger:
-
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml

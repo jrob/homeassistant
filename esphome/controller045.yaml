@@ -2,7 +2,11 @@ substitutions:
   name: controller045
   description: Water Monitor and Cutoff
 
-<<: !include include/common.yaml
+#<<: !include include/common.yaml
+
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
 esphome:
   name: $name
@@ -12,12 +16,6 @@ esp32:
   board: nodemcu-32s
   framework:
     type: esp-idf
-
-ota:
-  - platform: esphome
-
-# Enable logging
-logger:
 
 globals:
 

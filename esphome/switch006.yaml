@@ -2,11 +2,8 @@ substitutions:
   name: switch006
   description: Garage Fluorescent Light
 
-ota:
-  - platform: esphome
+packages:
+  base: !include include/base.yaml
+  wifi: !include include/wifi_not.yaml
 
-# Enable logging
-logger:
-
-<<: !include include/common.yaml
 <<: !include include/sonoff_mini_light.yaml
