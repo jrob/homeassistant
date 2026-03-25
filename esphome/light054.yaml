@@ -11,6 +11,6 @@ esphome:
   comment: $friendly_name
 
 wifi:
-  ssid: !secret iot_wifi
-  password: !secret iot_wifi_password
+  ssid: !secret not_wifi
+  password: !secret not_wifi_password
   fast_connect: true
