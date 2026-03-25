@@ -19,22 +19,9 @@ http:
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
 
-telegram_bot:
-  - platform: polling
-    api_key: !secret telegram_api_key
-    allowed_chat_ids:
-      - !secret telegram_chatid_user
-      - !secret telegram_chatid_group
 
-notify:
 
-  - name: telegram_jrob
-    platform: telegram
-    chat_id: !secret telegram_chatid_user
 
-  - name: telegram_group
-    platform: telegram
-    chat_id: !secret telegram_chatid_group
 
 logbook:
   exclude:
@@ -43,20 +30,6 @@ logbook:
     entity_globs:
       - automation.keepalive_*_speaker
 
-influxdb:
-  host: !secret influxdb_host
-  port: !secret influxdb_port
-  database: homeassistant
-  username: !secret influxdb_username
-  password: !secret influxdb_password
-  default_measurement: state
-  tags_attributes:
-    - friendly_name
-  component_config_glob:
-    sensor.*humidity:
-      override_measurement: humidity
-    sensor.*temperature:
-      override_measurement: temperature
 
 # Update to be able to monitor host system
 # https://kleypot.com/proxmox-home-assistant-host-system-hardware-monitoring/
