@@ -51,68 +51,67 @@ input_number:
     icon: mdi:target
     unit_of_measurement: ºF
 
-sensor:
-  - platform: template
-    sensors:
+template:
+  - sensor:
 
-      grill_alert_temp:
-        value_template:
-          '{% if (states.sensor.ibbq_probe_4.state | int) < (states.input_number.grill_alert_low.state | int) or (states.sensor.ibbq_probe_4.state | int)  > (states.input_number.grill_alert_high.state | int) %}
-            Alert
-           {% else %}
-            Normal
-           {% endif %}'
-        friendly_name: Grill Temp Alert
-        icon_template:
-          '{% if (states.sensor.ibbq_probe_4.state | int) < (states.input_number.grill_alert_low.state | int) or (states.sensor.ibbq_probe_4.state | int)  > (states.input_number.grill_alert_high.state | int) %}
-            mdi:alert-circle
-           {% else %}
-            mdi:alert-circle-check
-           {% endif %}'
+    - default_entity_id: sensor.grill_alert_temp
+      name: Grill Temp Alert
+      state:
+        '{% if (states.sensor.ibbq_probe_4.state | int) < (states.input_number.grill_alert_low.state | int) or (states.sensor.ibbq_probe_4.state | int)  > (states.input_number.grill_alert_high.state | int) %}
+           Alert
+          {% else %}
+           Normal
+          {% endif %}'
+      icon:
+        '{% if (states.sensor.ibbq_probe_4.state | int) < (states.input_number.grill_alert_low.state | int) or (states.sensor.ibbq_probe_4.state | int)  > (states.input_number.grill_alert_high.state | int) %}
+           mdi:alert-circle
+          {% else %}
+           mdi:alert-circle-check
+          {% endif %}'
 
-      target_alert_temp_probe_1:
-        value_template:
-          '{% if (states.sensor.ibbq_probe_1.state | int) >= (states.input_number.grill_probe_1_target.state | int) %}
-            Alert
+    - default_entity_id: sensor.target_alert_temp_probe_1
+      name: Probe 1 Target Alert
+      state:
+        '{% if (states.sensor.ibbq_probe_1.state | int) >= (states.input_number.grill_probe_1_target.state | int) %}
+           Alert
+          {% else %}
+           Normal
+          {% endif %}'
+      icon:
+        '{% if (states.sensor.ibbq_probe_1.state | int) >= (states.input_number.grill_probe_1_target.state | int) %}
+          mdi:alert-circle
            {% else %}
-            Normal
-           {% endif %}'
-        friendly_name: Probe 1 Target Alert
-        icon_template:
-          '{% if (states.sensor.ibbq_probe_1.state | int) >= (states.input_number.grill_probe_1_target.state | int) %}
-            mdi:alert-circle
-           {% else %}
-            mdi:alert-circle-check
-           {% endif %}'
-
-      target_alert_temp_probe_2:
-        value_template:
-          '{% if (states.sensor.ibbq_probe_2.state | int) >= (states.input_number.grill_probe_2_target.state | int) %}
-            Alert
-           {% else %}
-            Normal
-           {% endif %}'
-        friendly_name: Probe 2 Target Alert
-        icon_template:
-          '{% if (states.sensor.ibbq_probe_2.state | int) >= (states.input_number.grill_probe_2_target.state | int) %}
-            mdi:alert-circle
-           {% else %}
-            mdi:alert-circle-check
+          mdi:alert-circle-check
            {% endif %}'
 
-      target_alert_temp_probe_3:
-        value_template:
-          '{% if (states.sensor.ibbq_probe_3.state | int) >= (states.input_number.grill_probe_3_target.state | int) %}
-            Alert
+    - default_entity_id: sensor.target_alert_temp_probe_2
+      name: Probe 2 Target Alert
+      state:
+        '{% if (states.sensor.ibbq_probe_2.state | int) >= (states.input_number.grill_probe_2_target.state | int) %}
+           Alert
+          {% else %}
+           Normal
+          {% endif %}'
+      icon:
+        '{% if (states.sensor.ibbq_probe_2.state | int) >= (states.input_number.grill_probe_2_target.state | int) %}
+          mdi:alert-circle
            {% else %}
-            Normal
+          mdi:alert-circle-check
            {% endif %}'
-        friendly_name: Probe 3 Target Alert
-        icon_template:
-          '{% if (states.sensor.ibbq_probe_3.state | int) >= (states.input_number.grill_probe_3_target.state | int) %}
-            mdi:alert-circle
+
+    - default_entity_id: sensor.target_alert_temp_probe_3
+      name: Probe 3 Target Alert
+      state:
+        '{% if (states.sensor.ibbq_probe_3.state | int) >= (states.input_number.grill_probe_3_target.state | int) %}
+           Alert
+          {% else %}
+           Normal
+          {% endif %}'
+      icon:
+        '{% if (states.sensor.ibbq_probe_3.state | int) >= (states.input_number.grill_probe_3_target.state | int) %}
+          mdi:alert-circle
            {% else %}
-            mdi:alert-circle-check
+          mdi:alert-circle-check
            {% endif %}'
 
 automation:

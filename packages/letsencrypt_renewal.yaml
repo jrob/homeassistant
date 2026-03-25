@@ -1,14 +1,13 @@
 # https://github.com/home-assistant/hassio-addons/issues/1445#issuecomment-668547727
 
-sensor:
-  - platform: template
-    sensors:
-      cert_expiry_ha:
-        value_template: "{{ ((as_timestamp(states('sensor.cert_expiry_timestamp_ha')) - now().timestamp()) / 86400) | round(1) }}"
-      cert_expiry_nas:
-        value_template: "{{ ((as_timestamp(states('sensor.cert_expiry_timestamp_nas')) - now().timestamp()) / 86400) | round(1) }}"
-      cert_expiry_prox:
-        value_template: "{{ ((as_timestamp(states('sensor.cert_expiry_timestamp_prox')) - now().timestamp()) / 86400) | round(1) }}"
+template:
+  - sensor:
+    - default_entity_id: sensor.cert_expiry_ha
+      state: "{{ ((as_timestamp(states('sensor.cert_expiry_timestamp_ha')) - now().timestamp()) / 86400) | round(1) }}"
+    - default_entity_id: sensor.cert_expiry_nas
+      state: "{{ ((as_timestamp(states('sensor.cert_expiry_timestamp_nas')) - now().timestamp()) / 86400) | round(1) }}"
+      #cert_expiry_prox:
+      #  value_template: "{{ ((as_timestamp(states('sensor.cert_expiry_timestamp_prox')) - now().timestamp()) / 86400) | round(1) }}"
 
 automation:
   # Renew certificates and restart homeassistant when cert expires in less than 30 days
