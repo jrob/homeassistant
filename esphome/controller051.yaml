@@ -1,15 +1,10 @@
-substitutions:
-  name: controller051
-  description: Countertop Aquarium
-  static_ip: ""
-
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
 
 esphome:
-  name: $name
-  comment: $description
+  name: controller051
+  friendly_name: Countertop Aquarium Controller
 
 esp32:
   board: esp32doit-devkit-v1
@@ -75,13 +70,13 @@ script:
 binary_sensor:
 
   - platform: template
-    name: $description Error Fill Duration Exceeded
+    name: Error Fill Duration Exceeded
     lambda: |-
       return id(error_fill_duration_exceeded);
 
   - platform: gpio
     id: reservoir_full_sensor
-    name: $description Full Sensor
+    name: Full Sensor
     pin:
       number: GPIO27
       mode: INPUT_PULLUP
@@ -105,8 +100,9 @@ switch:
     restore_mode: ALWAYS_OFF
 
   - platform: template
-    name: $description Pump
     id: relay_pump_pub
+    name: Drain Pump
+    icon: mdi:pump
     lambda: |-
       if (id(relay_pump).state) {
         return true;
@@ -127,8 +123,9 @@ switch:
         - switch.turn_off: relay_pump
 
   - platform: template
-    name: $description Valve
     id: relay_valve_pub
+    name: Fill Valve
+    icon: mdi:water-pump
     lambda: |-
       if (id(relay_valve).state) {
         return true;
@@ -147,7 +144,7 @@ switch:
         - switch.turn_off: relay_valve
 
   - platform: template
-    name: $description ATO Enabled
+    name: Auto Top Off
     restore_mode: RESTORE_DEFAULT_OFF
     lambda: |-
       return id(ato_enabled);
@@ -170,7 +167,7 @@ switch:
 
 light:
   - platform: monochromatic
-    name: $description Light
+    name: Light
     output: output_gpio_33
     restore_mode: ALWAYS_OFF
 
@@ -190,7 +187,7 @@ one_wire:
 sensor:
   - platform: dallas_temp
     address: 0x2D011921144A0228
-    name: $description Temperature
+    name: Temperature
 
 api:
   services:

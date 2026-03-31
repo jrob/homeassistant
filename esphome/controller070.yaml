@@ -1,15 +1,10 @@
-substitutions:
-  name: controller070
-  description: Cube Aquarium ATO WC Controller
-  static_ip: ""
-
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
 
 esphome:
-  name: $name
-  comment: $description
+  name: controller070
+  friendly_name: Cube Aquarium Controller
   on_boot:
     priority: -100
     then:
@@ -31,9 +26,9 @@ esp32:
 number:
 
   - platform: template
-    name: $description Error delay (m)
+    name: Error Delay (m)
     id: error_delay
-    icon: mdi:numeric
+    icon: mdi:clock
     restore_value: true
     initial_value: 10
     optimistic: true
@@ -75,7 +70,7 @@ script:
 binary_sensor:
 
   - platform: gpio
-    name: $description Button Pump
+    name: Pump Button
     pin:
       number: GPIO26
       inverted: true
@@ -88,7 +83,7 @@ binary_sensor:
       - switch.toggle: relay_pump_pub
 
   - platform: gpio
-    name: $description Button Valve
+    name: Valve Button
     pin:
       number: GPIO27
       inverted: true
@@ -102,7 +97,7 @@ binary_sensor:
             - switch.toggle: relay_valve
 
   - platform: gpio
-    name: $description Sump Full
+    name: Sump Full Sensor
     id: sump_full
     pin:
       number: GPIO18
@@ -117,7 +112,7 @@ binary_sensor:
         - script.execute: set_fill_valve_on_off
 
   - platform: gpio
-    name: $description Sump Low
+    name: Sump Low Sensor
     id: sump_low
     pin:
       number: GPIO19
@@ -132,7 +127,7 @@ binary_sensor:
         - switch.turn_off: relay_pump
 
   - platform: gpio
-    name: $description Moisture Sensor
+    name: Moisture Sensor
     pin:
       number: GPIO21
       inverted: true
@@ -155,52 +150,49 @@ switch:
     restore_mode: ALWAYS_OFF
 
   - platform: template
-    name: $description Valve
     id: relay_valve_pub
+    name: Fill Valve
+    icon: mdi:water-pump
     lambda: |-
       return id(relay_valve).state;
     turn_on_action:
-      - logger.log: "Valve turn on"
       - switch.turn_on: relay_valve
       - script.execute: fill_duration_guard
     turn_off_action:
-      - logger.log: "valve turn off"
       - switch.turn_off: relay_valve
       - script.stop: fill_duration_guard
 
   - platform: template
-    name: $description Pump
     id: relay_pump_pub
+    name: Drain Pump
+    icon: mdi:pump
     lambda: |-
       return id(relay_pump).state;
     turn_on_action:
-      - logger.log: "Pump turn on"
       - if:
           condition:
             - binary_sensor.is_off: sump_low
           then:
             - switch.turn_on: relay_pump
     turn_off_action:
-      - logger.log: "Pump turn off"
       - switch.turn_off: relay_pump
 
   - platform: template
-    name: $description ATO Enabled
+    name: Auto Top Off
     id: ato_enabled
     restore_mode: RESTORE_DEFAULT_OFF
     optimistic: true
     turn_on_action:
       then:
         - script.execute: set_fill_valve_on_off
-        - logger.log: "ATO Enable on"
     turn_off_action:
       then:
         - switch.turn_off: relay_valve
         - script.stop: fill_duration_guard
-        - logger.log: "ATO Enable off"
 
   - platform: template
-    name: $description Error Fill Duration Exceeded
+    name: Error Fill Duration Exceeded
     id: error_fill_duration_exceeded
+    icon: mdi:alert
     restore_mode: RESTORE_DEFAULT_OFF
     optimistic: true

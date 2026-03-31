@@ -1,14 +1,10 @@
-substitutions:
-  name: controller046
-  description: Garage Door Opener
-
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
 
 esphome:
-  name: $name
-  comment: $description
+  name: controller046
+  friendly_name: Garage Door
 
 esp8266:
   board: d1_mini
@@ -21,13 +17,12 @@ switch:
   - platform: gpio
     id: relay_1
     pin: D5
-    name: $description Button
+    name: Button
 
 binary_sensor:
 
   - platform: gpio
-    id: garage_door_sensor_open
-    name: $description Sensor Open
+    name: Open Sensor
     pin:
       number: D1
       mode: INPUT_PULLUP
@@ -38,8 +33,7 @@ binary_sensor:
          - lambda: id(garage_door_cover).publish_state(COVER_OPEN);
 
   - platform: gpio
-    id: garage_door_sensor_closed
-    name: $description Sensor Closed
+    name: Closed Sensor
     pin:
       number: D6
       mode: INPUT_PULLUP
@@ -48,22 +42,13 @@ binary_sensor:
     on_press:
       then:
          - lambda: id(garage_door_cover).publish_state(COVER_CLOSED);
-#        - script.execute: set_fill_pump_state
-#    on_press:
-#      then:
-#        - script.execute: stop_fill_pump
-#        - servo.write:
-#            id: drain_pump
-#            level: 0.0
-#        - servo.detach: drain_pump
 
 cover:
   - platform: template
     id: garage_door_cover
-    name: "Garage Door"
+    name: Garage Door
     device_class: garage
     open_action:
-      # Turn the OPEN switch on briefly
       - switch.turn_on: relay_1
       - delay: 0.25s
       - switch.turn_off: relay_1
@@ -75,5 +60,3 @@ cover:
       - switch.turn_on: relay_1
       - delay: 0.25s
       - switch.turn_off: relay_1
-    #optimistic: true
-    #assumed_state: true

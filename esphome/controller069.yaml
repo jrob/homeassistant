@@ -1,15 +1,10 @@
-substitutions:
-  name: controller069
-  description: Cube Aquarium Power Strip
-  static_ip: ""
-
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
 
 esphome:
-  name: $name
-  comment: $description
+  name: controller069
+  friendly_name: Cube Aquarium Power Strip
 
 esp32:
   board: esp32doit-devkit-v1
@@ -19,34 +14,34 @@ esp32:
 switch:
 
   - platform: gpio
-    name: $description Outlet 1
+    name: Outlet 1
     pin: GPIO32
     restore_mode: ALWAYS_ON
   - platform: gpio
-    name: $description Outlet 2
+    name: Outlet 2
     pin: GPIO25
     restore_mode: ALWAYS_ON
   - platform: gpio
-    name: $description Outlet 3
+    name: Outlet 3
     pin: GPIO26
     restore_mode: ALWAYS_ON
   - platform: gpio
-    name: $description Outlet 4
+    name: Outlet 4
     pin: GPIO17
     restore_mode: ALWAYS_ON
   - platform: gpio
-    name: $description Outlet 5
+    name: Outlet 5
     pin: GPIO18
     restore_mode: ALWAYS_ON
   - platform: gpio
-    name: $description Outlet 6
+    name: Outlet 6
     pin: GPIO19
     restore_mode: ALWAYS_ON
   - platform: gpio
-    name: $description Outlet 7
+    name: Outlet 7
     pin: GPIO21
     restore_mode: ALWAYS_ON
   - platform: gpio
-    name: $description Outlet 8
+    name: Outlet 8
     pin: GPIO16
     restore_mode: ALWAYS_ON

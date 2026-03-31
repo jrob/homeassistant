@@ -1,14 +1,10 @@
-substitutions:
-  name: switch028
-  description: Bat Strobe
-
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
 
 esphome:
-  name: $name
-  comment: $description (Gosund WP5)
+  name: switch028
+  friendly_name: Smart Switch 28
 
 esp8266:
   board: esp01_1m
@@ -20,7 +16,7 @@ binary_sensor:
     filters:
       - invert:
       - delayed_off: 10ms
-    name: $description Power Button
+    name: Button
     on_press:
       then:
         - switch.toggle: relay_1
@@ -36,7 +32,7 @@ switch:
     inverted: true
     restore_mode: RESTORE_DEFAULT_ON
   - platform: gpio
-    name: $description
+    name: Switch
     id: relay_1
     pin: GPIO14
     restore_mode: RESTORE_DEFAULT_ON

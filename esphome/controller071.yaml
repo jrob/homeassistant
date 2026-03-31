@@ -1,15 +1,10 @@
-substitutions:
-  name: controller071
-  description: Cube Aquarium LED Controller
-  static_ip: ""
-
 packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
 
 esphome:
-  name: $name
-  comment: $description
+  name: controller071
+  friendly_name: Cube Aquarium LED Controller
 
 esp32:
   board: esp32doit-devkit-v1
@@ -20,7 +15,7 @@ binary_sensor:
 
   - platform: gpio
     id: switch_1
-    name: $description Switch 1
+    name: Switch 1
     filters:
       - invert:
     pin:
@@ -33,7 +28,7 @@ binary_sensor:
 
   - platform: gpio
     id: switch_2
-    name: $description Switch 2
+    name: Switch 2
     filters:
       - invert:
     pin:
@@ -46,7 +41,7 @@ binary_sensor:
 
   - platform: gpio
     id: switch_3
-    name: $description Switch 3
+    name: Switch 3
     filters:
       - invert:
     pin:
@@ -59,7 +54,7 @@ binary_sensor:
 
   - platform: gpio
     id: switch_4
-    name: $description Switch 4
+    name: Switch 4
     filters:
       - invert:
     pin:
@@ -74,7 +69,7 @@ light:
 
   - platform: monochromatic
     id: light_1
-    name: $description Light 1
+    name: Light 1
     output: output_gpio_23
     on_state:
       then:
@@ -88,7 +83,7 @@ light:
 
   - platform: monochromatic
     id: light_2
-    name: $description Light 2
+    name: Light 2
     output: output_gpio_22
     on_state:
       then:
@@ -102,7 +97,7 @@ light:
 
   - platform: monochromatic
     id: light_3
-    name: $description Light 3
+    name: Light 3
     output: output_gpio_19
     on_state:
       then:
@@ -116,7 +111,7 @@ light:
 
   - platform: monochromatic
     id: light_4
-    name: $description Light 4
+    name: Light 4
     output: output_gpio_18
     on_state:
       then:
