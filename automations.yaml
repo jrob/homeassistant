@@ -456,8 +456,8 @@
     target:
       entity_id: light.cube_aquarium_led_controller_light_1
     data:
-      transition: 60
-      brightness_pct: 75
+      transition: 15
+      brightness_pct: 85
   mode: single
 - id: '1717099654249'
   alias: Cube Aquarium Auto Water Change
