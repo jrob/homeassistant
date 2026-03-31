@@ -5,23 +5,23 @@ packages:
 esphome:
   name: controller051
   friendly_name: Countertop Aquarium Controller
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: set_fill_valve_on_off
+      - if:
+          condition:
+            and:
+              - switch.is_on: ato_enabled
+          then:
+            - logger.log: "Start up ato enabled"
+          else:
+            - logger.log: "Start up ato disabled"
 
 esp32:
   board: esp32doit-devkit-v1
   framework:
     type: esp-idf
-
-globals:
-
-  - id: error_fill_duration_exceeded
-    type: bool
-    restore_value: yes
-    initial_value: 'false'
-
-  - id: ato_enabled
-    type: bool
-    restore_value: yes
-    initial_value: 'true'
 
 number:
 
@@ -41,41 +41,34 @@ script:
   - id: fill_duration_guard
     then:
       - delay: !lambda "return id(error_delay).state * 1000 * 60;"
-      - globals.set:
-          id: error_fill_duration_exceeded
-          value: 'true'
+      - switch.turn_on: error_fill_duration_exceeded
       - switch.turn_off: relay_valve
 
-  - id: set_fill_valve
+  - id: set_fill_valve_on_off
     then:
+      - logger.log: "set_fill_valve_on_off"
+      - delay: 50ms
       - if:
           condition:
             and:
-              - binary_sensor.is_off: reservoir_full_sensor
-              #- binary_sensor.is_off: reservoir_full_backup_sensor
-              - lambda: |-
-                  return id(ato_enabled) && !id(error_fill_duration_exceeded);
+              - switch.is_off: error_fill_duration_exceeded
+              - switch.is_on: ato_enabled
+              - binary_sensor.is_off: reservoir_full
           then:
             - switch.turn_on: relay_valve
             - script.execute: fill_duration_guard
       - if:
           condition:
             or:
-              - binary_sensor.is_on: reservoir_full_sensor
-              #- binary_sensor.is_on: reservoir_full_backup_sensor
+              - binary_sensor.is_on: reservoir_full
           then:
             - switch.turn_off: relay_valve
             - script.stop: fill_duration_guard
 
 binary_sensor:
 
-  - platform: template
-    name: Error Fill Duration Exceeded
-    lambda: |-
-      return id(error_fill_duration_exceeded);
-
   - platform: gpio
-    id: reservoir_full_sensor
+    id: reservoir_full
     name: Full Sensor
     pin:
       number: GPIO27
@@ -84,7 +77,7 @@ binary_sensor:
       - delayed_on_off: 1000ms
     on_state:
       then:
-        - script.execute: set_fill_valve
+        - script.execute: set_fill_valve_on_off
 
 switch:
 
@@ -104,66 +97,44 @@ switch:
     name: Drain Pump
     icon: mdi:pump
     lambda: |-
-      if (id(relay_pump).state) {
-        return true;
-      } else {
-        return false;
-      }
+      return id(relay_pump).state;
     turn_on_action:
-#      - if:
-#          condition:
-#            - lambda: |-
-#                return id(ato_enabled);
-#          then:
-#            - switch.turn_on: relay_pump
-        then:
-          - switch.turn_on: relay_pump
+      - switch.turn_on: relay_pump
     turn_off_action:
-      then:
-        - switch.turn_off: relay_pump
+      - switch.turn_off: relay_pump
 
   - platform: template
     id: relay_valve_pub
     name: Fill Valve
     icon: mdi:water-pump
     lambda: |-
-      if (id(relay_valve).state) {
-        return true;
-      } else {
-        return false;
-      }
+      return id(relay_valve).state;
     turn_on_action:
-      - if:
-          condition:
-            - lambda: |-
-                return id(ato_enabled);
-          then:
-            - switch.turn_on: relay_valve
+      - switch.turn_on: relay_valve
+      - script.execute: fill_duration_guard
     turn_off_action:
-      then:
-        - switch.turn_off: relay_valve
+      - switch.turn_off: relay_valve
+      - script.stop: fill_duration_guard
 
   - platform: template
     name: Auto Top Off
+    id: ato_enabled
     restore_mode: RESTORE_DEFAULT_OFF
-    lambda: |-
-      return id(ato_enabled);
+    optimistic: true
     turn_on_action:
       then:
-        - globals.set:
-            id: ato_enabled
-            value: 'true'
-        - script.execute: set_fill_valve
-        - logger.log: "ATO Enable on"
+        - script.execute: set_fill_valve_on_off
     turn_off_action:
       then:
         - switch.turn_off: relay_valve
         - script.stop: fill_duration_guard
-        - globals.set:
-            id: ato_enabled
-            value: 'false'
-        - logger.log: "ATO Enable off"
 
+  - platform: template
+    name: Error Fill Duration Exceeded
+    id: error_fill_duration_exceeded
+    icon: mdi:alert
+    restore_mode: RESTORE_DEFAULT_OFF
+    optimistic: true
 
 light:
   - platform: monochromatic
@@ -188,37 +159,3 @@ sensor:
   - platform: dallas_temp
     address: 0x2D011921144A0228
     name: Temperature
-
-api:
-  services:
-
-    - service: reset_error_fill_duration_exceeded
-      then:
-        - logger.log:
-            format: "Reseting pump duration error"
-        - globals.set:
-            id: error_fill_duration_exceeded
-            value: 'false'
-
-#    - service: toggle_ato_enable
-#      then:
-#        - if:
-#            condition:
-#              - lambda: |-
-#                  return id(ato_enabled);
-#            then:
-#              - switch.turn_off: relay_valve
-#              - script.stop: fill_duration_guard
-#              - globals.set:
-#                  id: ato_enabled
-#                  value: 'false'
-#            else:
-#              - globals.set:
-#                  id: ato_enabled
-#                  value: 'true'
-#              - script.execute: set_fill_valve
-#
-    - service: e_stop
-      then:
-        - switch.turn_off: relay_valve
-        - switch.turn_off: relay_pump

@@ -53,17 +53,15 @@ script:
             and:
               - switch.is_off: error_fill_duration_exceeded
               - switch.is_on: ato_enabled
-              - binary_sensor.is_off: sump_full
+              - binary_sensor.is_off: reservoir_full
           then:
-            - logger.log: "turn on relay_valve"
             - switch.turn_on: relay_valve
             - script.execute: fill_duration_guard
       - if:
           condition:
             or:
-              - binary_sensor.is_on: sump_full
+              - binary_sensor.is_on: reservoir_full
           then:
-            - logger.log: "turn off relay_valve"
             - switch.turn_off: relay_valve
             - script.stop: fill_duration_guard
 
@@ -97,8 +95,8 @@ binary_sensor:
             - switch.toggle: relay_valve
 
   - platform: gpio
-    name: Sump Full Sensor
-    id: sump_full
+    name: Full Sensor
+    id: reservoir_full
     pin:
       number: GPIO18
       mode:
@@ -108,12 +106,11 @@ binary_sensor:
       - delayed_on_off: 500ms
     on_state:
       then:
-        - logger.log: "Sump Full On"
         - script.execute: set_fill_valve_on_off
 
   - platform: gpio
-    name: Sump Low Sensor
-    id: sump_low
+    name: Low Sensor
+    id: reservoir_low
     pin:
       number: GPIO19
       inverted: true
@@ -121,7 +118,7 @@ binary_sensor:
         input: true
         pullup: true
     filters:
-      - delayed_on_off: 500ms
+      - delayed_on_off: 1000ms
     on_press:
       then:
         - switch.turn_off: relay_pump
@@ -169,11 +166,7 @@ switch:
     lambda: |-
       return id(relay_pump).state;
     turn_on_action:
-      - if:
-          condition:
-            - binary_sensor.is_off: sump_low
-          then:
-            - switch.turn_on: relay_pump
+      - switch.turn_on: relay_pump
     turn_off_action:
       - switch.turn_off: relay_pump
 
