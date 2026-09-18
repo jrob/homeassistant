@@ -2,6 +2,9 @@ packages:
   base: !include include/base.yaml
   wifi: !include include/wifi_not.yaml
 
+#web_server:
+#  port: 80
+
 esphome:
   name: controller070
   friendly_name: Cube Aquarium Controller
@@ -103,7 +106,8 @@ binary_sensor:
         input: true
         pullup: true
     filters:
-      - delayed_on_off: 500ms
+      - delayed_on: 50ms
+      - delayed_off: 1s
     on_state:
       then:
         - script.execute: set_fill_valve_on_off
@@ -133,6 +137,11 @@ binary_sensor:
         pullup: true
     filters:
       - delayed_on_off: 1s
+    on_press:
+      then:
+        - switch.turn_off: relay_valve
+        - switch.turn_off: relay_pump
+        - switch.turn_on: error_fill_duration_exceeded
 
 switch:
 
