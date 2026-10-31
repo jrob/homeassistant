@@ -258,49 +258,48 @@
   description: "Auto water change for the counter top aquarium system.\n\n74 liter
     total volume\n15 percent = 13.3 minutes\n10 percent = 8.8 minutes\n  5 percent
     = 4.4 minutes\n  2 min = 2.3 %\n  4 min = 4.5 %"
-  trigger:
-  - platform: time
-    at: '10:30:00'
-  - platform: time
-    at: '10:45:00'
+  triggers:
+  - at: '10:30:00'
+    trigger: time
+  - at: '10:45:00'
     enabled: false
-  condition:
+    trigger: time
+  conditions:
   - condition: state
     entity_id: binary_sensor.drain_sump_reservoir_full_sensor
     state: 'off'
   - condition: state
     entity_id: switch.countertop_aquarium_ato_enabled
     state: 'on'
-  action:
-  - service: switch.turn_off
-    metadata: {}
-    data: {}
-    target:
-      entity_id: switch.countertop_aquarium_ato_enabled
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 1
-      milliseconds: 0
-  - service: switch.turn_on
-    target:
-      entity_id: switch.countertop_aquarium_pump
-    data: {}
-  - delay: 00:02:00
-  - service: switch.turn_off
-    target:
-      entity_id: switch.countertop_aquarium_pump
-    data: {}
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 1
-      milliseconds: 0
-  - service: switch.turn_on
+  actions:
+  - action: switch.turn_off
     target:
       entity_id:
-      - switch.countertop_aquarium_ato_enabled
+      - switch.countertop_aquarium_auto_top_off
     data: {}
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - target:
+      entity_id: switch.countertop_aquarium_drain_pump
+    data: {}
+    action: switch.turn_on
+  - delay: 00:02:00
+  - target:
+      entity_id: switch.countertop_aquarium_drain_pump
+    data: {}
+    action: switch.turn_off
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - target:
+      entity_id: switch.countertop_aquarium_auto_top_off
+    data: {}
+    action: switch.turn_on
   mode: single
 - id: '1714074884992'
   alias: CO2 Off
@@ -464,29 +463,32 @@
   description: "Auto water change for the counter top aquarium system.\n\n74 liter
     total volume\n15 percent = 13.3 minutes\n10 percent = 8.8 minutes\n  5 percent
     = 4.4 minutes\n  2 min = 2.3 %\n  4 min = 4.5 %"
-  trigger:
-  - platform: time
-    at: '10:00:00'
-  - platform: time
-    at: '10:15:00'
+  triggers:
+  - at: '10:00:00'
+    trigger: time
+  - at: '10:15:00'
     enabled: true
-  condition:
+    trigger: time
+  conditions:
   - condition: state
     entity_id: binary_sensor.drain_sump_reservoir_full_sensor
     state: 'off'
   - condition: state
-    entity_id: switch.cube_aquarium_ato_wc_controller_ato_enabled
-    state: 'on'
+    entity_id: switch.cube_aquarium_controller_auto_top_off
+    state:
+    - 'on'
   - condition: state
-    entity_id: binary_sensor.cube_aquarium_ato_wc_controller_sump_low
-    state: 'off'
+    entity_id: binary_sensor.cube_aquarium_controller_low_sensor
+    state:
+    - 'off'
   - condition: state
-    entity_id: switch.cube_aquarium_ato_wc_controller_error_fill_duration_exceeded
-    state: 'off'
-  action:
+    entity_id: switch.cube_aquarium_controller_error_fill_duration_exceeded
+    state:
+    - 'off'
+  actions:
   - data: {}
     target:
-      entity_id: switch.cube_aquarium_ato_wc_controller_ato_enabled
+      entity_id: switch.cube_aquarium_controller_auto_top_off
     action: switch.turn_off
   - delay:
       hours: 0
@@ -494,8 +496,7 @@
       seconds: 1
       milliseconds: 0
   - target:
-      entity_id:
-      - switch.cube_aquarium_ato_wc_controller_pump
+      entity_id: switch.cube_aquarium_controller_drain_pump
     data: {}
     action: switch.turn_on
   - delay:
@@ -505,7 +506,7 @@
       milliseconds: 0
   - data: {}
     target:
-      entity_id: switch.cube_aquarium_ato_wc_controller_pump
+      entity_id: switch.cube_aquarium_controller_drain_pump
     action: switch.turn_off
   - delay:
       hours: 0
@@ -513,8 +514,7 @@
       seconds: 1
       milliseconds: 0
   - target:
-      entity_id:
-      - switch.cube_aquarium_ato_wc_controller_ato_enabled
+      entity_id: switch.cube_aquarium_controller_auto_top_off
     data: {}
     action: switch.turn_on
   mode: single
